@@ -3,7 +3,7 @@
 #include <system/debug_log.h>
 
 MotionClipPlayer::MotionClipPlayer() :
-clip_(NULL),
+clip_(nullptr),
 anim_time_(0.0f),
 playback_speed_(1.0f),
 looping_(false)

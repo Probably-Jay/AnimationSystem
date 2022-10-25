@@ -19,13 +19,14 @@
 
 AnimatedMeshApp::AnimatedMeshApp(gef::Platform& platform) :
 	Application(platform),
-	sprite_renderer_(NULL),
-	font_(NULL),
-	mesh_(NULL),
-	player_(NULL),
-	renderer_3d_(NULL),
-	model_scene_(NULL),
-	walk_anim_(NULL)
+	sprite_renderer_(nullptr),
+	renderer_3d_(nullptr),
+	font_(nullptr),
+	mesh_(nullptr),
+	player_(nullptr),
+	model_scene_(nullptr),
+	walk_anim_(nullptr),
+	animation_system_(nullptr)
 {
 }
 
@@ -34,6 +35,8 @@ void AnimatedMeshApp::Init()
 	sprite_renderer_ = gef::SpriteRenderer::Create(platform_);
 	renderer_3d_ = gef::Renderer3D::Create(platform_);
 	input_manager_ = gef::InputManager::Create(platform_);
+
+	animation_system_ = AnimationSystem3D::Create();
 
 	InitFont();
 	SetupCamera();
@@ -79,25 +82,25 @@ void AnimatedMeshApp::CleanUp()
 	CleanUpFont();
 
 	delete player_;
-	player_ = NULL;
+	player_ = nullptr;
 
 	delete walk_anim_;
-	walk_anim_ = NULL;
+	walk_anim_ = nullptr;
 
 	delete mesh_;
-	mesh_ = NULL;
+	mesh_ = nullptr;
 
 	delete model_scene_;
-	model_scene_ = NULL;
+	model_scene_ = nullptr;
 
 	delete input_manager_;
-	input_manager_ = NULL;
+	input_manager_ = nullptr;
 
 	delete sprite_renderer_;
-	sprite_renderer_ = NULL;
+	sprite_renderer_ = nullptr;
 
 	delete renderer_3d_;
-	renderer_3d_ = NULL;
+	renderer_3d_ = nullptr;
 }
 
 bool AnimatedMeshApp::Update(float frame_time)
@@ -179,7 +182,7 @@ void AnimatedMeshApp::InitFont()
 void AnimatedMeshApp::CleanUpFont()
 {
 	delete font_;
-	font_ = NULL;
+	font_ = nullptr;
 }
 
 void AnimatedMeshApp::DrawHUD()
@@ -216,7 +219,7 @@ void AnimatedMeshApp::SetupCamera()
 
 gef::Skeleton* AnimatedMeshApp::GetFirstSkeleton(gef::Scene* scene)
 {
-	gef::Skeleton* skeleton = NULL;
+	gef::Skeleton* skeleton = nullptr;
 	if (scene)
 	{
 		// check to see if there is a skeleton in the the scene file
@@ -231,7 +234,7 @@ gef::Skeleton* AnimatedMeshApp::GetFirstSkeleton(gef::Scene* scene)
 
 gef::Mesh* AnimatedMeshApp::GetFirstMesh(gef::Scene* scene)
 {
-	gef::Mesh* mesh = NULL;
+	gef::Mesh* mesh = nullptr;
 
 	if (scene)
 	{
@@ -245,7 +248,7 @@ gef::Mesh* AnimatedMeshApp::GetFirstMesh(gef::Scene* scene)
 
 gef::Animation* AnimatedMeshApp::LoadAnimation(const char* anim_scene_filename, const char* anim_name)
 {
-	gef::Animation* anim = NULL;
+	gef::Animation* anim = nullptr;
 
 	gef::Scene anim_scene;
 	if (anim_scene.ReadSceneFromFile(platform_, anim_scene_filename))

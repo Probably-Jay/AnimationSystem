@@ -1,6 +1,7 @@
 #ifndef _ANIMATED_MESH_APP_H
 #define _ANIMATED_MESH_APP_H
 
+#include <animation/animation.h>
 #include <system/application.h>
 #include <graphics/sprite.h>
 #include <maths/vector2.h>
@@ -8,6 +9,8 @@
 #include <maths/matrix44.h>
 #include <vector>
 #include <graphics/skinned_mesh_instance.h>
+
+#include "AnimationSystem3D.h"
 #include "motion_clip_player.h"
 
 
@@ -67,6 +70,8 @@ private:
 
 	MotionClipPlayer anim_player_;
 	gef::Animation* walk_anim_;
+
+	std::unique_ptr<AnimationSystem3D> animation_system_;
 };
 
 #endif // _ANIMATED_MESH_APP_H

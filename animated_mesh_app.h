@@ -31,11 +31,12 @@ class AnimatedMeshApp : public gef::Application
 {
 public:
 	AnimatedMeshApp(gef::Platform& platform);
+	void LoadMeshAndAnimation();
 	void Init();
 
-	gef::Skeleton* GetFirstSkeleton(gef::Scene* scene);
+	gef::Skeleton* GetFirstSkeleton(const gef::Scene* scene) const;
 
-	gef::Mesh* GetFirstMesh(gef::Scene* scene);
+	gef::Mesh* GetFirstMesh(const gef::Scene* scene) const;
 
 	void CleanUp();
 	bool Update(float frame_time);
@@ -46,7 +47,7 @@ private:
 	void DrawHUD();
 	void SetupLights();
 	void SetupCamera();
-	gef::Animation* LoadAnimation(const char* anim_scene_filename, const char* anim_name);
+	gef::Animation* LoadAnimation(const char* anim_scene_filename, const char* anim_name) const;
 
 
 	gef::SpriteRenderer* sprite_renderer_;

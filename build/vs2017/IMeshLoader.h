@@ -13,6 +13,6 @@ public:
 	virtual const std::unique_ptr<IMesh>& GetMesh(std::string name) = 0;
 	virtual ~IMeshLoader() = default;
 protected:
-	IMeshLoader() = default;
+	//IMeshLoader() = default;
 	
 };

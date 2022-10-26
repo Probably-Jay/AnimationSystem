@@ -21,6 +21,7 @@ AnimatedMeshApp::AnimatedMeshApp(gef::Platform& platform) :
 	Application(platform),
 	sprite_renderer_(nullptr),
 	renderer_3d_(nullptr),
+	input_manager_(nullptr),
 	font_(nullptr),
 	mesh_(nullptr),
 	player_(nullptr),
@@ -42,6 +43,11 @@ void AnimatedMeshApp::Init()
 	SetupCamera();
 	SetupLights();
 
+	LoadMeshAndAnimation();
+}
+
+void AnimatedMeshApp::LoadMeshAndAnimation()
+{
 	// create a new scene object and read in the data from the file
 	// no meshes or materials are created yet
 	// we're not making any assumptions about what the data may be loaded in for
@@ -217,53 +223,41 @@ void AnimatedMeshApp::SetupCamera()
 }
 
 
-gef::Skeleton* AnimatedMeshApp::GetFirstSkeleton(gef::Scene* scene)
+gef::Skeleton* AnimatedMeshApp::GetFirstSkeleton(const gef::Scene* scene) const
 {
-	gef::Skeleton* skeleton = nullptr;
-	if (scene)
+	// check to see if there is a skeleton in the the scene file
+	if (scene == nullptr || scene->skeletons.empty())
 	{
-		// check to see if there is a skeleton in the the scene file
-		// if so, pull out the bind pose and create an array of matrices
-		// that wil be used to store the bone transformations
-		if (scene->skeletons.size() > 0)
-			skeleton = scene->skeletons.front();
+		return nullptr;
 	}
 
-	return skeleton;
+	// if so, pull out the bind pose and create an array of matrices
+	// that wil be used to store the bone transformations
+	return scene->skeletons.front();
 }
 
-gef::Mesh* AnimatedMeshApp::GetFirstMesh(gef::Scene* scene)
+gef::Mesh* AnimatedMeshApp::GetFirstMesh(const gef::Scene* scene) const
 {
-	gef::Mesh* mesh = nullptr;
+	if (scene == nullptr || scene->mesh_data.empty())
+		return nullptr;
 
-	if (scene)
-	{
-		// now check to see if there is any mesh data in the file, if so lets create a mesh from it
-		if (scene->mesh_data.size() > 0)
-			mesh = model_scene_->CreateMesh(platform_, scene->mesh_data.front());
-	}
-
-	return mesh;
+	return model_scene_->CreateMesh(platform_, scene->mesh_data.front());
 }
 
-gef::Animation* AnimatedMeshApp::LoadAnimation(const char* anim_scene_filename, const char* anim_name)
+gef::Animation* AnimatedMeshApp::LoadAnimation(const char* anim_scene_filename, const char* anim_name) const
 {
-	gef::Animation* anim = nullptr;
+	auto anim_scene = gef::Scene{};
+	
+	if (!anim_scene.ReadSceneFromFile(platform_, anim_scene_filename))
+		return nullptr;
 
-	gef::Scene anim_scene;
-	if (anim_scene.ReadSceneFromFile(platform_, anim_scene_filename))
-	{
-		// if the animation name is specified then try and find the named anim
-		// otherwise return the first animation if there is one
-		std::map<gef::StringId, gef::Animation*>::const_iterator anim_node_iter;
-		if (anim_name)
-			anim_node_iter = anim_scene.animations.find(gef::GetStringId(anim_name));
-		else
-			anim_node_iter = anim_scene.animations.begin();
+	const auto anim_node_iter =
+		anim_name != nullptr
+			? anim_scene.animations.find(gef::GetStringId(anim_name))
+			: anim_scene.animations.begin();
 
-		if (anim_node_iter != anim_scene.animations.end())
-			anim = new gef::Animation(*anim_node_iter->second);
-	}
+	if (anim_node_iter == anim_scene.animations.end())
+		return nullptr;
 
-	return anim;
+	return new gef::Animation(*anim_node_iter->second);
 }

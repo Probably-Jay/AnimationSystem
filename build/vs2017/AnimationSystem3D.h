@@ -1,31 +1,34 @@
 #pragma once
 #include <memory>
 
-#include "MeshLoader.h"
+
+#include "IMeshLoader.h"
+#include "system/platform.h"
 
 using std::unique_ptr;
 
-
-class AnimationSystem3D
+namespace AnimationSystem
 {
-public:
-
-	static unique_ptr<AnimationSystem3D> Create()
+	class AnimationSystem3D
 	{
-		const auto instance = new AnimationSystem3D();
-		return unique_ptr<AnimationSystem3D>(instance);
-	}
+	public:
 
-	AnimationSystem3D (AnimationSystem3D const&) = delete;
-	void operator=(AnimationSystem3D const&) = delete;
+		static unique_ptr<AnimationSystem3D> Create(gef::Platform & gef::Platform & platform_)
+		{
+			const auto system = new AnimationSystem3D(platform_);
+			return unique_ptr<AnimationSystem3D>(system);
+		}
 
-	IMeshLoader const & MeshLoader() const { return *mesh_loader_; }
+		AnimationSystem3D (AnimationSystem3D const&) = delete;
+		void operator=(AnimationSystem3D const&) = delete;
 
-private:
-	AnimationSystem3D() = default;
+		IMeshLoader & MeshLoader() const { return *mesh_loader_; }
 
-	unique_ptr<IMeshLoader> mesh_loader_;
+	private:
+		AnimationSystem3D(gef::Platform & platform_);
+		unique_ptr<IMeshLoader> mesh_loader_;
 
+		gef::Platform & gef::Platform & platform_;
 
-};
-
+	};
+}

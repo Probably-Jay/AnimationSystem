@@ -1,12 +1,20 @@
 #include "MeshLoader.h"
 
-Result AnimationSystem::MeshLoader::LoadMesh(const std::string& filepath)
+AnimationSystem::MeshLoader::MeshLoader(gef::Platform& platform_)
 {
-	// todo load mesh
+}
+
+Result AnimationSystem::MeshLoader::LoadMeshScene(const std::string& filepath)
+{
+	//model_scene_->ReadSceneFromFile(platform_, "tesla/tesla.scn");
+
+
+
+	
 	return Result::OK();
 }
 
-const std::unique_ptr<IMesh>& AnimationSystem::MeshLoader::GetMesh(string name)
+IMesh const * AnimationSystem::MeshLoader::GetMesh(string name)
 {
 	// todo get Mesh
 	return null_pointer_;

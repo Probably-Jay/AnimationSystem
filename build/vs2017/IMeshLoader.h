@@ -6,13 +6,13 @@
 #include "Result.h"
 
 
-class IMeshLoader
+namespace AnimationSystem
 {
-public:
-	virtual Result LoadMesh(std::string const & filepath) = 0;
-	virtual const std::unique_ptr<IMesh>& GetMesh(std::string name) = 0;
-	virtual ~IMeshLoader() = default;
-protected:
-	//IMeshLoader() = default;
-	
-};
+	class IMeshLoader
+	{
+	public:
+		virtual ~IMeshLoader() = default;
+		virtual Result LoadMeshScene(std::string const & filepath) = 0;
+		virtual IMesh const * GetMesh(std::string name) = 0;	
+	};
+}

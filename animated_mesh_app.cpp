@@ -48,6 +48,9 @@ void AnimatedMeshApp::Init()
 
 void AnimatedMeshApp::LoadMeshAndAnimation()
 {
+
+	animation_system_->MeshLoader().LoadMeshScene("tesla/tesla.scn");
+	
 	// create a new scene object and read in the data from the file
 	// no meshes or materials are created yet
 	// we're not making any assumptions about what the data may be loaded in for
@@ -227,9 +230,7 @@ gef::Skeleton* AnimatedMeshApp::GetFirstSkeleton(const gef::Scene* scene) const
 {
 	// check to see if there is a skeleton in the the scene file
 	if (scene == nullptr || scene->skeletons.empty())
-	{
 		return nullptr;
-	}
 
 	// if so, pull out the bind pose and create an array of matrices
 	// that wil be used to store the bone transformations

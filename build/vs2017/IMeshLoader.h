@@ -13,6 +13,6 @@ namespace AnimationSystem
 	public:
 		virtual ~IMeshLoader() = default;
 		virtual Result LoadMeshScene(std::string const & filepath) = 0;
-		virtual IMesh const * GetMesh(std::string name) = 0;	
+		virtual IMesh const * GetMesh(std::string const& name) = 0;	
 	};
 }

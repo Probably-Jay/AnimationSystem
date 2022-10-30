@@ -1,7 +1,8 @@
 #include "MeshLoader.h"
 
-AnimationSystem::MeshLoader::MeshLoader(gef::Platform& platform_)
+AnimationSystem::MeshLoader::MeshLoader(gef::Platform& platform_): platform_(platform_)
 {
+	
 }
 
 Result AnimationSystem::MeshLoader::LoadMeshScene(const std::string& filepath)
@@ -14,8 +15,12 @@ Result AnimationSystem::MeshLoader::LoadMeshScene(const std::string& filepath)
 	return Result::OK();
 }
 
-IMesh const * AnimationSystem::MeshLoader::GetMesh(string name)
+IMesh const * AnimationSystem::MeshLoader::GetMesh(string const & name)
 {
-	// todo get Mesh
-	return null_pointer_;
+	const auto mesh = meshes.find(name);
+	
+	if(mesh == meshes.end())
+		return nullptr;
+	
+	return mesh->second.get();
 }

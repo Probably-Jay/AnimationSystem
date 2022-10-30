@@ -13,7 +13,7 @@ namespace AnimationSystem
 	{
 	public:
 
-		static unique_ptr<AnimationSystem3D> Create(gef::Platform & gef::Platform & platform_)
+		static unique_ptr<AnimationSystem3D> Create(gef::Platform & platform_)
 		{
 			const auto system = new AnimationSystem3D(platform_);
 			return unique_ptr<AnimationSystem3D>(system);
@@ -28,7 +28,7 @@ namespace AnimationSystem
 		AnimationSystem3D(gef::Platform & platform_);
 		unique_ptr<IMeshLoader> mesh_loader_;
 
-		gef::Platform & gef::Platform & platform_;
+		gef::Platform & platform_;
 
 	};
 }

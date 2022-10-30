@@ -72,7 +72,7 @@ private:
 	MotionClipPlayer anim_player_;
 	gef::Animation* walk_anim_;
 
-	std::unique_ptr<AnimationSystem3D> animation_system_;
+	std::unique_ptr<AnimationSystem::AnimationSystem3D> animation_system_;
 };
 
 #endif // _ANIMATED_MESH_APP_H

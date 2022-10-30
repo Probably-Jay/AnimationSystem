@@ -37,7 +37,7 @@ void AnimatedMeshApp::Init()
 	renderer_3d_ = gef::Renderer3D::Create(platform_);
 	input_manager_ = gef::InputManager::Create(platform_);
 
-	animation_system_ = AnimationSystem3D::Create();
+	animation_system_ = AnimationSystem::AnimationSystem3D::Create(platform_);
 
 	InitFont();
 	SetupCamera();
@@ -48,8 +48,13 @@ void AnimatedMeshApp::Init()
 
 void AnimatedMeshApp::LoadMeshAndAnimation()
 {
-
 	animation_system_->MeshLoader().LoadMeshScene("tesla/tesla.scn");
+
+
+	
+
+
+	//delete a;
 	
 	// create a new scene object and read in the data from the file
 	// no meshes or materials are created yet

@@ -3,6 +3,7 @@
 
 
 #include "IMeshLoader.h"
+#include "graphics/scene.h"
 #include "system/platform.h"
 
 using std::unique_ptr;
@@ -22,13 +23,16 @@ namespace AnimationSystem
 		AnimationSystem3D (AnimationSystem3D const&) = delete;
 		void operator=(AnimationSystem3D const&) = delete;
 
-		IMeshLoader & MeshLoader() const { return *mesh_loader_; }
+		IMeshLoader const & MeshLoader() const { return *mesh_loader_; }
+		Result LoadObjectScene(std::string filePath);
 
+		gef::Scene & GetModelScene() const {return *model_scene_;}
+		
 	private:
 		AnimationSystem3D(gef::Platform & platform_);
 		unique_ptr<IMeshLoader> mesh_loader_;
 
 		gef::Platform & platform_;
-
+		std::unique_ptr<gef::Scene> model_scene_;
 	};
 }

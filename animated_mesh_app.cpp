@@ -25,9 +25,9 @@ AnimatedMeshApp::AnimatedMeshApp(gef::Platform& platform) :
 	renderer_3d_(nullptr),
 	input_manager_(nullptr),
 	font_(nullptr),
-	mesh_(nullptr),
+	//mesh_(nullptr),
 	player_(nullptr),
-	model_scene_(nullptr),
+	//model_scene_(nullptr),
 	walk_anim_(nullptr),
 	animation_system_(nullptr)
 {
@@ -50,37 +50,39 @@ void AnimatedMeshApp::Init()
 
 void AnimatedMeshApp::LoadMeshAndAnimation()
 {
-	auto & meshLoader = animation_system_->MeshLoader();
-	meshLoader.LoadMeshScene("tesla/tesla.scn");
+
+
+	animation_system_->LoadObjectScene("tesla/tesla.scn");
+
+	const auto & meshLoader = animation_system_->MeshLoader();
 
 	const auto ids = meshLoader.GetAllMeshIDs();
 
 	const auto wrappedMesh = meshLoader.GetMesh(ids.front());
 	
-	auto mesh = &wrappedMesh->Mesh();
 	
 	
 	
-	// create a new scene object and read in the data from the file
-	// no meshes or materials are created yet
-	// we're not making any assumptions about what the data may be loaded in for
-	model_scene_ = new gef::Scene();
-	model_scene_->ReadSceneFromFile(platform_, "tesla/tesla.scn");
-	
-	// we do want to render the data stored in the scene file so lets create the materials from the material data present in the scene file
-	model_scene_->CreateMaterials(platform_);
-	
-	// if there is mesh data in the scene, create a mesh to draw from the first mesh
-	mesh_ = GetFirstMesh(model_scene_);
+	// // create a new scene object and read in the data from the file
+	// // no meshes or materials are created yet
+	// // we're not making any assumptions about what the data may be loaded in for
+	// model_scene_ = new gef::Scene();
+	// model_scene_->ReadSceneFromFile(platform_, "tesla/tesla.scn");
+	//
+	// // we do want to render the data stored in the scene file so lets create the materials from the material data present in the scene file
+	// model_scene_->CreateMaterials(platform_);
+	//
+	// // if there is mesh data in the scene, create a mesh to draw from the first mesh
+	// mesh_ = GetFirstMesh(model_scene_);
 	
 	// get the first skeleton in the scene
-	gef::Skeleton* skeleton = GetFirstSkeleton(model_scene_);
+	gef::Skeleton* skeleton = GetFirstSkeleton(&animation_system_->GetModelScene());
 
 	if (skeleton)
 	{
 		player_ = new gef::SkinnedMeshInstance(*skeleton);
 		anim_player_.Init(player_->bind_pose());
-		player_->set_mesh(mesh_);
+		player_->set_mesh(&wrappedMesh->Mesh());
 	}
 
 
@@ -106,11 +108,11 @@ void AnimatedMeshApp::CleanUp()
 	delete walk_anim_;
 	walk_anim_ = nullptr;
 
-	delete mesh_;
-	mesh_ = nullptr;
+	// delete mesh_;
+	// mesh_ = nullptr;
 
-	delete model_scene_;
-	model_scene_ = nullptr;
+	// delete model_scene_;
+	// model_scene_ = nullptr;
 
 	delete input_manager_;
 	input_manager_ = nullptr;
@@ -252,7 +254,7 @@ gef::Mesh* AnimatedMeshApp::GetFirstMesh(const gef::Scene* scene) const
 	if (scene == nullptr || scene->mesh_data.empty())
 		return nullptr;
 
-	return model_scene_->CreateMesh(platform_, scene->mesh_data.front());
+	return animation_system_->GetModelScene().CreateMesh(platform_, scene->mesh_data.front());
 }
 
 gef::Animation* AnimatedMeshApp::LoadAnimation(const char* anim_scene_filename, const char* anim_name) const

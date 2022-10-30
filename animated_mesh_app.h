@@ -57,10 +57,10 @@ private:
 
 	float fps_;
 
-	gef::Mesh * mesh_;
+	//gef::Mesh * mesh_;
 	gef::SkinnedMeshInstance* player_;
 
-	gef::Scene* model_scene_;
+	//gef::Scene* model_scene_;
 
 	gef::Vector4 camera_eye_;
 	gef::Vector4 camera_lookat_;

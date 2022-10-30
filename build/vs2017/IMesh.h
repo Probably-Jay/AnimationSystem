@@ -10,7 +10,7 @@ namespace AnimationSystem
 		virtual ~IMesh() = default;
 
 		// todo remove dependency
-		virtual gef::Mesh & Mesh() const = 0;
+		virtual gef::Mesh const & Mesh() const = 0;
 	protected:
 		IMesh() = default; // prevent creation outside of class
 	
@@ -31,7 +31,7 @@ namespace AnimationSystem
 			return iMesh;
 		}
 
-		gef::Mesh & Mesh() const override {return *mesh_;}
+		gef::Mesh const & Mesh() const override {return *mesh_;}
 
 		~GefMeshWrapper() override = default;	
 	private:

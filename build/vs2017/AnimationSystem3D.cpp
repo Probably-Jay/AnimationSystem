@@ -14,6 +14,7 @@ Result AnimationSystem3D::LoadObjectScene(std::string filePath)
     model_scene_ = std::make_unique<gef::Scene>();
     model_scene_->ReadSceneFromFile(platform_, filePath.c_str());
 
+    
     // we want to render the data stored in the scene file
     // so create the materials from the material data present in the scene file
     model_scene_->CreateMaterials(platform_);

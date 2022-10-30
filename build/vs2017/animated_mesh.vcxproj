@@ -219,7 +219,9 @@
     <ClCompile Include="..\..\motion_clip_player.cpp" />
     <ClCompile Include="AnimationSystem3D.cpp" />
     <ClCompile Include="IMeshLoader.cpp" />
+    <ClCompile Include="ISkeleton.cpp" />
     <ClCompile Include="MeshLoader.cpp" />
+    <ClCompile Include="SkeletonLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\motion_clip_player.h" />
@@ -227,8 +229,10 @@
     <ClInclude Include="AnimationSystem3D.h" />
     <ClInclude Include="IMesh.h" />
     <ClInclude Include="IMeshLoader.h" />
+    <ClInclude Include="ISkeleton.h" />
     <ClInclude Include="MeshLoader.h" />
     <ClInclude Include="Result.h" />
+    <ClInclude Include="SkeletonLoader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

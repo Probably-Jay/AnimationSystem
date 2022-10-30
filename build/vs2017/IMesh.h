@@ -9,7 +9,7 @@ namespace AnimationSystem
 	public:
 		virtual ~IMesh() = default;
 
-		// todo remove dependency
+		// todo remove gef dependency?
 		virtual gef::Mesh const & Mesh() const = 0;
 	protected:
 		IMesh() = default; // prevent creation outside of class
@@ -22,7 +22,7 @@ namespace AnimationSystem
 }
 namespace AnimationSystem
 {
-	class GefMeshWrapper : IMesh
+	class GefMeshWrapper final : IMesh
 	{
 	public:
 		static std::unique_ptr<IMesh> Create(std::unique_ptr<gef::Mesh> mesh)
@@ -33,13 +33,11 @@ namespace AnimationSystem
 
 		gef::Mesh const & Mesh() const override {return *mesh_;}
 
-		~GefMeshWrapper() override = default;	
-	private:
 		
+	private:
 		// prevent creation outside of class
 		explicit GefMeshWrapper(std::unique_ptr<gef::Mesh> mesh)
-			:IMesh()
-			,mesh_(std::move(mesh))
+			:mesh_(std::move(mesh))
 		{
 		}
 

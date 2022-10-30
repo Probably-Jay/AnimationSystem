@@ -2,9 +2,9 @@
 
 using AnimationSystem::IMesh;
 
-AnimationSystem::MeshLoader::MeshLoader(gef::Platform& platform_): platform_(platform_)
+AnimationSystem::MeshLoader::MeshLoader(gef::Platform& platform_)
+	: platform_(platform_)
 {
-	
 }
 
 Result AnimationSystem::MeshLoader::LoadMeshScene(gef::Scene& scene)
@@ -17,13 +17,13 @@ Result AnimationSystem::MeshLoader::LoadMeshScene(gef::Scene& scene)
 	for (auto & meshData : meshDataList)
 	{
 		auto mesh = std::unique_ptr<gef::Mesh>(scene.CreateMesh(platform_, meshData));
+
 		if(mesh == nullptr)
 			return Result::Error("Mesh " + std::to_string(meshData.name_id) + "could not be created");
 
 		auto wrappedMesh = GefMeshWrapper::Create(std::move(mesh));
 		meshes_.emplace(meshData.name_id, std::move(wrappedMesh));
 	}
-	
 	
 	return Result::OK();
 }

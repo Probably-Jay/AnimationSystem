@@ -13,14 +13,30 @@ namespace AnimationSystem
 	class IProtectedWrapper
 	{
 	public:
-		virtual ~IProtectedWrapper() = default;
-		virtual T const & Item() const = 0;
-		virtual unsigned ID() const = 0;
+
+		static std::unique_ptr<IProtectedWrapper<T>> Create(T const & item, const unsigned id)
+		{
+			auto itemPtr = std::unique_ptr<IProtectedWrapper<T>>{ new IProtectedWrapper<T>{item, id}};
+			return itemPtr;
+		}
+
+		
+		T const & Item() const {return item_;}
+		unsigned ID() const {return id_;}
 		
 	protected:
-		IProtectedWrapper() = default; // prevent creation outside of class
+		// prevent creation outside of class
+		IProtectedWrapper(T const & item, const unsigned id)
+			:item_(item)
+			,id_(id)
+		{
+		}
 
 	private:
+
+		T const & item_;
+		const unsigned id_;
+		
 		void operator delete(void * p){::operator delete(p);} // prevent deletion outside of class
 
 		friend struct std::default_delete<IProtectedWrapper>; // allow deletion by smart pointer

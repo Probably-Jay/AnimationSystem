@@ -10,25 +10,37 @@ AnimationSystem::MeshLoader::MeshLoader(gef::Platform& platform_)
 Result AnimationSystem::MeshLoader::LoadMeshScene(gef::Scene& scene)
 {
 
-	// todo dont own this
-	
+	scene.CreateMeshes(platform_);
+
+	const auto & meshList = scene.meshes;
 	const auto & meshDataList = scene.mesh_data;
 	
-	if(meshDataList.empty())
+	if(meshList.empty())
 		return Result::Error("Scene contained no meshes");
 
-	for (auto & meshData : meshDataList)
+	// todo this properly
+	
+	auto meshDataIter = meshDataList.begin();
+	for(auto meshIter = meshList.begin(); meshIter != meshList.end(); ++meshIter, ++ meshDataIter)
 	{
-		auto mesh = std::unique_ptr<gef::Mesh>(scene.CreateMesh(platform_, meshData));
+		gef::StringId uniqueID = meshDataIter->name_id;
+		
+		auto wrappedMesh = IMesh::Create(**meshIter, meshDataIter->name_id);
 
-		if(mesh == nullptr)
-			return Result::Error("Mesh " + std::to_string(meshData.name_id) + "could not be created");
-
-		auto wrappedMesh = GefMeshWrapper::Create(std::move(mesh), meshData.name_id);
-		meshes_.emplace(meshData.name_id, std::move(wrappedMesh));
+		meshes_.emplace(uniqueID, std::move(wrappedMesh));
 	}
 	
 	return Result::OK();
+
+	// {
+	// 	auto mesh = std::unique_ptr<gef::Mesh>(scene.CreateMesh(platform_, meshData));
+	//
+	// 	if(mesh == nullptr)
+	// 		return Result::Error("Mesh " + std::to_string(meshData.name_id) + "could not be created");
+	//
+	// 	auto wrappedMesh = IMesh::Create(std::move(mesh), meshData.name_id);
+	// 	meshes_.emplace(meshData.name_id, std::move(wrappedMesh));
+	// }
 }
 
 IMesh const * AnimationSystem::MeshLoader::GetMesh(string const & name) const

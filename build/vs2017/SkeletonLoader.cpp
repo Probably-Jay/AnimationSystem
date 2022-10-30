@@ -12,8 +12,6 @@ Result AnimationSystem::SkeletonLoader::LoadSkeletonScene(gef::Scene& scene)
     
     if(skeletons.empty())
         return Result::Error("Scene contained no skeletons");
-
-
     
     //todo gef's way of getting the actual ID is broken
     // assume mesh data list is a parallel list, (bad)
@@ -24,7 +22,7 @@ Result AnimationSystem::SkeletonLoader::LoadSkeletonScene(gef::Scene& scene)
        // gef::StringId uniqueID = reinterpret_cast<unsigned>(skeleton);  // NOLINT
         gef::StringId uniqueID = meshDataIter->name_id;
         
-        auto wrappedSkeleton = GefSkeletonWrapper::Create(**skeletonIter, uniqueID);
+        auto wrappedSkeleton = ISkeleton::Create(**skeletonIter, uniqueID);
         
         skeletons_.emplace(uniqueID, std::move(wrappedSkeleton));
     }

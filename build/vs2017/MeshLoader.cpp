@@ -24,7 +24,7 @@ Result AnimationSystem::MeshLoader::LoadMeshScene(gef::Scene& scene)
 		if(mesh == nullptr)
 			return Result::Error("Mesh " + std::to_string(meshData.name_id) + "could not be created");
 
-		auto wrappedMesh = GefMeshWrapper::Create(std::move(mesh));
+		auto wrappedMesh = GefMeshWrapper::Create(std::move(mesh), meshData.name_id);
 		meshes_.emplace(meshData.name_id, std::move(wrappedMesh));
 	}
 	

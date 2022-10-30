@@ -4,6 +4,7 @@
 
 #include "IMeshLoader.h"
 #include "SkeletonLoader.h"
+#include "SkinnedMeshContainer.h"
 #include "graphics/scene.h"
 #include "system/platform.h"
 
@@ -32,9 +33,13 @@ namespace AnimationSystem
 		
 	private:
 		AnimationSystem3D(gef::Platform & platform_);
+		
 		unique_ptr<IMeshLoader> mesh_loader_;
 		unique_ptr<ISkeletonLoader> skeleton_loader_;
 
+		unique_ptr<SkinnedMeshContainer> skinnedMeshes;
+
+		
 		gef::Platform & platform_;
 		std::unique_ptr<gef::Scene> model_scene_;
 	};

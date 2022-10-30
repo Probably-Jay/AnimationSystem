@@ -63,7 +63,7 @@ void AnimatedMeshApp::LoadMeshAndAnimation()
 	{
 		player_ = new gef::SkinnedMeshInstance(skeleton->Skeleton());
 		anim_player_.Init(player_->bind_pose());
-		player_->set_mesh(&mesh->Mesh());
+		player_->set_mesh(&mesh->Item());
 	}
 
 

@@ -15,27 +15,32 @@ Result AnimationSystem::SkeletonLoader::LoadSkeletonScene(gef::Scene& scene)
 
 
     
-    //todo gef's way of getting the actual ID is broken, make it up
-    for (const auto skeleton : skeletons)
+    //todo gef's way of getting the actual ID is broken
+    // assume mesh data list is a parallel list, (bad)
+    
+    auto meshDataIter = meshDataList.begin();
+    for(auto skeletonIter = skeletons.begin(); skeletonIter != skeletons.end(); ++skeletonIter, ++ meshDataIter)
     {
-        auto wrappedSkeleton = GefSkeletonWrapper::Create(*skeleton);
-
-        gef::StringId uniqueID = reinterpret_cast<unsigned>(&wrappedSkeleton->Skeleton());  // NOLINT
+       // gef::StringId uniqueID = reinterpret_cast<unsigned>(skeleton);  // NOLINT
+        gef::StringId uniqueID = meshDataIter->name_id;
+        
+        auto wrappedSkeleton = GefSkeletonWrapper::Create(**skeletonIter, uniqueID);
         
         skeletons_.emplace(uniqueID, std::move(wrappedSkeleton));
     }
 
     return Result::OK();
-    
+
+    // todo use this code 
     for (auto & meshData : meshDataList)
     {
-        const auto skeleton = scene.FindSkeleton(meshData);
-        
-        if(skeleton == nullptr)
-            return Result::Error("Skeleton " + std::to_string(meshData.name_id) + "could not be found");
-    
-        auto wrappedSkeleton = GefSkeletonWrapper::Create(*skeleton);
-        skeletons_.emplace(meshData.name_id, std::move(wrappedSkeleton));
+        // const auto skeleton = scene.FindSkeleton(meshData);
+        //
+        // if(skeleton == nullptr)
+        //     return Result::Error("Skeleton " + std::to_string(meshData.name_id) + "could not be found");
+        //
+        // auto wrappedSkeleton = GefSkeletonWrapper::Create(*skeleton,);
+        // skeletons_.emplace(meshData.name_id, std::move(wrappedSkeleton));
     }
 	
     return Result::OK();

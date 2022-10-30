@@ -217,8 +217,8 @@
     </ClCompile>
     <ClCompile Include="..\..\animated_mesh_app.cpp" />
     <ClCompile Include="..\..\motion_clip_player.cpp" />
+    <ClCompile Include="..\..\SkinnedMeshContainer.cpp" />
     <ClCompile Include="AnimationSystem3D.cpp" />
-    <ClCompile Include="ISkeleton.cpp" />
     <ClCompile Include="MeshLoader.cpp" />
     <ClCompile Include="SkeletonLoader.cpp" />
   </ItemGroup>
@@ -228,10 +228,12 @@
     <ClInclude Include="AnimationSystem3D.h" />
     <ClInclude Include="IMesh.h" />
     <ClInclude Include="IMeshLoader.h" />
+    <ClInclude Include="IProtectedWrapper.h" />
     <ClInclude Include="ISkeleton.h" />
     <ClInclude Include="MeshLoader.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="SkeletonLoader.h" />
+    <ClInclude Include="SkinnedMeshContainer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

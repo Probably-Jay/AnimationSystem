@@ -19,7 +19,7 @@ namespace AnimationSystem
 }
 namespace AnimationSystem
 {
-    class SkeletonLoader final : ISkeletonLoader
+    class SkeletonLoader final : public ISkeletonLoader
     {
     public:
         explicit SkeletonLoader(gef::Platform& platform_);

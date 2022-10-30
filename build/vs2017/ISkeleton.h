@@ -27,23 +27,23 @@ namespace AnimationSystem
     class GefSkeletonWrapper final : ISkeleton
     {
     public:
-        static std::unique_ptr<ISkeleton> Create(std::unique_ptr<gef::Skeleton> skeleton)
+        static std::unique_ptr<ISkeleton> Create(gef::Skeleton const & skeleton)
         {
-            auto iSkeleton = std::unique_ptr<ISkeleton>{ new GefSkeletonWrapper{std::move(skeleton)}};
+            auto iSkeleton = std::unique_ptr<ISkeleton>{ new GefSkeletonWrapper{skeleton}};
             return iSkeleton;
         }
 
-        gef::Skeleton const & Skeleton() const override {return *skeleton_;}
+        gef::Skeleton const & Skeleton() const override {return skeleton_;}
 
 
     private:
         // prevent creation outside of class
-        explicit GefSkeletonWrapper(std::unique_ptr<gef::Skeleton> mesh)
-            :skeleton_(std::move(mesh))
+        explicit GefSkeletonWrapper(gef::Skeleton const & mesh)
+            :skeleton_(mesh)
         {
         }
 
-        std::unique_ptr<gef::Skeleton> skeleton_;
+        gef::Skeleton const & skeleton_;
 
         void operator delete(void * p){::operator delete(p);}
     };

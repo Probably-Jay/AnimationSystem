@@ -51,22 +51,19 @@ void AnimatedMeshApp::Init()
 void AnimatedMeshApp::LoadMeshAndAnimation()
 {
 	animation_system_->LoadObjectScene("tesla/tesla.scn");
-
-	const auto & meshLoader = animation_system_->MeshLoader();
-
-	const auto ids = meshLoader.GetAllMeshIDs();
-
-	const auto wrappedMesh = meshLoader.GetMesh(ids.front());
 	
-	
+	const auto firstMeshID = animation_system_->MeshLoader().GetAllMeshIDs().front();
+	const auto mesh = animation_system_->MeshLoader().GetMesh(firstMeshID);
 
-	gef::Skeleton* skeleton = GetFirstSkeleton(&animation_system_->GetModelScene());
+	const auto firstSkeletonID = animation_system_->SkeletonLoader().GetAllSkeletonIDs().front();
+	const auto skeleton = animation_system_->SkeletonLoader().GetSkeleton(firstSkeletonID);
+
 
 	if (skeleton)
 	{
-		player_ = new gef::SkinnedMeshInstance(*skeleton);
+		player_ = new gef::SkinnedMeshInstance(skeleton->Skeleton());
 		anim_player_.Init(player_->bind_pose());
-		player_->set_mesh(&wrappedMesh->Mesh());
+		player_->set_mesh(&mesh->Mesh());
 	}
 
 

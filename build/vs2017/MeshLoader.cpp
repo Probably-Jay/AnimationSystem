@@ -9,6 +9,9 @@ AnimationSystem::MeshLoader::MeshLoader(gef::Platform& platform_)
 
 Result AnimationSystem::MeshLoader::LoadMeshScene(gef::Scene& scene)
 {
+
+	// todo dont own this
+	
 	const auto & meshDataList = scene.mesh_data;
 	
 	if(meshDataList.empty())

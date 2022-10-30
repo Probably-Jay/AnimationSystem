@@ -218,7 +218,6 @@
     <ClCompile Include="..\..\animated_mesh_app.cpp" />
     <ClCompile Include="..\..\motion_clip_player.cpp" />
     <ClCompile Include="AnimationSystem3D.cpp" />
-    <ClCompile Include="IMeshLoader.cpp" />
     <ClCompile Include="ISkeleton.cpp" />
     <ClCompile Include="MeshLoader.cpp" />
     <ClCompile Include="SkeletonLoader.cpp" />

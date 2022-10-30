@@ -18,16 +18,22 @@ Result AnimationSystem3D::LoadObjectScene(std::string filePath)
     // we want to render the data stored in the scene file
     // so create the materials from the material data present in the scene file
     model_scene_->CreateMaterials(platform_);
-    
-    auto result = mesh_loader_->LoadMeshScene(*model_scene_);
-    if(!result.Successful)
+   
+    Result result = Result::OK();
+    result = mesh_loader_->LoadMeshScene(*model_scene_);
+    if(!result.Successful())
         return result;
 
+    result = skeleton_loader_->LoadSkeletonScene(*model_scene_);
+    if(!result.Successful())
+        return result;
+    
     return Result::OK();
 }
 
 AnimationSystem3D::AnimationSystem3D(gef::Platform& platform_)
     : mesh_loader_(new class MeshLoader(platform_))
+    , skeleton_loader_(new class SkeletonLoader(platform_))
     , platform_(platform_)
 {
 

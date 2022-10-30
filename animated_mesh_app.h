@@ -57,7 +57,7 @@ private:
 
 	float fps_;
 
-	class gef::Mesh* mesh_;
+	gef::Mesh * mesh_;
 	gef::SkinnedMeshInstance* player_;
 
 	gef::Scene* model_scene_;

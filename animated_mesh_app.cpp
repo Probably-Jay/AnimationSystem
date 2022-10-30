@@ -17,6 +17,8 @@
 #include <animation/skeleton.h>
 #include <animation/animation.h>
 
+#include "IMesh.h"
+
 AnimatedMeshApp::AnimatedMeshApp(gef::Platform& platform) :
 	Application(platform),
 	sprite_renderer_(nullptr),
@@ -48,26 +50,29 @@ void AnimatedMeshApp::Init()
 
 void AnimatedMeshApp::LoadMeshAndAnimation()
 {
-	animation_system_->MeshLoader().LoadMeshScene("tesla/tesla.scn");
+	auto & meshLoader = animation_system_->MeshLoader();
+	meshLoader.LoadMeshScene("tesla/tesla.scn");
 
+	const auto ids = meshLoader.GetAllMeshIDs();
 
+	const auto wrappedMesh = meshLoader.GetMesh(ids.front());
 	
-
-
-	//delete a;
+	auto mesh = &wrappedMesh->Mesh();
+	
+	
 	
 	// create a new scene object and read in the data from the file
 	// no meshes or materials are created yet
 	// we're not making any assumptions about what the data may be loaded in for
 	model_scene_ = new gef::Scene();
 	model_scene_->ReadSceneFromFile(platform_, "tesla/tesla.scn");
-
+	
 	// we do want to render the data stored in the scene file so lets create the materials from the material data present in the scene file
 	model_scene_->CreateMaterials(platform_);
-
+	
 	// if there is mesh data in the scene, create a mesh to draw from the first mesh
 	mesh_ = GetFirstMesh(model_scene_);
-
+	
 	// get the first skeleton in the scene
 	gef::Skeleton* skeleton = GetFirstSkeleton(model_scene_);
 

@@ -19,8 +19,8 @@ namespace AnimationSystem
 
     private:
         // prevent creation outside of class
-        explicit GefSkeletonWrapper(gef::Skeleton const & mesh, const gef::StringId id)
-            : skeleton_(mesh), id_(id)
+        GefSkeletonWrapper(gef::Skeleton const & skeleton, const gef::StringId id)
+            : skeleton_(skeleton), id_(id)
         {
         }
 

@@ -4,8 +4,9 @@
 namespace AnimationSystem
 {
 	/**
-	 * \brief Wrapper for implementation-specific objects. Ownership is strictly forbidden through this interface.
-	 * Attempting to create or destroy an object via a pointer of this type is a compile-time error.
+	 * \brief Wrapper for implementation-specific objects. Manual ownership is strictly forbidden through this interface.
+	 * Instead, deriving types must offer a static factory method returning a unique_pointer of this type.
+	 * Attempting to create or delete an object via a pointer of this type is a compile-time error.
 	 * \tparam T The class contained in this wrapper. Accessible through IProtectedWrapper<T>::Item().
 	 */
 	template <class T>

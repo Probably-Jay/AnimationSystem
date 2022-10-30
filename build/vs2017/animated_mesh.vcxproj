@@ -230,6 +230,7 @@
     <ClInclude Include="IMeshLoader.h" />
     <ClInclude Include="IProtectedWrapper.h" />
     <ClInclude Include="ISkeleton.h" />
+    <ClInclude Include="ISkinnedMesh.h" />
     <ClInclude Include="MeshLoader.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="SkeletonLoader.h" />

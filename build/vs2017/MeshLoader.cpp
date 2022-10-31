@@ -9,7 +9,6 @@ AnimationSystem::MeshLoader::MeshLoader(gef::Platform& platform_)
 
 Result AnimationSystem::MeshLoader::LoadMeshScene(gef::Scene& scene)
 {
-
 	scene.CreateMeshes(platform_);
 
 	const auto & meshList = scene.meshes;
@@ -21,7 +20,7 @@ Result AnimationSystem::MeshLoader::LoadMeshScene(gef::Scene& scene)
 	// todo this properly
 	
 	auto meshDataIter = meshDataList.begin();
-	for(auto meshIter = meshList.begin(); meshIter != meshList.end(); ++meshIter, ++ meshDataIter)
+	for(auto meshIter = meshList.begin(); meshIter != meshList.end(); ++meshIter, ++meshDataIter)
 	{
 		gef::StringId uniqueID = meshDataIter->name_id;
 		

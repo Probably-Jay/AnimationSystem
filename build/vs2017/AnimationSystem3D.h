@@ -7,6 +7,7 @@
 #include "SkinnedMeshContainer.h"
 #include "graphics/scene.h"
 #include "system/platform.h"
+#include "motion_clip_player.h"
 
 using std::unique_ptr;
 
@@ -16,11 +17,7 @@ namespace AnimationSystem
 	{
 	public:
 
-		static unique_ptr<AnimationSystem3D> Create(gef::Platform & platform_)
-		{
-			const auto system = new AnimationSystem3D(platform_);
-			return unique_ptr<AnimationSystem3D>(system);
-		}
+		static unique_ptr<AnimationSystem3D> Create(gef::Platform & platform_);
 
 		AnimationSystem3D (AnimationSystem3D const&) = delete;
 		void operator=(AnimationSystem3D const&) = delete;
@@ -32,6 +29,7 @@ namespace AnimationSystem
 
 		SkinnedMeshWrapper * GetSkinnedMesh(StringId id) const {return skinned_mesh_container_->GetSkinnedMesh(id);}
 
+		Result CreateAnimatorForSkinnedMesh(StringId id);
 		
 		gef::Scene & GetModelScene() const {return *model_scene_;}
 		Result CreateSkinnedMeshFrom(gef::StringId skeletonId) const;
@@ -44,6 +42,8 @@ namespace AnimationSystem
 
 		unique_ptr<SkinnedMeshContainer> skinned_mesh_container_;
 
+
+		std::map<StringId, unique_ptr<MotionClipPlayer>> animators_;
 		
 		gef::Platform & platform_;
 		std::unique_ptr<gef::Scene> model_scene_;

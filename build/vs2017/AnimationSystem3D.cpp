@@ -4,6 +4,12 @@
 
 using namespace AnimationSystem;
 
+unique_ptr<AnimationSystem3D> AnimationSystem3D::Create(gef::Platform& platform_)
+{
+    const auto system = new AnimationSystem3D(platform_);
+    return unique_ptr<AnimationSystem3D>(system);
+}
+
 Result AnimationSystem3D::LoadObjectScene(std::string filePath)
 {
     // from lab code:
@@ -28,6 +34,21 @@ Result AnimationSystem3D::LoadObjectScene(std::string filePath)
     if(!result.Successful())
         return result;
     
+    return Result::OK();
+}
+
+Result AnimationSystem3D::CreateAnimatorForSkinnedMesh(StringId id)
+{
+    const auto skinnedMesh = skinned_mesh_container_->GetSkinnedMesh(id);
+
+    if(skinnedMesh == nullptr)
+        return Result::Error("Cannot find skinned mesh with id:" + std::to_string(id));
+    
+    auto animator = std::make_unique<MotionClipPlayer>();
+
+    animator->Init(skinnedMesh->Item().bind_pose());
+    
+    animators_.push_back(std::move(animator));
     return Result::OK();
 }
 

@@ -49,19 +49,16 @@ Result AnimatedMeshApp::LoadMeshAndAnimation()
 		return result;
 	
 	const auto firstMeshID = animation_system_->MeshLoader().GetAllMeshIDs().front();
-	const auto mesh = animation_system_->MeshLoader().GetMesh(firstMeshID);
 
-	const auto firstSkeletonID = animation_system_->SkeletonLoader().GetAllSkeletonIDs().front();
-	const auto skeleton = animation_system_->SkeletonLoader().GetSkeleton(firstSkeletonID);
-
-	result = animation_system_->CreateSkinnedMeshFrom(firstSkeletonID);
+	result = animation_system_->CreateSkinnedMeshFrom(firstMeshID);
 
 	if(result.IsError())
 		return result;
 
-	player_ = animation_system_->GetSkinnedMesh(firstSkeletonID);
-	
-	anim_player_.Init(player_->Item().bind_pose());
+	player_ = animation_system_->GetSkinnedMesh(firstMeshID);
+
+	animation_system_->CreateAnimatorForSkinnedMesh(firstMeshID);
+	//anim_player_.Init(player_->Item().bind_pose());
 
 	// anims
 	walk_anim_ = LoadAnimation("tesla/tesla@walk.scn", "");

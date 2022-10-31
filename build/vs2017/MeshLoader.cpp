@@ -1,6 +1,6 @@
 #include "MeshLoader.h"
 
-using AnimationSystem::IMesh;
+using AnimationSystem::MeshWrapper;
 
 AnimationSystem::MeshLoader::MeshLoader(gef::Platform& platform_)
 	: platform_(platform_)
@@ -25,7 +25,7 @@ Result AnimationSystem::MeshLoader::LoadMeshScene(gef::Scene& scene)
 	{
 		gef::StringId uniqueID = meshDataIter->name_id;
 		
-		auto wrappedMesh = IMesh::Create(**meshIter, meshDataIter->name_id);
+		auto wrappedMesh = MeshWrapper::Create(**meshIter, meshDataIter->name_id);
 
 		meshes_.emplace(uniqueID, std::move(wrappedMesh));
 	}
@@ -43,14 +43,14 @@ Result AnimationSystem::MeshLoader::LoadMeshScene(gef::Scene& scene)
 	// }
 }
 
-IMesh const * AnimationSystem::MeshLoader::GetMesh(string const & name) const
+MeshWrapper const * AnimationSystem::MeshLoader::GetMesh(string const & name) const
 {
 	return GetMesh(gef::GetStringId(name));
 }
 
-IMesh const* AnimationSystem::MeshLoader::GetMesh(const gef::StringId id) const
+MeshWrapper const* AnimationSystem::MeshLoader::GetMesh(const gef::StringId id) const
 {
-	const auto mesh = meshes_.find(id );
+	const auto mesh = meshes_.find(id);
 
 	if(mesh == meshes_.end())
 		return nullptr;

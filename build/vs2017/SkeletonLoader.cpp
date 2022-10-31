@@ -22,7 +22,7 @@ Result AnimationSystem::SkeletonLoader::LoadSkeletonScene(gef::Scene& scene)
        // gef::StringId uniqueID = reinterpret_cast<unsigned>(skeleton);  // NOLINT
         gef::StringId uniqueID = meshDataIter->name_id;
         
-        auto wrappedSkeleton = ISkeleton::Create(**skeletonIter, uniqueID);
+        auto wrappedSkeleton = SkeletonWrapper::Create(**skeletonIter, uniqueID);
         
         skeletons_.emplace(uniqueID, std::move(wrappedSkeleton));
     }
@@ -44,12 +44,12 @@ Result AnimationSystem::SkeletonLoader::LoadSkeletonScene(gef::Scene& scene)
     return Result::OK();
 }
 
-AnimationSystem::ISkeleton const* AnimationSystem::SkeletonLoader::GetSkeleton(std::string const& name) const
+AnimationSystem::SkeletonWrapper const* AnimationSystem::SkeletonLoader::GetSkeleton(std::string const& name) const
 {
     return GetSkeleton(gef::GetStringId(name));
 }
 
-AnimationSystem::ISkeleton const* AnimationSystem::SkeletonLoader::GetSkeleton(gef::StringId id) const
+AnimationSystem::SkeletonWrapper const* AnimationSystem::SkeletonLoader::GetSkeleton(gef::StringId id) const
 {
     const auto skeleton = skeletons_.find(id );
 

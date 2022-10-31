@@ -2,7 +2,6 @@
 #include <memory>
 #include <string>
 
-#include "IMesh.h"
 #include "IMeshLoader.h"
 #include "Result.h"
 #include "graphics/scene.h"
@@ -18,13 +17,13 @@ namespace AnimationSystem
 	public:
 		explicit MeshLoader(gef::Platform& platform_);
 		Result LoadMeshScene(gef::Scene& scene) override;
-		IMesh const * GetMesh(string const& name) const override;
-		IMesh const * GetMesh(gef::StringId id) const override;
+		MeshWrapper const * GetMesh(string const& name) const override;
+		MeshWrapper const * GetMesh(gef::StringId id) const override;
 		std::vector<unsigned int> GetAllMeshIDs() const override;
 	private:
 		gef::Platform& platform_;
 		
-		std::map<gef::StringId, unique_ptr<IMesh>> meshes_;
+		std::map<gef::StringId, unique_ptr<MeshWrapper>> meshes_;
 		
 	};
 }

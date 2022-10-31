@@ -31,9 +31,24 @@ Result AnimationSystem3D::LoadObjectScene(std::string filePath)
     return Result::OK();
 }
 
+Result AnimationSystem3D::CreateSkinnedMeshFrom(const gef::StringId skeletonId) const
+{
+    const auto skeleton = skeleton_loader_->GetSkeleton(skeletonId);
+    if(skeleton == nullptr)
+        return Result::Error("Skeleton could not be found at "+ std::to_string(skeletonId));
+         
+    const auto mesh = mesh_loader_->GetMesh(skeletonId);
+    if(mesh == nullptr)
+        return Result::Error("Skeleton could not be found at "+ std::to_string(skeletonId));
+    
+    skinned_mesh_container_->CreateSkinnedMesh(*skeleton, *mesh);
+    return Result::OK();
+}
+
 AnimationSystem3D::AnimationSystem3D(gef::Platform& platform_)
     : mesh_loader_(new class MeshLoader(platform_))
     , skeleton_loader_(new class SkeletonLoader(platform_))
+    , skinned_mesh_container_(new SkinnedMeshContainer())
     , platform_(platform_)
 {
 

@@ -7,6 +7,7 @@ struct Result
 	static Result OK() { return Result{ }; }
 	static Result Error(std::string	error) { return Result{ std::move(error) }; }
 	bool Successful() const {return successful_;}
+	bool IsError() const {return !Successful();}
 	std::string ErrorMessage() const {return error_message_;}
 
 	Result(const Result& other) = default;

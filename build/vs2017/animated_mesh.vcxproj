@@ -226,11 +226,11 @@
     <ClInclude Include="..\..\motion_clip_player.h" />
     <ClInclude Include="..\..\animated_mesh_app.h" />
     <ClInclude Include="AnimationSystem3D.h" />
-    <ClInclude Include="IMesh.h" />
+    <ClInclude Include="MeshWrapper.h" />
     <ClInclude Include="IMeshLoader.h" />
-    <ClInclude Include="IProtectedWrapper.h" />
-    <ClInclude Include="ISkeleton.h" />
-    <ClInclude Include="ISkinnedMesh.h" />
+    <ClInclude Include="ViewingProtectedWrapper.h" />
+    <ClInclude Include="SkeletonWrapper.h" />
+    <ClInclude Include="SkinnedMeshWrapper.h" />
     <ClInclude Include="MeshLoader.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="SkeletonLoader.h" />

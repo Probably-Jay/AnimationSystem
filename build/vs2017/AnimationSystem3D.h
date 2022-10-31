@@ -25,19 +25,24 @@ namespace AnimationSystem
 		AnimationSystem3D (AnimationSystem3D const&) = delete;
 		void operator=(AnimationSystem3D const&) = delete;
 
+		Result LoadObjectScene(std::string filePath);
+		
 		IMeshLoader const & MeshLoader() const { return *mesh_loader_; }
 		ISkeletonLoader const & SkeletonLoader() const { return *skeleton_loader_; }
-		Result LoadObjectScene(std::string filePath);
 
-		gef::Scene & GetModelScene() const {return *model_scene_;}
+		SkinnedMeshWrapper * GetSkinnedMesh(StringId id) const {return skinned_mesh_container_->GetSkinnedMesh(id);}
+
 		
+		gef::Scene & GetModelScene() const {return *model_scene_;}
+		Result CreateSkinnedMeshFrom(gef::StringId skeletonId) const;
+
 	private:
 		AnimationSystem3D(gef::Platform & platform_);
 		
 		unique_ptr<IMeshLoader> mesh_loader_;
 		unique_ptr<ISkeletonLoader> skeleton_loader_;
 
-		unique_ptr<SkinnedMeshContainer> skinnedMeshes;
+		unique_ptr<SkinnedMeshContainer> skinned_mesh_container_;
 
 		
 		gef::Platform & platform_;

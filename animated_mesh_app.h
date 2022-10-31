@@ -12,7 +12,7 @@
 
 #include "AnimationSystem3D.h"
 #include "motion_clip_player.h"
-
+#include "Result.h"
 
 // FRAMEWORK FORWARD DECLARATIONS
 namespace gef
@@ -31,7 +31,7 @@ class AnimatedMeshApp : public gef::Application
 {
 public:
 	AnimatedMeshApp(gef::Platform& platform);
-	void LoadMeshAndAnimation();
+	Result LoadMeshAndAnimation();
 	void Init();
 
 	gef::Skeleton* GetFirstSkeleton(const gef::Scene* scene) const;
@@ -58,7 +58,7 @@ private:
 	float fps_;
 
 	//gef::Mesh * mesh_;
-	gef::SkinnedMeshInstance* player_;
+	AnimationSystem::SkinnedMeshWrapper* player_;
 
 	//gef::Scene* model_scene_;
 

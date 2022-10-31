@@ -12,6 +12,8 @@
 #include <animation/skeleton.h>
 #include <animation/animation.h>
 
+#include "StringIDFromString.h"
+
 
 AnimatedMeshApp::AnimatedMeshApp(gef::Platform& platform) :
 	Application(platform),
@@ -22,7 +24,7 @@ AnimatedMeshApp::AnimatedMeshApp(gef::Platform& platform) :
 	//mesh_(nullptr),
 	player_(nullptr),
 	//model_scene_(nullptr),
-	walk_anim_(nullptr),
+	//walk_anim_(nullptr),
 	animation_system_(nullptr)
 {
 }
@@ -42,35 +44,41 @@ void AnimatedMeshApp::Init()
 	LoadMeshAndAnimation();
 }
 
-Result AnimatedMeshApp::LoadMeshAndAnimation()
+AnimationSystem::Result AnimatedMeshApp::LoadMeshAndAnimation()
 {
-	Result result = animation_system_->LoadObjectScene("tesla/tesla.scn");
+	AnimationSystem::Result result = animation_system_->LoadObjectScene("tesla/tesla.scn");
 	if(!result.Successful())
 		return result;
 	
-	const auto firstMeshID = animation_system_->MeshLoader().GetAllMeshIDs().front();
+	player_id_ = animation_system_->MeshLoader().GetAllMeshIDs().front();
 
-	result = animation_system_->CreateSkinnedMeshFrom(firstMeshID);
+	result = animation_system_->CreateSkinnedMeshFrom(player_id_);
 
 	if(result.IsError())
 		return result;
 
-	player_ = animation_system_->GetSkinnedMesh(firstMeshID);
+	player_ = animation_system_->GetSkinnedMesh(player_id_);
 
-	animation_system_->CreateAnimatorForSkinnedMesh(firstMeshID);
-	//anim_player_.Init(player_->Item().bind_pose());
+	animation_system_->CreateAnimatorForSkinnedMesh(player_id_);
+	
+	auto animationResult = animation_system_->LoadAnimation("tesla/tesla@walk.scn","");
 
+	if(animationResult.IsError())
+		return {animationResult};
+	
 	// anims
-	walk_anim_ = LoadAnimation("tesla/tesla@walk.scn", "");
 
+	const auto walk_anim_ = animation_system_->GetAnimation(animationResult.EntityID());
+	
 	if (walk_anim_)
 	{
-		anim_player_.set_clip(walk_anim_);
-		anim_player_.set_looping(true);
-		anim_player_.set_anim_time(0.0f);
+		auto & animPlayer = animation_system_->GetAnimator(player_id_)->Item();
+		animPlayer.set_clip(&walk_anim_->Item());
+		animPlayer.set_looping(true);
+		animPlayer.set_anim_time(0.0f);
 	}
 
-	return Result::OK();
+	return AnimationSystem::Result::OK();
 }
 
 
@@ -78,8 +86,8 @@ void AnimatedMeshApp::CleanUp()
 {
 	CleanUpFont();
 
-	delete walk_anim_;
-	walk_anim_ = nullptr;
+	// delete walk_anim_;
+	// walk_anim_ = nullptr;
 	
 	delete input_manager_;
 	input_manager_ = nullptr;
@@ -116,12 +124,14 @@ bool AnimatedMeshApp::Update(float frame_time)
 
 	if(player_)
 	{
+		const auto animPlayer = animation_system_->GetAnimator(player_id_);
+		
 		// update the pose in the anim player from the animation
-		anim_player_.Update(frame_time, player_->Item().bind_pose());
+		animPlayer->Item().Update(frame_time, player_->Item().bind_pose());
 
 		// update the bone matrices that are used for rendering the character
 		// from the newly updated pose in the anim player
-		player_->Item().UpdateBoneMatrices(anim_player_.pose());
+		player_->Item().UpdateBoneMatrices(animPlayer->Item().pose());
 	}
 
 	// build a transformation matrix that will position the character

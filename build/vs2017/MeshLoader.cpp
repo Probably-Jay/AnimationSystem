@@ -7,7 +7,7 @@ AnimationSystem::MeshLoader::MeshLoader(gef::Platform& platform_)
 {
 }
 
-Result AnimationSystem::MeshLoader::LoadMeshScene(gef::Scene& scene)
+AnimationSystem::Result AnimationSystem::MeshLoader::LoadMeshScene(gef::Scene& scene)
 {
 	scene.CreateMeshes(platform_);
 

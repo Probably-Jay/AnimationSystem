@@ -31,7 +31,7 @@ class AnimatedMeshApp : public gef::Application
 {
 public:
 	AnimatedMeshApp(gef::Platform& platform);
-	Result LoadMeshAndAnimation();
+	AnimationSystem::Result LoadMeshAndAnimation();
 	void Init();
 
 	gef::Skeleton* GetFirstSkeleton(const gef::Scene* scene) const;
@@ -69,8 +69,9 @@ private:
 	float near_plane_;
 	float far_plane_;
 
-	MotionClipPlayer anim_player_;
-	gef::Animation* walk_anim_;
+	//MotionClipPlayer anim_player_;
+	StringId player_id_;
+	//AnimationSystem::AnimationWrapper* walk_anim_;
 
 	std::unique_ptr<AnimationSystem::AnimationSystem3D> animation_system_;
 };

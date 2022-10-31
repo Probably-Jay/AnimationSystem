@@ -4,6 +4,17 @@
 
 using namespace AnimationSystem;
 
+AnimationSystem3D::AnimationSystem3D(gef::Platform& platform_)
+    : mesh_loader_(new class MeshLoader(platform_))
+    , skeleton_loader_(new class SkeletonLoader(platform_))
+    , skinned_mesh_container_(new SkinnedMeshContainer())
+    , animation_container_(new AnimationContainer(platform_))
+    , platform_(platform_)
+{
+
+}
+
+
 unique_ptr<AnimationSystem3D> AnimationSystem3D::Create(gef::Platform& platform_)
 {
     const auto system = new AnimationSystem3D(platform_);
@@ -44,11 +55,11 @@ Result AnimationSystem3D::CreateAnimatorForSkinnedMesh(StringId id)
     if(skinnedMesh == nullptr)
         return Result::Error("Cannot find skinned mesh with id:" + std::to_string(id));
     
-    auto animator = std::make_unique<MotionClipPlayer>();
+    auto animator =  AnimatorWrapper::Create(id);
 
-    animator->Init(skinnedMesh->Item().bind_pose());
+    animator->Item().Init(skinnedMesh->Item().bind_pose());
     
-    animators_.push_back(std::move(animator));
+    animators_.emplace(animator->ID(), std::move(animator));
     return Result::OK();
 }
 
@@ -66,13 +77,5 @@ Result AnimationSystem3D::CreateSkinnedMeshFrom(const gef::StringId skeletonId) 
     return Result::OK();
 }
 
-AnimationSystem3D::AnimationSystem3D(gef::Platform& platform_)
-    : mesh_loader_(new class MeshLoader(platform_))
-    , skeleton_loader_(new class SkeletonLoader(platform_))
-    , skinned_mesh_container_(new SkinnedMeshContainer())
-    , platform_(platform_)
-{
-
-}
 
 

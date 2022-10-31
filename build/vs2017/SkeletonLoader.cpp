@@ -5,7 +5,7 @@ AnimationSystem::SkeletonLoader::SkeletonLoader(gef::Platform& platform_)
 {
 }
 
-Result AnimationSystem::SkeletonLoader::LoadSkeletonScene(gef::Scene& scene)
+AnimationSystem::Result AnimationSystem::SkeletonLoader::LoadSkeletonScene(gef::Scene& scene)
 {
     const auto & meshDataList = scene.mesh_data;
     const auto & skeletons = scene.skeletons;

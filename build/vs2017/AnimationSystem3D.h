@@ -2,7 +2,10 @@
 #include <memory>
 
 
+#include "AnimatorWrapper.h"
+#include "IAnimationContainer.h"
 #include "IMeshLoader.h"
+#include "IStringID.h"
 #include "SkeletonLoader.h"
 #include "SkinnedMeshContainer.h"
 #include "graphics/scene.h"
@@ -10,6 +13,8 @@
 #include "motion_clip_player.h"
 
 using std::unique_ptr;
+
+
 
 namespace AnimationSystem
 {
@@ -27,12 +32,19 @@ namespace AnimationSystem
 		IMeshLoader const & MeshLoader() const { return *mesh_loader_; }
 		ISkeletonLoader const & SkeletonLoader() const { return *skeleton_loader_; }
 
-		SkinnedMeshWrapper * GetSkinnedMesh(StringId id) const {return skinned_mesh_container_->GetSkinnedMesh(id);}
+		SkinnedMeshWrapper * GetSkinnedMesh(const StringId id) const {return skinned_mesh_container_->GetSkinnedMesh(id);}
 
+
+		AnimatorWrapper* GetAnimator(const StringId id) const { return GetWrappedValueFromMap(animators_, id); }
+		
 		Result CreateAnimatorForSkinnedMesh(StringId id);
 		
 		gef::Scene & GetModelScene() const {return *model_scene_;}
-		Result CreateSkinnedMeshFrom(gef::StringId skeletonId) const;
+		Result CreateSkinnedMeshFrom(StringId skeletonId) const;
+		
+		CreateEntityResult LoadAnimation(const string& filepath, const string& name) const {return animation_container_->LoadAnimations(filepath, name);}
+		AnimationWrapper* GetAnimation(StringId id) const {return animation_container_->GetAnimation(id);}
+
 
 	private:
 		AnimationSystem3D(gef::Platform & platform_);
@@ -42,8 +54,9 @@ namespace AnimationSystem
 
 		unique_ptr<SkinnedMeshContainer> skinned_mesh_container_;
 
-
-		std::map<StringId, unique_ptr<MotionClipPlayer>> animators_;
+		unique_ptr<IAnimationContainer> animation_container_;
+		
+		std::map<StringId, unique_ptr<AnimatorWrapper>> animators_;
 		
 		gef::Platform & platform_;
 		std::unique_ptr<gef::Scene> model_scene_;

@@ -11,9 +11,11 @@ namespace AnimationSystem
         virtual ~IAnimationContainer() = default;
         virtual CreateEntityResult LoadAnimations(const string& filepath, string animationName) = 0;
         virtual AnimationWrapper * GetAnimation(StringId id) const = 0;
-        
+        virtual bool HasAnimation(StringId id) const = 0;
     };
-}namespace AnimationSystem
+}
+
+namespace AnimationSystem
 {
     class AnimationContainer : public IAnimationContainer
     {
@@ -21,9 +23,10 @@ namespace AnimationSystem
         explicit AnimationContainer(gef::Platform const & platform);
 
         CreateEntityResult LoadAnimations(const string& filepath, string animationName) override;
-        
+
         AnimationWrapper * GetAnimation(const StringId id) const override {return GetWrappedValueFromMap(animations_, id);}
-        
+        bool HasAnimation(const StringId id) const override {return GetAnimation(id) != nullptr; }
+
     private:
 
         std::map<StringId, std::unique_ptr<AnimationWrapper>> animations_;

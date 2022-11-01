@@ -221,6 +221,7 @@
     <ClCompile Include="..\..\motion_clip_player.cpp" />
     <ClCompile Include="..\..\SkinnedMeshContainer.cpp" />
     <ClCompile Include="..\..\StringIDFromString.cpp" />
+    <ClCompile Include="AnimationController.cpp" />
     <ClCompile Include="AnimationSystem3D.cpp" />
     <ClCompile Include="MeshLoader.cpp" />
     <ClCompile Include="SkeletonLoader.cpp" />
@@ -234,6 +235,7 @@
     <ClInclude Include="..\..\motion_clip_player.h" />
     <ClInclude Include="..\..\animated_mesh_app.h" />
     <ClInclude Include="..\..\StringIDFromString.h" />
+    <ClInclude Include="AnimationController.h" />
     <ClInclude Include="AnimationSystem3D.h" />
     <ClInclude Include="MeshWrapper.h" />
     <ClInclude Include="IMeshLoader.h" />

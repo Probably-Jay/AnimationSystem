@@ -68,15 +68,20 @@ AnimationSystem::Result AnimatedMeshApp::LoadMeshAndAnimation()
 	
 	// anims
 
-	const auto walk_anim_ = animation_system_->GetAnimation(animationResult.EntityID());
+	const auto walkAnim = animation_system_->GetAnimation(animationResult.EntityID());
 	
-	if (walk_anim_)
+	if (!walkAnim)
+		return AnimationSystem::Result::Error("Walk animation could not be found");
+
+	result = animation_system_->SetAnimatorProperties(player_id_, [&walkAnim](auto & animPlayer)
 	{
-		auto & animPlayer = animation_system_->GetAnimator(player_id_)->Item();
-		animPlayer.set_clip(&walk_anim_->Item());
+		animPlayer.set_clip(&walkAnim->Item());
 		animPlayer.set_looping(true);
 		animPlayer.set_anim_time(0.0f);
-	}
+	});
+
+	if(result.IsError())
+		return result;
 
 	return AnimationSystem::Result::OK();
 }

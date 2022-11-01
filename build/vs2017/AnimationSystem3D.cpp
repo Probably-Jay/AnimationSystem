@@ -90,5 +90,20 @@ Result AnimationSystem3D::CreateAnimatiorForSkinnedMesh(const StringId sMeshId, 
     return Result::Error("This function is not implimented");
 }
 
+Result AnimationSystem3D::SetAnimation(StringId anmiatorId, string animName)
+{
+    const auto animator = GetAnimator(anmiatorId);
+    if(animator == nullptr)
+        return Result::Error("Animator mesh could not be found at "+ std::to_string(anmiatorId));
+
+    const auto animation= animation_container_->GetAnimation(animName);
+    if(animation == nullptr)
+        return Result::Error("Animation could not be found with id" + animName);
+    
+    
+    animator->Item().set_clip(&animation->Item());
+    return Result::OK();
+}
+
 
 

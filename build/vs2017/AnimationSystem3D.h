@@ -17,6 +17,8 @@
 #include <AnimationController.h>
 #include <functional>
 
+#include "AnimatorConfig.h"
+
 
 using std::unique_ptr;
 
@@ -46,21 +48,23 @@ namespace AnimationSystem
 		gef::Scene & GetModelScene() const {return *model_scene_;}
 		Result CreateSkinnedMeshFrom(StringId skeletonId) const;
 
-		CreateEntityResult LoadAnimation(const string& filepath, const string& name) const {return animation_container_->LoadAnimations(filepath, name);}
+		CreateEntityResult LoadAnimation(const string& nameId, const string& filepath, const string& nameWithinFile) const {return animation_container_->LoadAnimations(nameId, filepath, nameWithinFile);}
+		
 		AnimationWrapper* GetAnimation(const StringId id) const {return animation_container_->GetAnimation(id);}
 
-		Result SetAnimatorProperties(const StringId animationId, std::function<void(MotionClipPlayer&)> const & a) const
+		Result SetAnimatorProperties(const StringId animationId, std::function<void(AnimatorConfig)> const & a) const
 		{
 			const auto animator = GetAnimator(animationId);
 			if(animator == nullptr)
 				return Result::Error("Animation could not be found with id" + std::to_string(animationId));
 
-			a(animator->Item());
+			a(AnimatorConfig(animator->Item()));
 			return Result::OK();
 		}
 
 		AnimatorWrapper* GetAnimator(const StringId id) const { return GetWrappedValueFromMap(animators_, id); }
 		Result CreateAnimatiorForSkinnedMesh(const StringId sMeshId, const StringId animatiorId);
+		Result SetAnimation(StringId animatorId, string animName);
 	private:
 		AnimationSystem3D(gef::Platform & platform_);
 		

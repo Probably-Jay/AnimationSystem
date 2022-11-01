@@ -8,31 +8,25 @@ AnimationSystem::AnimationContainer::AnimationContainer(const gef::Platform& pla
 {
 }
 
-AnimationSystem::CreateEntityResult AnimationSystem::AnimationContainer::LoadAnimations(
-    const string& filepath, string animationName)
+AnimationSystem::CreateEntityResult AnimationSystem::AnimationContainer::LoadAnimations(const string& nameId, const std::string& filepath, const std::string& nameWithinFile)
 {
-    // from lab
-    
     auto animationScene = gef::Scene{};
 	
     if (!animationScene.ReadSceneFromFile(platform_, filepath.c_str()))
         return CreateEntityResult::Error("Could not load animation from scene file");
     
     const auto animationIter =
-        animationName.empty() // if no name specified, take first
+        nameWithinFile.empty() // if no name specified, take first
             ? animationScene.animations.begin()
-            : animationScene.animations.find(gef::GetStringId(animationName));
+            : animationScene.animations.find(gef::GetStringId(nameWithinFile));
 
     if (animationIter == animationScene.animations.end())
-        return CreateEntityResult::Error("Animation with name " + animationName + "could not be found");
+        return CreateEntityResult::Error("Animation with name " + nameWithinFile + "could not be found");
 
-    // create a UID todo make this better
-    const StringId animationId = gef::GetStringId(filepath) ^ animationIter->first;
+    const StringId animationId = string_id_table_.Add(nameId);
     
     auto animation = AnimationWrapper::Create(animationId, std::move(*animationIter->second));
+    animations_.emplace(animationId, std::move(animation));
 
-    StringId id = animation->ID();
-    animations_.emplace(id, std::move(animation));
-
-    return CreateEntityResult::OK(id);
+    return CreateEntityResult::OK(animationId);
 }

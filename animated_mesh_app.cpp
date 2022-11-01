@@ -61,27 +61,25 @@ AnimationSystem::Result AnimatedMeshApp::LoadMeshAndAnimation()
 
 	animation_system_->CreateAnimatorForSkinnedMesh(player_id_);
 	
-	auto animationResult = animation_system_->LoadAnimation("tesla/tesla@walk.scn","");
+	auto animationResult = animation_system_->LoadAnimation("Walk", "tesla/tesla@walk.scn","");
 
 	if(animationResult.IsError())
 		return {animationResult};
-
-	
-	//animation_system_->CreateAnimatiorForSkinnedMesh(player_id_, animationResult.EntityID());
-	
-
-
 	
 	const auto walkAnim = animation_system_->GetAnimation(animationResult.EntityID());
 	
 	if (!walkAnim)
 		return AnimationSystem::Result::Error("Walk animation could not be found");
 
-	result = animation_system_->SetAnimatorProperties(player_id_, [&walkAnim](auto & animPlayer)
+	result = animation_system_->SetAnimation(player_id_, "Walk");
+
+	if(result.IsError())
+		return result;
+	
+	result = animation_system_->SetAnimatorProperties(player_id_, [&walkAnim](AnimatorConfig animPlayer)
 	{
-		animPlayer.set_clip(&walkAnim->Item());
-		animPlayer.set_looping(true);
-		animPlayer.set_anim_time(0.0f);
+		animPlayer.SetLooping(true);
+		animPlayer.SetAnimationTime(0.0f);
 	});
 
 	if(result.IsError())

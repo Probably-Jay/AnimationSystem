@@ -65,9 +65,13 @@ AnimationSystem::Result AnimatedMeshApp::LoadMeshAndAnimation()
 
 	if(animationResult.IsError())
 		return {animationResult};
-	
-	// anims
 
+	
+	//animation_system_->CreateAnimatiorForSkinnedMesh(player_id_, animationResult.EntityID());
+	
+
+
+	
 	const auto walkAnim = animation_system_->GetAnimation(animationResult.EntityID());
 	
 	if (!walkAnim)

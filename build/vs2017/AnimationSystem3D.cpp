@@ -77,5 +77,18 @@ Result AnimationSystem3D::CreateSkinnedMeshFrom(const gef::StringId skeletonId) 
     return Result::OK();
 }
 
+Result AnimationSystem3D::CreateAnimatiorForSkinnedMesh(const StringId sMeshId, const StringId animatiorId)
+{
+    const auto sMesh = skinned_mesh_container_->GetSkinnedMesh(sMeshId);
+    if(sMesh == nullptr)
+        return Result::Error("Skinned mesh could not be found at "+ std::to_string(sMeshId));
+
+    const auto animator = GetAnimator(animatiorId);
+    if(animator == nullptr)
+        return Result::Error("Animator mesh could not be found at "+ std::to_string(animatiorId));
+
+    return Result::Error("This function is not implimented");
+}
+
 
 

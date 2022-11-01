@@ -60,6 +60,7 @@ namespace AnimationSystem
 		}
 
 		AnimatorWrapper* GetAnimator(const StringId id) const { return GetWrappedValueFromMap(animators_, id); }
+		Result CreateAnimatiorForSkinnedMesh(const StringId sMeshId, const StringId animatiorId);
 	private:
 		AnimationSystem3D(gef::Platform & platform_);
 		

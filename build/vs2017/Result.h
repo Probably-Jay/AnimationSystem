@@ -42,6 +42,7 @@ namespace AnimationSystem
 			return *this;
 		}
 
+		// todo add result handling?
 		~Result() = default;
 		
 	protected:

@@ -17,18 +17,19 @@ AnimationSystem::CreateEntityResult AnimationSystem::AnimationContainer::LoadAni
 	
     if (!animationScene.ReadSceneFromFile(platform_, filepath.c_str()))
         return CreateEntityResult::Error("Could not load animation from scene file");
-
-    const StringId animationID = gef::GetStringId(animationName);
     
     const auto animationIter =
         animationName.empty() // if no name specified, take first
             ? animationScene.animations.begin()
-            : animationScene.animations.find(animationID);
+            : animationScene.animations.find(gef::GetStringId(animationName));
 
     if (animationIter == animationScene.animations.end())
         return CreateEntityResult::Error("Animation with name " + animationName + "could not be found");
 
-    auto animation = AnimationWrapper::Create(animationID, std::move(*animationIter->second));
+    // create a UID todo make this better
+    const StringId animationId = gef::GetStringId(filepath) ^ animationIter->first;
+    
+    auto animation = AnimationWrapper::Create(animationId, std::move(*animationIter->second));
 
     StringId id = animation->ID();
     animations_.emplace(id, std::move(animation));

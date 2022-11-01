@@ -66,3 +66,19 @@ std::vector<unsigned> AnimationSystem::SkeletonLoader::GetAllSkeletonIDs() const
         IDs.push_back(pair.first);
     return IDs;
 }
+
+AnimationSystem::Result AnimationSystem::SingleSkeletonLoader::LoadSkeleton(StringId const id, gef::Scene const& scene, gef::Platform & platform)
+{
+    const auto & skeletons = scene.skeletons;
+    
+    if(skeletons.empty())
+        return Result::Error("Scene contained no skeletons");
+
+    if(skeletons.size() > 1)
+        return Result::Error("Multiple skeletons per scene is not supported");
+
+    const auto skeletonFromFile = skeletons.front();
+    skeleton_ = SkeletonWrapper::Create(*skeletonFromFile, id);
+
+    return Result::OK();
+}

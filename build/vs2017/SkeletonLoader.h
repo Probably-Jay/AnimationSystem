@@ -33,4 +33,14 @@ namespace AnimationSystem
 		
         std::map<gef::StringId, std::unique_ptr<SkeletonWrapper>> skeletons_;
     };
+
+    class SingleSkeletonLoader
+    {
+    public:
+        Result LoadSkeleton(StringId const id, gef::Scene const& scene, gef::Platform& platform);
+        std::unique_ptr<SkeletonWrapper> TakeSkeleton() {return std::move(skeleton_); }
+
+    private:
+        std::unique_ptr<SkeletonWrapper> skeleton_;
+    };
 }

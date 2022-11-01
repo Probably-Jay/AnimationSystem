@@ -1,6 +1,10 @@
 ﻿#include "SkinnedMeshContainer.h"
 
+#include <pplwin.h>
+
+#include "MeshLoader.h"
 #include "MeshWrapper.h"
+#include "SkeletonLoader.h"
 
 AnimationSystem::SkinnedMeshWrapper const& AnimationSystem::SkinnedMeshContainer::CreateSkinnedMesh(SkeletonWrapper const& skeleton, MeshWrapper const& mesh)
 {
@@ -24,4 +28,37 @@ AnimationSystem::SkinnedMeshWrapper const& AnimationSystem::SkinnedMeshContainer
     auto iSkinnedMesh = SkinnedMeshWrapper::Create(std::move(skinnedMesh), skeleton.ID());
     skinned_meshes_.emplace(skeleton.ID(), std::move(iSkinnedMesh));
     return *skinned_meshes_.at(skeleton.ID());
+}
+
+AnimationSystem::Result AnimationSystem::SingleSkinnedMeshContainer::CreateSkinnedMesh(StringId id, gef::Platform& platform, std::unique_ptr<gef::Scene> modelScene)
+{
+    model_scene_ = std::move(modelScene);
+    return Create(id, platform);
+}
+
+AnimationSystem::Result AnimationSystem::SingleSkinnedMeshContainer::Create(const StringId id, gef::Platform& platform)
+{
+    auto meshLoader = SingleMeshLoader{};
+    {
+        auto result = meshLoader.LoadMesh(id, *model_scene_, platform);
+    
+        if(result.IsError())
+            return result;
+    }
+    
+    auto skeletonLoader = SingleSkeletonLoader{};
+    {
+        auto result = skeletonLoader.LoadSkeleton(id, *model_scene_, platform);
+    
+        if(result.IsError())
+            return result;
+    }
+
+    mesh_ = meshLoader.TakeMesh();
+    skeleton_ = skeletonLoader.TakeSkeleton();
+
+    skinned_mesh_ = SkinnedMeshWrapper::Create(id, skeleton_->Item());
+    skinned_mesh_->Item().set_mesh(&mesh_->Item());
+
+    return Result::OK();
 }

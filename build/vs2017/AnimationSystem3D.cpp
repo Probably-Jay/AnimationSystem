@@ -1,5 +1,6 @@
 #include "AnimationSystem3D.h"
 
+#include "AnimatedObject.h"
 #include "MeshLoader.h"
 
 using namespace AnimationSystem;
@@ -9,6 +10,7 @@ AnimationSystem3D::AnimationSystem3D(gef::Platform& platform_)
     , skeleton_loader_(new class SkeletonLoader(platform_))
     , skinned_mesh_container_(new SkinnedMeshContainer())
     , animation_container_(new AnimationContainer(platform_))
+    , animated_objects_container_(new AnimatedObjectContainer())
     , platform_(platform_)
 {
 
@@ -20,6 +22,8 @@ unique_ptr<AnimationSystem3D> AnimationSystem3D::Create(gef::Platform& platform_
     const auto system = new AnimationSystem3D(platform_);
     return unique_ptr<AnimationSystem3D>(system);
 }
+
+
 
 Result AnimationSystem3D::LoadObjectScene(std::string filePath)
 {

@@ -1,5 +1,7 @@
 #include "MeshLoader.h"
 
+#include "system/platform.h"
+
 using AnimationSystem::MeshWrapper;
 
 AnimationSystem::MeshLoader::MeshLoader(gef::Platform& platform_)
@@ -24,9 +26,9 @@ AnimationSystem::Result AnimationSystem::MeshLoader::LoadMeshScene(gef::Scene& s
 	{
 		gef::StringId uniqueID = meshDataIter->name_id;
 		
-		auto wrappedMesh = MeshWrapper::Create(**meshIter, meshDataIter->name_id);
+	//	auto wrappedMesh = MeshWrapper::Create(**meshIter, meshDataIter->name_id);
 
-		meshes_.emplace(uniqueID, std::move(wrappedMesh));
+	//	meshes_.emplace(uniqueID, std::move(wrappedMesh));
 	}
 	
 	return Result::OK();
@@ -63,4 +65,23 @@ std::vector<unsigned int> AnimationSystem::MeshLoader::GetAllMeshIDs() const
 	for(auto const& pair: meshes_)
 		IDs.push_back(pair.first);
 	return IDs;
+}
+
+AnimationSystem::Result AnimationSystem::SingleMeshLoader::LoadMesh(const StringId id, gef::Scene& scene, gef::Platform & platform)
+{
+	scene.CreateMeshes(platform);
+
+	const auto & meshList = scene.meshes;
+	
+	if(meshList.empty())
+		return Result::Error("Scene contained no meshes");
+
+	if(meshList.size() > 1)
+		return Result::Error("Loading multiple meshes per scene-file not supported");
+
+	const auto meshFromFile = meshList.front();
+
+	mesh_ = MeshWrapper::Create(*meshFromFile, id); 
+	
+	return Result::OK();
 }

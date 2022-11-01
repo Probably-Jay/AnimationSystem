@@ -17,6 +17,7 @@
 #include <AnimationController.h>
 #include <functional>
 
+#include "AnimatedObjectContainer.h"
 #include "AnimatorConfig.h"
 
 
@@ -26,17 +27,22 @@ using std::unique_ptr;
 
 namespace AnimationSystem
 {
+	class AnimatedObjectContainer;
+
 	class AnimationSystem3D
 	{
 	public:
-
 		static unique_ptr<AnimationSystem3D> Create(gef::Platform & platform_);
 
 		AnimationSystem3D (AnimationSystem3D const&) = delete;
 		void operator=(AnimationSystem3D const&) = delete;
 
-		Result LoadObjectScene(std::string filePath);
+		CreateEntityResult CreateAnimatedObject(string const & objectNameId, string const & filePath)
+		{ return animated_objects_container_->CreateAnimatedObject(objectNameId, filePath, platform_);}
+		IReadonlyAnimatedObjectContainer const & AnimatedObjects() const {return *animated_objects_container_;}
 		
+		Result LoadObjectScene(std::string filePath);
+
 		IMeshLoader const & MeshLoader() const { return *mesh_loader_; }
 		ISkeletonLoader const & SkeletonLoader() const { return *skeleton_loader_; }
 
@@ -49,8 +55,9 @@ namespace AnimationSystem
 		Result CreateSkinnedMeshFrom(StringId skeletonId) const;
 
 		CreateEntityResult LoadAnimation(const string& nameId, const string& filepath, const string& nameWithinFile) const {return animation_container_->LoadAnimations(nameId, filepath, nameWithinFile);}
-		
+
 		AnimationWrapper* GetAnimation(const StringId id) const {return animation_container_->GetAnimation(id);}
+
 
 		Result SetAnimatorProperties(const StringId animationId, std::function<void(AnimatorConfig)> const & a) const
 		{
@@ -80,7 +87,7 @@ namespace AnimationSystem
 		
 		std::map<StringId, unique_ptr<AnimatorWrapper>> animators_;
 
-		
+		unique_ptr<AnimatedObjectContainer> animated_objects_container_;
 		
 		gef::Platform & platform_;
 		std::unique_ptr<gef::Scene> model_scene_;

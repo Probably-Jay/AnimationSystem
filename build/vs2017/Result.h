@@ -55,9 +55,10 @@ namespace AnimationSystem
 
 	struct CreateEntityResult : public Result
 	{
-		
+	public:
 		static CreateEntityResult OK(const StringId id) { return CreateEntityResult{ id }; }
 		static CreateEntityResult Error(std::string	error) { return CreateEntityResult{ std::move(error) }; }
+		static CreateEntityResult Error(const Result& error) { return CreateEntityResult{ error.ErrorMessage() }; }
 
 		StringId EntityID() const {return createdEntityId;}
 	private:

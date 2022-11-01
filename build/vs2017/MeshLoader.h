@@ -26,4 +26,13 @@ namespace AnimationSystem
 		std::map<gef::StringId, unique_ptr<MeshWrapper>> meshes_;
 		
 	};
+
+	class SingleMeshLoader
+	{
+	public:
+		Result LoadMesh(StringId id, gef::Scene& scene, gef::Platform& platform);
+		unique_ptr<MeshWrapper> TakeMesh() {return std::move(mesh_);}
+	private:
+		unique_ptr<MeshWrapper> mesh_;
+	};
 }

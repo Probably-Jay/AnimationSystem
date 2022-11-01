@@ -12,6 +12,7 @@
 #include <animation/skeleton.h>
 #include <animation/animation.h>
 
+#include "AnimatedObject.h"
 #include "StringIDFromString.h"
 
 
@@ -46,18 +47,26 @@ void AnimatedMeshApp::Init()
 
 AnimationSystem::Result AnimatedMeshApp::LoadMeshAndAnimation()
 {
-	AnimationSystem::Result result = animation_system_->LoadObjectScene("tesla/tesla.scn");
-	if(!result.Successful())
-		return result;
+	auto createPlayerResult = animation_system_->CreateAnimatedObject("Player", "tesla/tesla.scn") ;
+	if(createPlayerResult.IsError())
+		return {createPlayerResult};
+
+	const auto player = animation_system_->AnimatedObjects().GetAnimatedObject(createPlayerResult.EntityID());
+
+	player_id_ = player->ID();
 	
-	player_id_ = animation_system_->MeshLoader().GetAllMeshIDs().front();
-
-	result = animation_system_->CreateSkinnedMeshFrom(player_id_);
-
-	if(result.IsError())
-		return result;
-
-	player_ = animation_system_->GetSkinnedMesh(player_id_);
+	// AnimationSystem::Result result = animation_system_->LoadObjectScene("tesla/tesla.scn");
+	// if(!result.Successful())
+	// 	return result;
+	//
+	// player_id_ = animation_system_->MeshLoader().GetAllMeshIDs().front();
+	//
+	// result = animation_system_->CreateSkinnedMeshFrom(player_id_);
+	//
+	// if(result.IsError())
+	// 	return result;
+	//
+	// player_ = animation_system_->GetSkinnedMesh(player_id_);
 
 	animation_system_->CreateAnimatorForSkinnedMesh(player_id_);
 	
@@ -71,7 +80,7 @@ AnimationSystem::Result AnimatedMeshApp::LoadMeshAndAnimation()
 	if (!walkAnim)
 		return AnimationSystem::Result::Error("Walk animation could not be found");
 
-	result = animation_system_->SetAnimation(player_id_, "Walk");
+	auto result = animation_system_->SetAnimation(player_id_, "Walk");
 
 	if(result.IsError())
 		return result;

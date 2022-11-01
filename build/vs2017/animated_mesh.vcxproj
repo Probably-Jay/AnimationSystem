@@ -205,6 +205,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\AnimatedObject.cpp" />
+    <ClCompile Include="..\..\AnimatedObjectContainer.cpp" />
     <ClCompile Include="..\..\AnimatorConfig.cpp" />
     <ClCompile Include="..\..\EntityMap.cpp" />
     <ClCompile Include="..\..\IAnimationContainer.cpp" />
@@ -228,6 +230,8 @@
     <ClCompile Include="SkeletonLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\AnimatedObject.h" />
+    <ClInclude Include="..\..\AnimatedObjectContainer.h" />
     <ClInclude Include="..\..\AnimationWrapper.h" />
     <ClInclude Include="..\..\AnimatorConfig.h" />
     <ClInclude Include="..\..\AnimatorWrapper.h" />

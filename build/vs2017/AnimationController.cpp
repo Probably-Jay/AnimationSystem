@@ -8,7 +8,7 @@ AnimationSystem::AnimationController::AnimationController(IAnimationContainer co
 AnimationSystem::Result AnimationSystem::AnimationController::SetCurrentAnimation(const StringId id)
 {
     if(!animations_.HasAnimation(id))
-        return Result::Error("Animation collection does not contain id" + std::to_string(id));
+        return Result::Error(ERROR_TAG+ "Animation collection does not contain id" + std::to_string(id) );
 
     currentAnimationId = id;
     return Result::OK();

@@ -1,16 +1,18 @@
 #pragma once
 #include <algorithm>
+#include <stdexcept>
 #include <string>
 #include <utility>
 
 #include "IStringID.h"
-
+#define ERROR_TAG ("Unhandled error result in: " + std::string(__FUNCTION__) + ", Message: ")  
 namespace AnimationSystem
 {
 	struct Result
 	{
+		
 		static Result OK() { return Result{ }; }
-		static Result Error(std::string	error) { return Result{ std::move(error) }; }
+		static Result Error(std::string	error) { return Result{ (std::move(error)) }; }
 	
 		bool Successful() const {return successful_;}
 		bool IsError() const {return !Successful();}
@@ -22,6 +24,7 @@ namespace AnimationSystem
 			: successful_(other.successful_),
 			  error_message_(std::move(other.error_message_))
 		{
+			other.Handled();
 		}
 
 		Result& operator=(const Result& other)
@@ -39,11 +42,18 @@ namespace AnimationSystem
 				return *this;
 			successful_ = other.successful_;
 			error_message_ = std::move(other.error_message_);
+			other.Handled();
 			return *this;
 		}
 
+		void Handled() const {handled_ = true;}
+		
 		// todo add result handling?
-		~Result() = default;
+		~Result() noexcept(false)
+		{
+			if(IsError() && !handled_)
+				throw std::runtime_error(error_message_);
+		}
 		
 	protected:
 		Result() :successful_(true), error_message_(std::string()) {}
@@ -51,6 +61,8 @@ namespace AnimationSystem
 
 		bool successful_;
 		std::string error_message_;
+
+		mutable bool handled_ = false;
 	};
 
 	struct CreateEntityResult : public Result

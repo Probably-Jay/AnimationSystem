@@ -57,7 +57,7 @@ Result AnimationSystem3D::CreateAnimatorForSkinnedMesh(StringId id)
     const auto skinnedMesh = skinned_mesh_container_->GetSkinnedMesh(id);
 
     if(skinnedMesh == nullptr)
-        return Result::Error("Cannot find skinned mesh with id:" + std::to_string(id));
+        return Result::Error(ERROR_TAG+ "Cannot find skinned mesh with id:" + std::to_string(id));
     
     auto animator =  AnimatorWrapper::Create(id);
 
@@ -71,11 +71,11 @@ Result AnimationSystem3D::CreateSkinnedMeshFrom(const gef::StringId skeletonId) 
 {
     const auto skeleton = skeleton_loader_->GetSkeleton(skeletonId);
     if(skeleton == nullptr)
-        return Result::Error("Skeleton could not be found at "+ std::to_string(skeletonId));
+        return Result::Error(ERROR_TAG+ "Skeleton could not be found at "+ std::to_string(skeletonId));
          
     const auto mesh = mesh_loader_->GetMesh(skeletonId);
     if(mesh == nullptr)
-        return Result::Error("Skeleton could not be found at "+ std::to_string(skeletonId));
+        return Result::Error(ERROR_TAG+ "Skeleton could not be found at "+ std::to_string(skeletonId));
     
     skinned_mesh_container_->CreateSkinnedMesh(*skeleton, *mesh);
     return Result::OK();
@@ -85,24 +85,24 @@ Result AnimationSystem3D::CreateAnimatiorForSkinnedMesh(const StringId sMeshId, 
 {
     const auto sMesh = skinned_mesh_container_->GetSkinnedMesh(sMeshId);
     if(sMesh == nullptr)
-        return Result::Error("Skinned mesh could not be found at "+ std::to_string(sMeshId));
+        return Result::Error(ERROR_TAG+ "Skinned mesh could not be found at "+ std::to_string(sMeshId));
 
     const auto animator = GetAnimator(animatiorId);
     if(animator == nullptr)
-        return Result::Error("Animator mesh could not be found at "+ std::to_string(animatiorId));
+        return Result::Error(ERROR_TAG+ "Animator mesh could not be found at "+ std::to_string(animatiorId));
 
-    return Result::Error("This function is not implimented");
+    return Result::Error(ERROR_TAG+ "This function is not implimented");
 }
 
 Result AnimationSystem3D::SetAnimation(StringId anmiatorId, string animName)
 {
     const auto animator = GetAnimator(anmiatorId);
     if(animator == nullptr)
-        return Result::Error("Animator mesh could not be found at "+ std::to_string(anmiatorId));
+        return Result::Error(ERROR_TAG+ "Animator mesh could not be found at "+ std::to_string(anmiatorId));
 
     const auto animation= animation_container_->GetAnimation(animName);
     if(animation == nullptr)
-        return Result::Error("Animation could not be found with id" + animName);
+        return Result::Error(ERROR_TAG+ "Animation could not be found with id" + animName);
     
     
     animator->Item().set_clip(&animation->Item());

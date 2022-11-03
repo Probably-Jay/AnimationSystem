@@ -5,7 +5,7 @@
 #include <utility>
 
 #include "IStringID.h"
-#define ERROR_TAG ("Unhandled error result in: " + std::string(__FUNCTION__) + ", Message: ")  
+#define ERROR_TAG ("Unhandled error in: " + std::string(__FUNCTION__) + ", Message: ")  
 namespace AnimationSystem
 {
 	struct Result

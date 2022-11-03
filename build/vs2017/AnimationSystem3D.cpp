@@ -3,6 +3,8 @@
 #include "AnimatedObject.h"
 #include "MeshLoader.h"
 
+#include <optional>
+
 using namespace AnimationSystem;
 
 AnimationSystem3D::AnimationSystem3D(gef::Platform& platform_)
@@ -24,6 +26,10 @@ unique_ptr<AnimationSystem3D> AnimationSystem3D::Create(gef::Platform& platform_
 }
 
 
+CreateEntityResult AnimationSystem3D::CreateAnimatedObject(string const& objectNameId, string const& filePath)
+{
+    return animated_objects_container_->CreateAnimatedObject(objectNameId, filePath, platform_);
+}
 
 Result AnimationSystem3D::LoadObjectScene(std::string filePath)
 {
@@ -103,7 +109,8 @@ Result AnimationSystem3D::SetAnimation(StringId anmiatorId, string animName)
     const auto animation= animation_container_->GetAnimation(animName);
     if(animation == nullptr)
         return Result::Error(ERROR_TAG+ "Animation could not be found with id" + animName);
-    
+
+    std::optional<bool> a;
     
     animator->Item().set_clip(&animation->Item());
     return Result::OK();

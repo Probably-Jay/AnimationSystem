@@ -8,7 +8,7 @@
 
 AnimationSystem::SkinnedMeshWrapper const& AnimationSystem::SkinnedMeshContainer::CreateSkinnedMesh(SkeletonWrapper const& skeleton, MeshWrapper const& mesh)
 {
-    const auto & sMesh = MakeAndStoreMesh(skeleton);
+    auto & sMesh = MakeAndStoreMesh(skeleton);
     sMesh.Item().set_mesh(&mesh.Item());
     return sMesh;
 }
@@ -22,7 +22,7 @@ AnimationSystem::SkinnedMeshWrapper* AnimationSystem::SkinnedMeshContainer::GetS
     return sMeshIter->second.get();
 }
 
-AnimationSystem::SkinnedMeshWrapper const& AnimationSystem::SkinnedMeshContainer::MakeAndStoreMesh(SkeletonWrapper const& skeleton)
+AnimationSystem::SkinnedMeshWrapper & AnimationSystem::SkinnedMeshContainer::MakeAndStoreMesh(SkeletonWrapper const& skeleton)
 {
     auto skinnedMesh = std::make_unique<gef::SkinnedMeshInstance>(gef::SkinnedMeshInstance{skeleton.Item()});
     auto iSkinnedMesh = SkinnedMeshWrapper::Create(std::move(skinnedMesh), skeleton.ID());

@@ -23,7 +23,7 @@ namespace AnimationSystem
 
         AnimationSystem::SkinnedMeshWrapper* GetSkinnedMesh(StringId id) const;
     private:
-        AnimationSystem::SkinnedMeshWrapper const& MakeAndStoreMesh(SkeletonWrapper const& skeleton);
+        AnimationSystem::SkinnedMeshWrapper & MakeAndStoreMesh(SkeletonWrapper const& skeleton);
         std::map<StringId, unique_ptr<SkinnedMeshWrapper>> skinned_meshes_;
     };
 

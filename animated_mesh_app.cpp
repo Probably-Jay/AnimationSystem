@@ -48,13 +48,17 @@ void AnimatedMeshApp::Init()
 AnimationSystem::Result AnimatedMeshApp::LoadMeshAndAnimation()
 {
 	auto createPlayerResult = animation_system_->CreateAnimatedObject("Player", "tesla/tesla.scn") ;
+	
 	if(createPlayerResult.IsError())
 		return {createPlayerResult};
 
-	const auto player = animation_system_->AnimatedObjects().GetAnimatedObject(createPlayerResult.EntityID());
-
+	AnimationSystem::AnimatedObjectWrapper* player = animation_system_->AnimatedObjects().GetAnimatedObject(
+		createPlayerResult.EntityID());
 	player_id_ = player->ID();
+
+	//player->Item().
 	
+	/*
 	// AnimationSystem::Result result = animation_system_->LoadObjectScene("tesla/tesla.scn");
 	// if(!result.Successful())
 	// 	return result;
@@ -68,8 +72,9 @@ AnimationSystem::Result AnimatedMeshApp::LoadMeshAndAnimation()
 	//
 	// player_ = animation_system_->GetSkinnedMesh(player_id_);
 
-	animation_system_->CreateAnimatorForSkinnedMesh(player_id_);
-	
+	//animation_system_->CreateAnimatorForSkinnedMesh(player_id_);
+	*/
+
 	auto animationResult = animation_system_->LoadAnimation("Walk", "tesla/tesla@walk.scn","");
 
 	if(animationResult.IsError())

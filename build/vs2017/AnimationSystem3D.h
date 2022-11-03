@@ -36,10 +36,10 @@ namespace AnimationSystem
 
 		AnimationSystem3D (AnimationSystem3D const&) = delete;
 		void operator=(AnimationSystem3D const&) = delete;
+		
+		CreateEntityResult CreateAnimatedObject(string const & objectNameId, string const & filePath);
 
-		CreateEntityResult CreateAnimatedObject(string const & objectNameId, string const & filePath)
-		{ return animated_objects_container_->CreateAnimatedObject(objectNameId, filePath, platform_);}
-		IReadonlyAnimatedObjectContainer const & AnimatedObjects() const {return *animated_objects_container_;}
+		AnimatedObjectContainer const & AnimatedObjects() const {return *animated_objects_container_;}
 		
 		Result LoadObjectScene(std::string filePath);
 

@@ -8,8 +8,9 @@ AnimationSystem::CreateEntityResult AnimationSystem::AnimatedObjectContainer::Cr
 
     const auto stringId = idTable.Add(objectNameId);
     
-    auto animatedObject = AnimatedObjectWrapper::Create(stringId, stringId);
-    const auto result = animatedObject->Item().Create(platform,  std::move(modelScene));
+    auto animatedObject = AnimatedObjectWrapper::Create(stringId, platform, stringId);
+
+    const auto result = animatedObject->Item().CreateObjectsFromScene(platform, std::move(modelScene));
 
     if(result.IsError())
         return CreateEntityResult::Error(result);

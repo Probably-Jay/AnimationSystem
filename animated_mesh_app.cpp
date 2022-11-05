@@ -84,8 +84,9 @@ AnimationSystem::PureResult AnimatedMeshApp::LoadMeshAndAnimation()
 	//animation_system_->CreateAnimatorForSkinnedMesh(player_id_);
 	*/
 
-	auto animationResult = animation_system_->CreateAnimationFor(*player_,"Walk", "tesla/tesla@walk.scn","",
-	[](AnimatorConfig& animPlayer)
+	auto animationResult = animation_system_->CreateAnimationFor(*player_,"Walk",
+	"tesla/tesla@walk.scn","",
+	[](AnimatorConfig animPlayer)
 	{
 		animPlayer.SetLooping(true);
 		animPlayer.SetAnimationTime(0.0f);
@@ -148,14 +149,7 @@ bool AnimatedMeshApp::Update(float frame_time)
 
 	if(player_)
 	{
-		const auto animPlayer = animation_system_->GetAnimator(player_id_);
-		
-		// update the pose in the anim player from the animation
-		animPlayer->Item().Update(frame_time, player_->bind_pose());
-
-		// update the bone matrices that are used for rendering the character
-		// from the newly updated pose in the anim player
-		player_->UpdateBoneMatrices(animPlayer->Item().pose());
+		player_->UpdateAnimation(frame_time);
 	}
 
 	// build a transformation matrix that will position the character
@@ -164,7 +158,7 @@ bool AnimatedMeshApp::Update(float frame_time)
 	{
 		gef::Matrix44 player_transform;
 		player_transform.SetIdentity();
-		player->set_transform(player_transform);
+		player_->set_transform(player_transform);
 	}
 
 	return true;
@@ -185,8 +179,8 @@ void AnimatedMeshApp::Render()
 
 	// draw the player, the pose is defined by the bone matrices
 	if(player_)
-		//todo draw player
-		renderer_3d_->DrawSkinnedMesh(player_->Item(), player_->Item().bone_matrices());
+		player_->RenderSelf(*renderer_3d_);
+	
 
 	renderer_3d_->End();
 

@@ -8,8 +8,8 @@ AnimationSystem::AnimationContainer::AnimationContainer(const gef::Platform& pla
 {
 }
 
-AnimationSystem::PureResult AnimationSystem::AnimationContainer::LoadAnimations(const string& nameId, const std::string& filepath,
-    const std::string& nameWithinFile, const std::function<void(AnimatorConfig)>& configDelegate)
+AnimationSystem::PureResult AnimationSystem::AnimationContainer::LoadAnimations(const string& animationName, const std::string& filepath,
+    const std::string& nameWithinFile, const std::function<void(AnimatorConfig)> configDelegate)
 {
     auto animationScene = gef::Scene{};
 	
@@ -24,7 +24,7 @@ AnimationSystem::PureResult AnimationSystem::AnimationContainer::LoadAnimations(
     if (animationIter == animationScene.animations.end())
         return PureResult::Error("Animation with name " + nameWithinFile + "could not be found");
 
-    const StringId animationId = string_id_table_.Add(nameId);
+    const StringId animationId = string_id_table_.Add(animationName);
 
     //bug ??
     auto gefAnimation = std::unique_ptr<gef::Animation>(animationIter->second);

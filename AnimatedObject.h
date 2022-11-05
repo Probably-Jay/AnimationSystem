@@ -14,6 +14,9 @@ namespace AnimationSystem
         virtual ~IAnimatedObject() = default;
         virtual StringId ID() const = 0;
         virtual IAnimator & Animator() const = 0;
+        virtual void UpdateAnimation(float frameTime) = 0;
+        virtual void set_transform(const gef::Matrix44& matrix44) = 0;
+        virtual void RenderSelf(gef::Renderer3D& renderer3D) = 0;
     };
     
     class AnimatedObject : public IAnimatedObject
@@ -32,6 +35,9 @@ namespace AnimationSystem
       
         IAnimator& Animator() const override {return *animator;}
         AnimationController& Animator() {return *animator;}
+        void UpdateAnimation(float frameTime) override;
+        void set_transform(const gef::Matrix44& transform) override;
+        void RenderSelf(gef::Renderer3D& renderer3D) override;
 
     private:
         const StringId name_id_;

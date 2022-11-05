@@ -27,18 +27,21 @@ namespace AnimationSystem
        //  Result SetCurrentAnimation(StringId id);
 
        void Animate() { throw; }
-       void Init(SkinnedMeshWrapper const * skinnedMesh );
+       void Init(gef::SkinnedMeshInstance const& skinnedMesh);
         
-       PureResult CreateAnimation(const string& animationName, const std::string& filePath, const std::string& nameWithinFile, const std::function<void(AnimatorConfig&)>& configDelegate);
+       PureResult CreateAnimation(const string& animationName, const std::string& filePath,
+                                  const std::string& nameWithinFile, const std::function<void(AnimatorConfig)> configDelegate);
        PureResult SetAnimation(std::string animationName) override;
        PureResult SetAnimation(StringId animationId) override;
+
+       PureResult UpdateAnimation(float frameTime, gef::SkinnedMeshInstance& skinnedMesh);
 
    private:
        PureResult SetAnimation(Animation& animation);
        std::optional<std::reference_wrapper<Animation>> current_animation_;
         
        std::unique_ptr<IAnimationContainer> animations_;
-       std::unique_ptr<AnimatorWrapper> animator_;
+       std::unique_ptr<MotionClipPlayer> animator_;
 
        //  AnimationWrapper * CurrentAnimation() const {return animations_.GetAnimation(currentAnimationId);}
    };

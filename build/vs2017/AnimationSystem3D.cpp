@@ -129,10 +129,10 @@ CreateAnimatedObjectResult AnimationSystem3D::CreateAnimatedObject(string const&
 
 PureResult AnimationSystem3D::CreateAnimationFor(IAnimatedObject const& readonlyAnimObject, string const& animationName,
                                                  string const& fileName, string const& nameWithinFile,
-                                                 std::function<void(AnimatorConfig&)> const& configurationDelegate)
+                                                 std::function<void(AnimatorConfig)> const configurationDelegate)
 {
     auto animatedObjectResult = animated_objects_factory_->GetObject(readonlyAnimObject);
-    if(!animatedObjectResult.IsError())
+    if(animatedObjectResult.IsError())
         return animatedObjectResult.ToPureResult();
 
     auto & animatedObject = animatedObjectResult.Take().get();

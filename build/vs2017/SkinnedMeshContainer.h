@@ -32,7 +32,7 @@ namespace AnimationSystem
     public:
         PureResult Create(const StringId id, gef::Platform& platform);
         PureResult CreateSkinnedMesh(StringId id, gef::Platform& platform, std::unique_ptr<gef::Scene> modelScene);
-        SkinnedMeshWrapper * SkinnedMesh() const {return skinned_mesh_.get();}
+        gef::SkinnedMeshInstance & SkinnedMesh() const {return skinned_mesh_->Item();}
     private:
         unique_ptr<MeshWrapper> mesh_ = nullptr;
         unique_ptr<SkeletonWrapper> skeleton_ = nullptr;

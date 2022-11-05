@@ -1,29 +1,28 @@
 ﻿#include "AnimationController.h"
 
 AnimationSystem::AnimationController::AnimationController(StringId const id, gef::Platform const& platform)
-    : currentAnimationId(nullptr)
+    : current_animation_({})
     , animations_(new AnimationContainer{platform})
-    , animator_(AnimatorWrapper::Create(id))
+    , animator_(new MotionClipPlayer{})
 {
 }
 
-void AnimationSystem::AnimationController::Init(SkinnedMeshWrapper const* skinnedMesh)
+void AnimationSystem::AnimationController::Init(gef::SkinnedMeshInstance const & skinnedMesh)
 {
-    animator_->Item().Init(skinnedMesh->Item().bind_pose());
+    animator_->Init(skinnedMesh.bind_pose());
 }
 
 AnimationSystem::PureResult AnimationSystem::AnimationController::CreateAnimation(const string& animationName,
-    const std::string& filePath, const std::string& nameWithinFile, const std::function<void(AnimatorConfig&)>& configDelegate)
+    const std::string& filePath, const std::string& nameWithinFile, const std::function<void(AnimatorConfig)> configDelegate)
 {
-    animations_->LoadAnimations(animationName, filePath, nameWithinFile, configDelegate);
-    return PureResult::Error(ERROR_TAG+"Not implimented");
+    return animations_->LoadAnimations(animationName, filePath, nameWithinFile, configDelegate);
 }
 
 AnimationSystem::PureResult AnimationSystem::AnimationController::SetAnimation(const std::string animationName)
 {
     const auto id = gef::GetStringId(animationName);
     if(!animations_->HasAnimation(id))
-        return PureResult::Error(ERROR_TAG+"Animation" + animationName + "could not be found");
+        return PureResult::Error(ERROR_TAG+"Animation '" + animationName + "' could not be found");
     return SetAnimation(id);
 }
 
@@ -39,14 +38,27 @@ AnimationSystem::PureResult AnimationSystem::AnimationController::SetAnimation(c
     return result.ToPureResult();
 }
 
+AnimationSystem::PureResult AnimationSystem::AnimationController::UpdateAnimation(
+    float frameTime, gef::SkinnedMeshInstance& skinnedMesh)
+{
+    if(!current_animation_.has_value())
+        return PureResult::Error(ERROR_TAG+"Cannot animate as no animation is selected");
+
+    animator_->Update(frameTime, skinnedMesh.bind_pose());
+    skinnedMesh.UpdateBoneMatrices(animator_->pose());
+}
+
 AnimationSystem::PureResult AnimationSystem::AnimationController::SetAnimation(Animation& animation)
 {
     current_animation_ = animation;
-    auto & animator = animator_->Item();
-
+    
+    auto & animator = *animator_;
+    animator.set_clip(&animation.GetAnimation());
+    
     try
     {
-        current_animation_.value().get().ApplyConfig(AnimatorConfig{animator});
+        auto animatorConfigWrapper = AnimatorConfig{animator};
+        animation.ApplyConfig(animatorConfigWrapper);
     }
     catch (std::exception& e)
     {
@@ -59,12 +71,3 @@ AnimationSystem::PureResult AnimationSystem::AnimationController::SetAnimation(A
     return PureResult::OK();
 }
 
-
-// AnimationSystem::Result AnimationSystem::AnimationController::SetCurrentAnimation(const StringId id)
-// {
-//     if(!animations_.HasAnimation(id))
-//         return Result::Error(ERROR_TAG+ "Animation collection does not contain id" + std::to_string(id) );
-//
-//     currentAnimationId = id;
-//     return Result::OK();
-// }

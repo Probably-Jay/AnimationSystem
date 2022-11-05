@@ -65,9 +65,8 @@ namespace AnimationSystem
 		//PureResult CreateAnimationForSkinnedMesh(const StringId sMeshId, const StringId animatiorId) const;
 	//	PureResult SetAnimation(StringId animatorId, string animName);
 
-		PureResult CreateAnimationFor(IAnimatedObject const& animObject, string const& animationName,
-		                              string const& fileName, string const& nameWithinFile, std
-		                              ::function<void(AnimatorConfig&)> const& configurationDelegate);
+		PureResult CreateAnimationFor(IAnimatedObject const& readonlyAnimObject, string const& animationName,
+		                              string const& fileName, string const& nameWithinFile, std::function<void(AnimatorConfig)> const configurationDelegate);
 	private:
 		AnimationSystem3D(gef::Platform & platform_);
 		

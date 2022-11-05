@@ -11,7 +11,7 @@ namespace AnimationSystem
   public:
     
     Animation(std::unique_ptr<gef::Animation> animation, const StringId id,
-    const std::function<void(AnimatorConfig)>& configDelegate)
+    const std::function<void(AnimatorConfig)> configDelegate)
       : animation_(std::move(animation))
       , id_(id)
       , config_delegate_(configDelegate)
@@ -26,12 +26,15 @@ namespace AnimationSystem
 
     gef::Animation const & GetAnimation() const {return *animation_;}
     StringId ID() const {return id_;}
-    void ApplyConfig(AnimatorConfig animator) const {config_delegate_(animator);}
+    void ApplyConfig(AnimatorConfig animator) const
+    {
+      config_delegate_(animator);
+    }
     
   private:
     std::unique_ptr<gef::Animation> animation_{};
     StringId id_;
-    std::function<void(AnimatorConfig)> const & config_delegate_;
+    std::function<void(AnimatorConfig)> const config_delegate_;
   };
 
 

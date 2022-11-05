@@ -9,7 +9,12 @@
 
 #include "IStringID.h"
 #include "SkinnedMeshWrapper.h"
-#define ERROR_TAG ("Unhandled error in: " + std::string(__FUNCTION__) + ", Message: ")  
+
+
+#define ERROR_TAG ("Unhandled error in: " + std::string(__FUNCTION__) + ", Message: ")
+
+#define ANIMATION_ERROR_STRUCT_THROWS_ON_UNHANDLED true 
+
 namespace AnimationSystem
 {
 	struct ErrorStruct
@@ -18,6 +23,13 @@ namespace AnimationSystem
 		std::string Message() const {return error_message_;}
 		void HandleError() {handled_ = true;}
 		bool UnHandled() const {return !handled_;}
+		
+		[[noreturn]] void Raise() const noexcept(false)
+		{
+			std::cout << Message() << std::endl;
+			if constexpr (ANIMATION_ERROR_STRUCT_THROWS_ON_UNHANDLED)
+				throw std::runtime_error(Message());
+		}
 	private:
 		bool handled_ = false;
 		std::string error_message_;
@@ -65,15 +77,17 @@ namespace AnimationSystem
 			return *this;
 		}
 
-		// todo add result handling?
-		~PureResult() noexcept(false)
-		{	
+		void Raise() const
+		{
 			if(IsError() && Error().value().UnHandled() )
 			{
-				const auto message = Error().value().Message();
-				std::cout << message << std::endl;
-				throw std::runtime_error(message);
+				Error().value().Raise();
 			}
+		}
+		
+		~PureResult() noexcept(false)
+		{	
+			Raise();
 		}
 		
 	protected:
@@ -158,14 +172,17 @@ namespace AnimationSystem
 			return *this;
 		}
 
-		~ValueResult() noexcept(false)
+		void Raise() const
 		{
-			if(IsError() && Error().value().UnHandled())
+			if(IsError() && Error().value().UnHandled() )
 			{
-				const auto message = Error().value().Message();
-				std::cout << message << std::endl;
-				throw std::runtime_error(message);
+				Error().value().Raise();
 			}
+		}
+		
+		~ValueResult() noexcept(false)
+		{	
+			Raise();
 		}
 
 	private:

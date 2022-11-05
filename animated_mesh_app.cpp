@@ -52,7 +52,7 @@ AnimationSystem::PureResult AnimatedMeshApp::LoadMeshAndAnimation()
 	player_ = createPlayerResult.Take();
 	
 	auto animationResult = animation_system_->CreateAnimationFor(*player_,
-		"Walk","tesla/tesla@walk.scn","",
+		"Walk","tesla/tesla@walk.scn","hi",
 	[](AnimatorConfig animPlayer)
 	{
 		animPlayer.SetLooping(true);

@@ -13,7 +13,7 @@ AnimationSystem::PureResult AnimationSystem::AnimationContainer::LoadAnimations(
     animationScene = std::make_unique<gef::Scene>();
 	
     if (!animationScene->ReadSceneFromFile(platform_, filepath.c_str()))
-        return PureResult::Error("Could not load animation from scene file");
+        return PureResult::Error(ERROR_TAG+"Could not load animation from scene file at: " + filepath);
     
     const auto animationIter =
         nameWithinFile.empty() // if no name specified, take first
@@ -21,7 +21,7 @@ AnimationSystem::PureResult AnimationSystem::AnimationContainer::LoadAnimations(
             : animationScene->animations.find(gef::GetStringId(nameWithinFile));
 
     if (animationIter == animationScene->animations.end())
-        return PureResult::Error("Animation with name " + nameWithinFile + "could not be found");
+        return PureResult::Error(ERROR_TAG+"Animation with name '" + nameWithinFile + "' could not be found");
 
     const StringId animationId = string_id_table_.Add(animationName);
 
@@ -38,7 +38,7 @@ AnimationSystem::ValueResult<std::reference_wrapper<AnimationSystem::Animation>>
 {
     const auto iter = animations_.find(id);
     if(iter == animations_.end())
-        return ValueResult<std::reference_wrapper<Animation>>::Error(ERROR_TAG+"Could not find animation with id" + std::to_string(id));
+        return ValueResult<std::reference_wrapper<Animation>>::Error(ERROR_TAG+"Could not find animation with id: " + std::to_string(id));
     
     return ValueResult<std::reference_wrapper<Animation>>::OK(*iter->second);
 }

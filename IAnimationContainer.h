@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <functional>
 
-#include "AnimationWrapper.h"
+#include "Animation.h"
 #include "AnimatorConfig.h"
 #include "PureResult.h"
 #include "graphics/scene.h"

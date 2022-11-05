@@ -233,7 +233,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\AnimatedObject.h" />
     <ClInclude Include="..\..\AnimatedObjectFactory.h" />
-    <ClInclude Include="..\..\AnimationWrapper.h" />
+    <ClInclude Include="..\..\Animation.h" />
     <ClInclude Include="..\..\AnimatorConfig.h" />
     <ClInclude Include="..\..\AnimatorWrapper.h" />
     <ClInclude Include="..\..\EntityMap.h" />

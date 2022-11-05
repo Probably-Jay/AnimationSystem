@@ -1,6 +1,5 @@
 ﻿#include "IAnimationContainer.h"
 
-#include "AnimationWrapper.h"
 #include "graphics/scene.h"
 
 AnimationSystem::AnimationContainer::AnimationContainer(const gef::Platform& platform)
@@ -26,10 +25,9 @@ AnimationSystem::PureResult AnimationSystem::AnimationContainer::LoadAnimations(
 
     const StringId animationId = string_id_table_.Add(animationName);
 
-    //bug ??
-    auto gefAnimation = std::unique_ptr<gef::Animation>(animationIter->second);
+    auto & gefAnimation = *animationIter->second;
     
-    auto animation = std::make_unique<Animation>(std::move(gefAnimation), animationId, configDelegate);
+    auto animation = std::make_unique<Animation>(gefAnimation, animationId, configDelegate);
     animations_.emplace(animationId, std::move(animation));
 
     return PureResult::OK();

@@ -1,30 +1,31 @@
 ﻿#pragma once
+#include <functional>
+
 #include "AnimatorConfig.h"
 #include "ViewingProtectedWrapper.h"
 #include "animation/animation.h"
 
 namespace AnimationSystem
 {
-  // typedef OwningProtectedWrapper<gef::Animation> AnimationWrapper;
   class Animation
   {
   public:
     
-    Animation(std::unique_ptr<gef::Animation> animation, const StringId id,
+    Animation(gef::Animation& animation, const StringId id,
     const std::function<void(AnimatorConfig)> configDelegate)
-      : animation_(std::move(animation))
+      : animation_(animation)
       , id_(id)
       , config_delegate_(configDelegate)
     {
     }
-    Animation(std::unique_ptr<gef::Animation> animation, const StringId id)
-      : animation_(std::move(animation))
+    Animation(gef::Animation& animation, const StringId id)
+      : animation_(animation)
       , id_(id)
       , config_delegate_([](auto _){})
     {
     }
 
-    gef::Animation const & GetAnimation() const {return *animation_;}
+    gef::Animation const & GetAnimation() const {return animation_;}
     StringId ID() const {return id_;}
     void ApplyConfig(AnimatorConfig animator) const
     {
@@ -32,11 +33,10 @@ namespace AnimationSystem
     }
     
   private:
-    std::unique_ptr<gef::Animation> animation_{};
+    gef::Animation& animation_;
     StringId id_;
     std::function<void(AnimatorConfig)> const config_delegate_;
   };
-
 
  
 }

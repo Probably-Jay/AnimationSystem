@@ -26,8 +26,8 @@ AnimationSystem::PureResult AnimationSystem::AnimationContainer::LoadAnimations(
     const StringId animationId = string_id_table_.Add(animationName);
 
     auto & gefAnimation = *animationIter->second;
-    
     auto animation = std::make_unique<Animation>(gefAnimation, animationId, configDelegate);
+    
     animations_.emplace(animationId, std::move(animation));
 
     return PureResult::OK();

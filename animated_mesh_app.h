@@ -33,11 +33,7 @@ public:
 	AnimatedMeshApp(gef::Platform& platform);
 	AnimationSystem::PureResult LoadMeshAndAnimation();
 	void Init();
-
-	gef::Skeleton* GetFirstSkeleton(const gef::Scene* scene) const;
-
-	gef::Mesh* GetFirstMesh(const gef::Scene* scene) const;
-
+	
 	void CleanUp();
 	bool Update(float frame_time);
 	void Render();
@@ -47,8 +43,6 @@ private:
 	void DrawHUD();
 	void SetupLights();
 	void SetupCamera();
-	gef::Animation* LoadAnimation(const char* anim_scene_filename, const char* anim_name) const;
-
 
 	gef::SpriteRenderer* sprite_renderer_;
 	gef::Renderer3D* renderer_3d_;
@@ -57,10 +51,7 @@ private:
 
 	float fps_;
 
-	//gef::Mesh * mesh_;
 	std::shared_ptr<AnimationSystem::IAnimatedObject> player_;
-
-	//gef::Scene* model_scene_;
 
 	gef::Vector4 camera_eye_;
 	gef::Vector4 camera_lookat_;
@@ -68,10 +59,6 @@ private:
 	float camera_fov_;
 	float near_plane_;
 	float far_plane_;
-
-	//MotionClipPlayer anim_player_;
-	StringId player_id_;
-	//AnimationSystem::AnimationWrapper* walk_anim_;
 
 	std::unique_ptr<AnimationSystem::AnimationSystem3D> animation_system_;
 };

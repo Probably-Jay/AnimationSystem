@@ -8,7 +8,7 @@ namespace AnimationSystem
     {
     public:
         virtual ~IStringID() = default;
-        virtual StringId ID() const =0;
+        [[nodiscard]] virtual StringId ID() const =0;
     };
 
     

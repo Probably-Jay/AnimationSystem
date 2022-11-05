@@ -22,19 +22,19 @@ public:
 	/// @param[in] bind_pose	The bind pose for the skeleton being animated.
 	bool Update(const float delta_time, const gef::SkeletonPose& bind_pose);
 
-	const float anim_time() const { return anim_time_; }
+	[[nodiscard]] const float anim_time() const { return anim_time_; }
 	void set_anim_time(const float anim_time) { anim_time_ = anim_time; }
 
-	const float playback_speed() const { return playback_speed_; }
+	[[nodiscard]] const float playback_speed() const { return playback_speed_; }
 	void set_playback_speed(const float playback_speed) { playback_speed_ = playback_speed; }
 
-	const bool looping() const { return looping_; }
+	[[nodiscard]] const bool looping() const { return looping_; }
 	void set_looping(const bool looping) { looping_ = looping; }
 
-	const gef::Animation* clip() const { return clip_; }
+	[[nodiscard]] const gef::Animation* clip() const { return clip_; }
 	void set_clip(const gef::Animation* clip) { clip_ = clip; }
 
-	const gef::SkeletonPose& pose() const { return pose_; }
+	[[nodiscard]] const gef::SkeletonPose& pose() const { return pose_; }
 
 private:
 	/// The pose created by sampling the animation clip

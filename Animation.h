@@ -25,8 +25,8 @@ namespace AnimationSystem
     {
     }
 
-    gef::Animation const & GetAnimation() const {return animation_;}
-    StringId ID() const {return id_;}
+    [[nodiscard]] gef::Animation const & GetAnimation() const {return animation_;}
+    [[nodiscard]] StringId ID() const {return id_;}
     void ApplyConfig(AnimatorConfig animator) const
     {
       config_delegate_(animator);

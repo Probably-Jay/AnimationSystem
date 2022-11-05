@@ -2,12 +2,6 @@
 
 #include "graphics/renderer_3d.h"
 
-// AnimationSystem::Result AnimationSystem::AnimatedObject::Create(AnimatedObject& item,
-//     gef::Platform& platform, unique_ptr<gef::Scene> modelScene)
-// {
-//     return item.Create(platform, std::move(modelScene));
-// }
-
 AnimationSystem::PureResult AnimationSystem::AnimatedObject::CreateObjectsFromScene(gef::Platform& platform,
                                                                 std::unique_ptr<gef::Scene> modelScene)
 {
@@ -22,9 +16,9 @@ AnimationSystem::PureResult AnimationSystem::AnimatedObject::CreateObjectsFromSc
     return PureResult::OK();
 }
 
-void AnimationSystem::AnimatedObject::UpdateAnimation(float frameTime)
+AnimationSystem::PureResult AnimationSystem::AnimatedObject::UpdateAnimation(float frameTime)
 {
-    animator->UpdateAnimation(frameTime, skinnedMeshContainer.SkinnedMesh());
+    return animator->UpdateAnimation(frameTime, skinnedMeshContainer.SkinnedMesh());
 }
 
 void AnimationSystem::AnimatedObject::set_transform(const gef::Matrix44& transform)

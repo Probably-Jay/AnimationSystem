@@ -13,8 +13,8 @@ namespace AnimationSystem
     {
     public:
         virtual ~IReadOnlyAnimationContainer() = default;
-        virtual ValueResult<std::reference_wrapper<Animation>> GetAnimation(StringId id) const = 0;
-        virtual bool HasAnimation(StringId id) const = 0;
+        [[nodiscard]] virtual ValueResult<std::reference_wrapper<Animation>> GetAnimation(StringId id) const = 0;
+        [[nodiscard]] virtual bool HasAnimation(StringId id) const = 0;
     };
     class IAnimationContainer : public IReadOnlyAnimationContainer
     {

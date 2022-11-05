@@ -22,10 +22,7 @@ AnimatedMeshApp::AnimatedMeshApp(gef::Platform& platform) :
 	renderer_3d_(nullptr),
 	input_manager_(nullptr),
 	font_(nullptr),
-	//mesh_(nullptr),
 	player_(nullptr),
-	//model_scene_(nullptr),
-	//walk_anim_(nullptr),
 	animation_system_(nullptr)
 {
 }
@@ -52,40 +49,10 @@ AnimationSystem::PureResult AnimatedMeshApp::LoadMeshAndAnimation()
 	if(createPlayerResult.IsError())
 		return createPlayerResult.ToPureResult();
 
-	// AnimationSystem::AnimatedObjectWrapper* player = animation_system_->AnimatedObjects().GetAnimatedObject(
-	// 	createPlayerResult.EntityID());
-
 	player_ = createPlayerResult.Take();
-
 	
-	//auto animationResult = animation_system_.get()->CreateAnimationFor(player_, "Walk", "tesla/tesla@walk.scn","");//, [](AnimatorConfig animPlayer)
-	// {
-	// 	animPlayer.SetLooping(true);
-	// 	animPlayer.SetAnimationTime(0.0f);
-	// });
-
-	
-	//player->Item().
-
-	/*
-	// AnimationSystem::Result result = animation_system_->LoadObjectScene("tesla/tesla.scn");
-	// if(!result.Successful())
-	// 	return result;
-	//
-	// player_id_ = animation_system_->MeshLoader().GetAllMeshIDs().front();
-	//
-	// result = animation_system_->CreateSkinnedMeshFrom(player_id_);
-	//
-	// if(result.IsError())
-	// 	return result;
-	//
-	// player_ = animation_system_->GetSkinnedMesh(player_id_);
-
-	//animation_system_->CreateAnimatorForSkinnedMesh(player_id_);
-	*/
-
-	auto animationResult = animation_system_->CreateAnimationFor(*player_,"Walk",
-	"tesla/tesla@walk.scn","",
+	auto animationResult = animation_system_->CreateAnimationFor(*player_,
+		"Walk","tesla/tesla@walk.scn","",
 	[](AnimatorConfig animPlayer)
 	{
 		animPlayer.SetLooping(true);
@@ -95,14 +62,10 @@ AnimationSystem::PureResult AnimatedMeshApp::LoadMeshAndAnimation()
 	if(animationResult.IsError())
 		return animationResult;
 	
-	
-	
-	auto result = player_->Animator().SetAnimation("Walk");
-	
-	if(result.IsError())
+	if(auto result = player_->Animator().SetAnimation("Walk"); result.IsError())
 		return result;
-	
 
+	
 	return AnimationSystem::PureResult::OK();
 }
 
@@ -110,9 +73,6 @@ AnimationSystem::PureResult AnimatedMeshApp::LoadMeshAndAnimation()
 void AnimatedMeshApp::CleanUp()
 {
 	CleanUpFont();
-
-	// delete walk_anim_;
-	// walk_anim_ = nullptr;
 	
 	delete input_manager_;
 	input_manager_ = nullptr;
@@ -233,40 +193,3 @@ void AnimatedMeshApp::SetupCamera()
 	far_plane_ = 1000.f;
 }
 
-
-gef::Skeleton* AnimatedMeshApp::GetFirstSkeleton(const gef::Scene* scene) const
-{
-	// check to see if there is a skeleton in the the scene file
-	if (scene == nullptr || scene->skeletons.empty())
-		return nullptr;
-
-	// if so, pull out the bind pose and create an array of matrices
-	// that wil be used to store the bone transformations
-	return scene->skeletons.front();
-}
-
-gef::Mesh* AnimatedMeshApp::GetFirstMesh(const gef::Scene* scene) const
-{
-	if (scene == nullptr || scene->mesh_data.empty())
-		return nullptr;
-
-	return animation_system_->GetModelScene().CreateMesh(platform_, scene->mesh_data.front());
-}
-
-gef::Animation* AnimatedMeshApp::LoadAnimation(const char* anim_scene_filename, const char* anim_name) const
-{
-	auto anim_scene = gef::Scene{};
-	
-	if (!anim_scene.ReadSceneFromFile(platform_, anim_scene_filename))
-		return nullptr;
-
-	const auto anim_node_iter =
-		anim_name != nullptr
-			? anim_scene.animations.find(gef::GetStringId(anim_name))
-			: anim_scene.animations.begin();
-
-	if (anim_node_iter == anim_scene.animations.end())
-		return nullptr;
-
-	return new gef::Animation(*anim_node_iter->second);
-}

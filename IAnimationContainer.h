@@ -4,6 +4,7 @@
 #include "AnimationWrapper.h"
 #include "AnimatorConfig.h"
 #include "PureResult.h"
+#include "graphics/scene.h"
 #include "system/platform.h"
 using std::string;
 namespace AnimationSystem
@@ -41,6 +42,7 @@ namespace AnimationSystem
         std::map<StringId, std::unique_ptr<Animation>> animations_;
         gef::Platform const & platform_;
 
+        std::unique_ptr<gef::Scene> animationScene;
         mutable gef::StringIdTable string_id_table_;
     };
 }

@@ -11,17 +11,17 @@ AnimationSystem::AnimationContainer::AnimationContainer(const gef::Platform& pla
 AnimationSystem::PureResult AnimationSystem::AnimationContainer::LoadAnimations(const string& animationName, const std::string& filepath,
     const std::string& nameWithinFile, const std::function<void(AnimatorConfig)> configDelegate)
 {
-    auto animationScene = gef::Scene{};
+    animationScene = std::make_unique<gef::Scene>();
 	
-    if (!animationScene.ReadSceneFromFile(platform_, filepath.c_str()))
+    if (!animationScene->ReadSceneFromFile(platform_, filepath.c_str()))
         return PureResult::Error("Could not load animation from scene file");
     
     const auto animationIter =
         nameWithinFile.empty() // if no name specified, take first
-            ? animationScene.animations.begin()
-            : animationScene.animations.find(gef::GetStringId(nameWithinFile));
+            ? animationScene->animations.begin()
+            : animationScene->animations.find(gef::GetStringId(nameWithinFile));
 
-    if (animationIter == animationScene.animations.end())
+    if (animationIter == animationScene->animations.end())
         return PureResult::Error("Animation with name " + nameWithinFile + "could not be found");
 
     const StringId animationId = string_id_table_.Add(animationName);

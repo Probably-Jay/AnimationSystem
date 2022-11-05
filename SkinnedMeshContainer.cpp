@@ -40,17 +40,13 @@ AnimationSystem::PureResult AnimationSystem::SingleSkinnedMeshContainer::Create(
 {
     auto meshLoader = SingleMeshLoader{};
     {
-        auto result = meshLoader.LoadMesh(id, *model_scene_, platform);
-    
-        if(result.IsError())
+        if(auto result = meshLoader.LoadMesh(id, *model_scene_, platform); result.IsError())
             return result;
     }
     
     auto skeletonLoader = SingleSkeletonLoader{};
     {
-        auto result = skeletonLoader.LoadSkeleton(id, *model_scene_, platform);
-    
-        if(result.IsError())
+        if(auto result = skeletonLoader.LoadSkeleton(id, *model_scene_, platform); result.IsError())
             return result;
     }
 

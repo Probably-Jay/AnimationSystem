@@ -67,8 +67,8 @@ namespace AnimationSystem
 
 		// todo add result handling?
 		~PureResult() noexcept(false)
-		{
-			if(IsError() && Error().value().UnHandled())
+		{	
+			if(IsError() && Error().value().UnHandled() )
 			{
 				const auto message = Error().value().Message();
 				std::cout << message << std::endl;

@@ -46,6 +46,7 @@ AnimationSystem::PureResult AnimationSystem::AnimationController::UpdateAnimatio
 
     animator_->Update(frameTime, skinnedMesh.bind_pose());
     skinnedMesh.UpdateBoneMatrices(animator_->pose());
+    return PureResult::OK();
 }
 
 AnimationSystem::PureResult AnimationSystem::AnimationController::SetAnimation(Animation& animation)

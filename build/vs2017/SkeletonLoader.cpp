@@ -5,13 +5,13 @@ AnimationSystem::SkeletonLoader::SkeletonLoader(gef::Platform& platform_)
 {
 }
 
-AnimationSystem::Result AnimationSystem::SkeletonLoader::LoadSkeletonScene(gef::Scene& scene)
+AnimationSystem::PureResult AnimationSystem::SkeletonLoader::LoadSkeletonScene(gef::Scene& scene)
 {
     const auto & meshDataList = scene.mesh_data;
     const auto & skeletons = scene.skeletons;
     
     if(skeletons.empty())
-        return Result::Error("Scene contained no skeletons");
+        return PureResult::Error("Scene contained no skeletons");
     
     //todo gef's way of getting the actual ID is broken
     // assume mesh data list is a parallel list, (bad)
@@ -27,7 +27,7 @@ AnimationSystem::Result AnimationSystem::SkeletonLoader::LoadSkeletonScene(gef::
         skeletons_.emplace(uniqueID, std::move(wrappedSkeleton));
     }
 
-    return Result::OK();
+    return PureResult::OK();
 
     // todo use this code 
     for (auto & meshData : meshDataList)
@@ -41,7 +41,7 @@ AnimationSystem::Result AnimationSystem::SkeletonLoader::LoadSkeletonScene(gef::
         // skeletons_.emplace(meshData.name_id, std::move(wrappedSkeleton));
     }
 	
-    return Result::OK();
+    return PureResult::OK();
 }
 
 AnimationSystem::SkeletonWrapper const* AnimationSystem::SkeletonLoader::GetSkeleton(std::string const& name) const
@@ -67,18 +67,18 @@ std::vector<unsigned> AnimationSystem::SkeletonLoader::GetAllSkeletonIDs() const
     return IDs;
 }
 
-AnimationSystem::Result AnimationSystem::SingleSkeletonLoader::LoadSkeleton(StringId const id, gef::Scene const& scene, gef::Platform & platform)
+AnimationSystem::PureResult AnimationSystem::SingleSkeletonLoader::LoadSkeleton(StringId const id, gef::Scene const& scene, gef::Platform & platform)
 {
     const auto & skeletons = scene.skeletons;
     
     if(skeletons.empty())
-        return Result::Error("Scene contained no skeletons");
+        return PureResult::Error("Scene contained no skeletons");
 
     if(skeletons.size() > 1)
-        return Result::Error("Multiple skeletons per scene is not supported");
+        return PureResult::Error("Multiple skeletons per scene is not supported");
 
     const auto skeletonFromFile = skeletons.front();
     skeleton_ = SkeletonWrapper::Create(*skeletonFromFile, id);
 
-    return Result::OK();
+    return PureResult::OK();
 }

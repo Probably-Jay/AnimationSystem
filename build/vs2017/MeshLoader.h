@@ -3,7 +3,7 @@
 #include <string>
 
 #include "IMeshLoader.h"
-#include "Result.h"
+#include "PureResult.h"
 #include "graphics/scene.h"
 
 
@@ -16,7 +16,7 @@ namespace AnimationSystem
 	{
 	public:
 		explicit MeshLoader(gef::Platform& platform_);
-		Result LoadMeshScene(gef::Scene& scene) override;
+		PureResult LoadMeshScene(gef::Scene& scene) override;
 		MeshWrapper const * GetMesh(string const& name) const override;
 		MeshWrapper const * GetMesh(gef::StringId id) const override;
 		std::vector<unsigned int> GetAllMeshIDs() const override;
@@ -30,7 +30,7 @@ namespace AnimationSystem
 	class SingleMeshLoader
 	{
 	public:
-		Result LoadMesh(StringId id, gef::Scene& scene, gef::Platform& platform);
+		PureResult LoadMesh(StringId id, gef::Scene& scene, gef::Platform& platform);
 		unique_ptr<MeshWrapper> TakeMesh() {return std::move(mesh_);}
 	private:
 		unique_ptr<MeshWrapper> mesh_;

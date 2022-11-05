@@ -1,6 +1,9 @@
 ﻿#pragma once
+#include <functional>
+
 #include "AnimationWrapper.h"
-#include "Result.h"
+#include "AnimatorConfig.h"
+#include "PureResult.h"
 #include "system/platform.h"
 using std::string;
 namespace AnimationSystem
@@ -9,33 +12,33 @@ namespace AnimationSystem
     {
     public:
         virtual ~IReadOnlyAnimationContainer() = default;
-        virtual AnimationWrapper * GetAnimation(const string id) const =0;
-        virtual AnimationWrapper * GetAnimation(StringId id) const = 0;
+        virtual ValueResult<std::reference_wrapper<Animation>> GetAnimation(StringId id) const = 0;
         virtual bool HasAnimation(StringId id) const = 0;
     };
     class IAnimationContainer : public IReadOnlyAnimationContainer
     {
     public:
         ~IAnimationContainer() override = default;
-        virtual CreateEntityResult LoadAnimations(const string& nameId, const std::string& filepath, const std::string& nameWithinFile) =0;
+        virtual PureResult LoadAnimations(const string& nameId, const std::string& filepath, const std::string& nameWithinFile,
+            const std::function<void(AnimatorConfig)>& configDelegate) = 0;
     };
 }
 
 namespace AnimationSystem
 {
-    class AnimationContainer : public IAnimationContainer
+    class AnimationContainer final : public IAnimationContainer
     {
     public:
         explicit AnimationContainer(gef::Platform const & platform);
 
-        CreateEntityResult LoadAnimations(const string& nameId, const std::string& filepath, const std::string& nameWithinFile)override;
+        PureResult LoadAnimations(const string& nameId, const std::string& filepath, const std::string& nameWithinFile,
+             const std::function<void(AnimatorConfig)>& configDelegate) override;
 
-        AnimationWrapper * GetAnimation(const string id) const override {return  GetWrappedValueFromMap(animations_, gef::GetStringId(id));}
-        AnimationWrapper * GetAnimation(const StringId id) const override {return GetWrappedValueFromMap(animations_, id);}
-        bool HasAnimation(const StringId id) const override {return GetAnimation(id) != nullptr; }
+        ValueResult<std::reference_wrapper<Animation>> GetAnimation(const StringId id) const override;
+        bool HasAnimation(const StringId id) const override {return string_id_table_.HasValue(id); }
 
     private:
-        std::map<StringId, std::unique_ptr<AnimationWrapper>> animations_;
+        std::map<StringId, std::unique_ptr<Animation>> animations_;
         gef::Platform const & platform_;
 
         mutable gef::StringIdTable string_id_table_;

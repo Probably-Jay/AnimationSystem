@@ -9,7 +9,7 @@ AnimationSystem::MeshLoader::MeshLoader(gef::Platform& platform_)
 {
 }
 
-AnimationSystem::Result AnimationSystem::MeshLoader::LoadMeshScene(gef::Scene& scene)
+AnimationSystem::PureResult AnimationSystem::MeshLoader::LoadMeshScene(gef::Scene& scene)
 {
 	scene.CreateMeshes(platform_);
 
@@ -17,7 +17,7 @@ AnimationSystem::Result AnimationSystem::MeshLoader::LoadMeshScene(gef::Scene& s
 	const auto & meshDataList = scene.mesh_data;
 	
 	if(meshList.empty())
-		return Result::Error("Scene contained no meshes");
+		return PureResult::Error("Scene contained no meshes");
 
 	// todo this properly
 	
@@ -31,7 +31,7 @@ AnimationSystem::Result AnimationSystem::MeshLoader::LoadMeshScene(gef::Scene& s
 	//	meshes_.emplace(uniqueID, std::move(wrappedMesh));
 	}
 	
-	return Result::OK();
+	return PureResult::OK();
 
 	// {
 	// 	auto mesh = std::unique_ptr<gef::Mesh>(scene.CreateMesh(platform_, meshData));
@@ -67,21 +67,21 @@ std::vector<unsigned int> AnimationSystem::MeshLoader::GetAllMeshIDs() const
 	return IDs;
 }
 
-AnimationSystem::Result AnimationSystem::SingleMeshLoader::LoadMesh(const StringId id, gef::Scene& scene, gef::Platform & platform)
+AnimationSystem::PureResult AnimationSystem::SingleMeshLoader::LoadMesh(const StringId id, gef::Scene& scene, gef::Platform & platform)
 {
 	scene.CreateMeshes(platform);
 
 	const auto & meshList = scene.meshes;
 	
 	if(meshList.empty())
-		return Result::Error("Scene contained no meshes");
+		return PureResult::Error("Scene contained no meshes");
 
 	if(meshList.size() > 1)
-		return Result::Error("Loading multiple meshes per scene-file not supported");
+		return PureResult::Error("Loading multiple meshes per scene-file not supported");
 
 	const auto meshFromFile = meshList.front();
 
 	mesh_ = MeshWrapper::Create(*meshFromFile, id); 
 	
-	return Result::OK();
+	return PureResult::OK();
 }

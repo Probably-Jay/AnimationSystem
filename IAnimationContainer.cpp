@@ -8,12 +8,13 @@ AnimationSystem::AnimationContainer::AnimationContainer(const gef::Platform& pla
 {
 }
 
-AnimationSystem::CreateEntityResult AnimationSystem::AnimationContainer::LoadAnimations(const string& nameId, const std::string& filepath, const std::string& nameWithinFile)
+AnimationSystem::PureResult AnimationSystem::AnimationContainer::LoadAnimations(const string& nameId, const std::string& filepath,
+    const std::string& nameWithinFile, const std::function<void(AnimatorConfig)>& configDelegate)
 {
     auto animationScene = gef::Scene{};
 	
     if (!animationScene.ReadSceneFromFile(platform_, filepath.c_str()))
-        return CreateEntityResult::Error("Could not load animation from scene file");
+        return PureResult::Error("Could not load animation from scene file");
     
     const auto animationIter =
         nameWithinFile.empty() // if no name specified, take first
@@ -21,12 +22,25 @@ AnimationSystem::CreateEntityResult AnimationSystem::AnimationContainer::LoadAni
             : animationScene.animations.find(gef::GetStringId(nameWithinFile));
 
     if (animationIter == animationScene.animations.end())
-        return CreateEntityResult::Error("Animation with name " + nameWithinFile + "could not be found");
+        return PureResult::Error("Animation with name " + nameWithinFile + "could not be found");
 
     const StringId animationId = string_id_table_.Add(nameId);
+
+    //bug ??
+    auto gefAnimation = std::unique_ptr<gef::Animation>(animationIter->second);
     
-    auto animation = AnimationWrapper::Create(animationId, std::move(*animationIter->second));
+    auto animation = std::make_unique<Animation>(std::move(gefAnimation), animationId, configDelegate);
     animations_.emplace(animationId, std::move(animation));
 
-    return CreateEntityResult::OK(animationId);
+    return PureResult::OK();
+}
+
+AnimationSystem::ValueResult<std::reference_wrapper<AnimationSystem::Animation>> AnimationSystem::AnimationContainer::GetAnimation(
+    const StringId id) const
+{
+    const auto iter = animations_.find(id);
+    if(iter == animations_.end())
+        return ValueResult<std::reference_wrapper<Animation>>::Error(ERROR_TAG+"Could not find animation with id" + std::to_string(id));
+    
+    return ValueResult<std::reference_wrapper<Animation>>::OK(*iter->second);
 }

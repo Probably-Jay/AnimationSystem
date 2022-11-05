@@ -6,7 +6,7 @@
 //     return item.Create(platform, std::move(modelScene));
 // }
 
-AnimationSystem::Result AnimationSystem::AnimatedObject::CreateObjectsFromScene(gef::Platform& platform,
+AnimationSystem::PureResult AnimationSystem::AnimatedObject::CreateObjectsFromScene(gef::Platform& platform,
                                                                 std::unique_ptr<gef::Scene> modelScene)
 {
     modelScene->CreateMaterials(platform);
@@ -16,7 +16,7 @@ AnimationSystem::Result AnimationSystem::AnimatedObject::CreateObjectsFromScene(
         return result;
 
     const auto skinnedMesh = skinnedMeshContainer.SkinnedMesh();
-    animator->Item().Init(skinnedMesh);
+    animator->Init(skinnedMesh);
     
-    return Result::OK();
+    return PureResult::OK();
 }

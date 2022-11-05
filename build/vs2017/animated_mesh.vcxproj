@@ -131,6 +131,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;..\..;..\..\..\gef_abertay</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -206,7 +207,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\AnimatedObject.cpp" />
-    <ClCompile Include="..\..\AnimatedObjectContainer.cpp" />
+    <ClCompile Include="..\..\AnimatedObjectFactory.cpp" />
     <ClCompile Include="..\..\AnimatorConfig.cpp" />
     <ClCompile Include="..\..\EntityMap.cpp" />
     <ClCompile Include="..\..\IAnimationContainer.cpp" />
@@ -231,7 +232,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\AnimatedObject.h" />
-    <ClInclude Include="..\..\AnimatedObjectContainer.h" />
+    <ClInclude Include="..\..\AnimatedObjectFactory.h" />
     <ClInclude Include="..\..\AnimationWrapper.h" />
     <ClInclude Include="..\..\AnimatorConfig.h" />
     <ClInclude Include="..\..\AnimatorWrapper.h" />
@@ -249,7 +250,7 @@
     <ClInclude Include="SkeletonWrapper.h" />
     <ClInclude Include="SkinnedMeshWrapper.h" />
     <ClInclude Include="MeshLoader.h" />
-    <ClInclude Include="Result.h" />
+    <ClInclude Include="PureResult.h" />
     <ClInclude Include="SkeletonLoader.h" />
     <ClInclude Include="SkinnedMeshContainer.h" />
   </ItemGroup>

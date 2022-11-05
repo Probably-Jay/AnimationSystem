@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "SkeletonWrapper.h"
-#include "Result.h"
+#include "PureResult.h"
 #include "graphics/scene.h"
 
 
@@ -10,7 +10,7 @@ namespace AnimationSystem
     {
     public:
         virtual ~ISkeletonLoader() = default;
-        virtual Result LoadSkeletonScene(gef::Scene& scene) = 0;
+        virtual PureResult LoadSkeletonScene(gef::Scene& scene) = 0;
         virtual SkeletonWrapper const * GetSkeleton(std::string const& name) const = 0;
         virtual SkeletonWrapper const * GetSkeleton(unsigned id) const = 0;
         virtual std::vector<unsigned int> GetAllSkeletonIDs() const = 0;
@@ -23,7 +23,7 @@ namespace AnimationSystem
     {
     public:
         explicit SkeletonLoader(gef::Platform& platform_);
-        Result LoadSkeletonScene(gef::Scene& scene) override;
+        PureResult LoadSkeletonScene(gef::Scene& scene) override;
         SkeletonWrapper const * GetSkeleton(std::string const& name) const override;
         SkeletonWrapper const * GetSkeleton(unsigned id) const override;
         std::vector<unsigned> GetAllSkeletonIDs() const override;
@@ -37,7 +37,7 @@ namespace AnimationSystem
     class SingleSkeletonLoader
     {
     public:
-        Result LoadSkeleton(StringId const id, gef::Scene const& scene, gef::Platform& platform);
+        PureResult LoadSkeleton(StringId const id, gef::Scene const& scene, gef::Platform& platform);
         std::unique_ptr<SkeletonWrapper> TakeSkeleton() {return std::move(skeleton_); }
 
     private:

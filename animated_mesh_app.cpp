@@ -40,7 +40,7 @@ void AnimatedMeshApp::Init()
 
 AnimationSystem::PureResult AnimatedMeshApp::LoadMeshAndAnimation()
 {
-	auto createPlayerResult = animation_system_->CreateAnimatedObject("Player", "tesla/tesla.scn") ;
+	auto createPlayerResult = animation_system_->CreateAnimatedObject("Player", "xbot/xbot.scn") ;
 	
 	if(createPlayerResult.IsError())
 		return createPlayerResult.ToPureResult();
@@ -48,7 +48,7 @@ AnimationSystem::PureResult AnimatedMeshApp::LoadMeshAndAnimation()
 	player_ = createPlayerResult.Take();
 	
 	auto animationResult = animation_system_->CreateAnimationFor(*player_,
-		"Walk","tesla/tesla@walk.scn","",
+		"Walk","xbot/xbot@walking.scn","",
 	[](AnimatorConfig animPlayer)
 	{
 		animPlayer.SetLooping(true);
@@ -113,7 +113,22 @@ bool AnimatedMeshApp::Update(float frame_time)
 	if (player_)
 	{
 		gef::Matrix44 player_transform;
+		
+		gef::Matrix44 player_scale;
+		gef::Matrix44 player_translate;
+		gef::Matrix44 player_rotate;
+
 		player_transform.SetIdentity();
+		player_scale.SetIdentity();
+		player_translate.SetIdentity();
+		player_rotate.SetIdentity();
+
+		player_scale.Scale(gef::Vector4(0.3f,0.3f,0.3f,1));
+		player_rotate.RotationY(gef::DegToRad(45.f));
+		player_translate.SetTranslation(gef::Vector4(25.f, -25.f, -100.f, 1));
+
+		player_transform = player_scale * player_rotate * player_translate;
+		
 		player_->SetTransform(player_transform);
 	}
 

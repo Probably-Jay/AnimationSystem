@@ -12,27 +12,12 @@ using std::unique_ptr;
 
 namespace AnimationSystem
 {
-	class MeshLoader final : public IMeshLoader
+	class MeshLoader
 	{
 	public:
-		explicit MeshLoader(gef::Platform& platform_);
-		PureResult LoadMeshScene(gef::Scene& scene) override;
-		MeshWrapper const * GetMesh(string const& name) const override;
-		MeshWrapper const * GetMesh(gef::StringId id) const override;
-		std::vector<unsigned int> GetAllMeshIDs() const override;
+		PureResult LoadMesh(gef::StringId id, gef::Scene& scene, gef::Platform& platform);
+		[[nodiscard]] gef::Mesh & Mesh() const {return mesh_.value().get();}
 	private:
-		gef::Platform& platform_;
-		
-		std::map<gef::StringId, unique_ptr<MeshWrapper>> meshes_;
-		
-	};
-
-	class SingleMeshLoader
-	{
-	public:
-		PureResult LoadMesh(StringId id, gef::Scene& scene, gef::Platform& platform);
-		unique_ptr<MeshWrapper> TakeMesh() {return std::move(mesh_);}
-	private:
-		unique_ptr<MeshWrapper> mesh_;
+		std::optional<std::reference_wrapper<gef::Mesh>> mesh_ ={};
 	};
 }

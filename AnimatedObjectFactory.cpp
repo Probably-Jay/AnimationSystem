@@ -9,8 +9,9 @@ AnimationSystem::CreateAnimatedObjectResult AnimationSystem::AnimatedObjectFacto
 
     const auto stringId = id_table_.Add(objectNameId);
     
-    auto animatedObject = std::make_shared<AnimatedObject>(platform, stringId);
+    auto animatedObject = std::shared_ptr<AnimatedObject>{new AnimatedObject{platform, stringId}};
 
+    // load the object
     if(const auto result = animatedObject->CreateObjectsFromScene(platform, std::move(modelScene)); result.IsError())
         return CreateAnimatedObjectResult::Error(result.Error().value());
 

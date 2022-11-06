@@ -208,8 +208,6 @@
   <ItemGroup>
     <ClCompile Include="..\..\AnimatedObject.cpp" />
     <ClCompile Include="..\..\AnimatedObjectFactory.cpp" />
-    <ClCompile Include="..\..\AnimatorConfig.cpp" />
-    <ClCompile Include="..\..\EntityMap.cpp" />
     <ClCompile Include="..\..\IAnimationContainer.cpp" />
     <ClCompile Include="..\..\main_d3d11.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|PSVita'">true</ExcludedFromBuild>
@@ -224,7 +222,6 @@
     <ClCompile Include="..\..\animated_mesh_app.cpp" />
     <ClCompile Include="..\..\motion_clip_player.cpp" />
     <ClCompile Include="..\..\SkinnedMeshContainer.cpp" />
-    <ClCompile Include="..\..\StringIDFromString.cpp" />
     <ClCompile Include="AnimationController.cpp" />
     <ClCompile Include="AnimationSystem3D.cpp" />
     <ClCompile Include="MeshLoader.cpp" />
@@ -235,13 +232,9 @@
     <ClInclude Include="..\..\AnimatedObjectFactory.h" />
     <ClInclude Include="..\..\Animation.h" />
     <ClInclude Include="..\..\AnimatorConfig.h" />
-    <ClInclude Include="..\..\AnimatorWrapper.h" />
-    <ClInclude Include="..\..\EntityMap.h" />
     <ClInclude Include="..\..\IAnimationContainer.h" />
-    <ClInclude Include="..\..\IStringID.h" />
     <ClInclude Include="..\..\motion_clip_player.h" />
     <ClInclude Include="..\..\animated_mesh_app.h" />
-    <ClInclude Include="..\..\StringIDFromString.h" />
     <ClInclude Include="AnimationController.h" />
     <ClInclude Include="AnimationSystem3D.h" />
     <ClInclude Include="MeshWrapper.h" />

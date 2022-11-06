@@ -1,19 +1,15 @@
 #include "animated_mesh_app.h"
 #include <system/platform.h>
 #include <graphics/sprite_renderer.h>
-#include <graphics/mesh.h>
 #include <graphics/font.h>
 #include <input/input_manager.h>
 #include <input/sony_controller_input_manager.h>
 #include <input/keyboard.h>
 #include <maths/math_utils.h>
 #include <graphics/renderer_3d.h>
-#include <graphics/scene.h>
 #include <animation/skeleton.h>
-#include <animation/animation.h>
 
 #include "AnimatedObject.h"
-#include "StringIDFromString.h"
 
 
 AnimatedMeshApp::AnimatedMeshApp(gef::Platform& platform) :
@@ -52,7 +48,7 @@ AnimationSystem::PureResult AnimatedMeshApp::LoadMeshAndAnimation()
 	player_ = createPlayerResult.Take();
 	
 	auto animationResult = animation_system_->CreateAnimationFor(*player_,
-		"Walk","tesla/tesla@walk.scn","hi",
+		"Walk","tesla/tesla@walk.scn","",
 	[](AnimatorConfig animPlayer)
 	{
 		animPlayer.SetLooping(true);
@@ -118,7 +114,7 @@ bool AnimatedMeshApp::Update(float frame_time)
 	{
 		gef::Matrix44 player_transform;
 		player_transform.SetIdentity();
-		player_->set_transform(player_transform);
+		player_->SetTransform(player_transform);
 	}
 
 	return true;
@@ -167,7 +163,8 @@ void AnimatedMeshApp::DrawHUD()
 	if(font_)
 	{
 		// display frame rate
-		font_->RenderText(sprite_renderer_, gef::Vector4(850.0f, 510.0f, -0.9f), 1.0f, 0xffffffff, gef::TJ_LEFT, "FPS: %.1f", fps_);
+		font_->RenderText(sprite_renderer_, gef::Vector4(850.0f, 510.0f, -0.9f), 1.0f, 0xffffffff, gef::TJ_LEFT,
+		                  "FPS: %.1f", fps_);
 	}
 }
 

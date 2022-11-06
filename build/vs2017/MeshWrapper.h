@@ -5,5 +5,5 @@
 
 namespace AnimationSystem
 {
-	typedef ViewingProtectedWrapper<gef::Mesh> MeshWrapper;
+	//typedef ViewingProtectedWrapper<gef::Mesh> MeshWrapper;
 }

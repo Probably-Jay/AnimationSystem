@@ -7,6 +7,7 @@
 #include "graphics/scene.h"
 #include "system/platform.h"
 using std::string;
+using gef::StringId;
 namespace AnimationSystem
 {
     class IReadOnlyAnimationContainer

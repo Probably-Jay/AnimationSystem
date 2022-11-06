@@ -4,5 +4,5 @@
 
 namespace AnimationSystem
 {
-    typedef OwningProtectedWrapper<gef::SkinnedMeshInstance> SkinnedMeshWrapper;
+   // typedef OwningProtectedWrapper<gef::SkinnedMeshInstance> SkinnedMeshWrapper;
 }

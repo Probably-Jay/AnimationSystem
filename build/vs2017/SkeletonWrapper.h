@@ -4,5 +4,5 @@
 
 namespace AnimationSystem
 {
-    typedef ViewingProtectedWrapper<gef::Skeleton> SkeletonWrapper;
+  //  typedef ViewingProtectedWrapper<gef::Skeleton> SkeletonWrapper;
 }

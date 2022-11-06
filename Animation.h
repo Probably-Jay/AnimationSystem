@@ -5,6 +5,8 @@
 #include "ViewingProtectedWrapper.h"
 #include "animation/animation.h"
 
+using gef::StringId;
+
 namespace AnimationSystem
 {
   class Animation

@@ -14,30 +14,15 @@ using std::unique_ptr;
 
 namespace AnimationSystem
 {
-    // class SkinnedMeshContainer
-    // {
-    // public:
-    //     SkinnedMeshWrapper const& CreateSkinnedMesh(SkeletonWrapper const& skeleton,
-    //                                                 MeshWrapper const& mesh);
-    //
-    //
-    //     SkinnedMeshWrapper* GetSkinnedMesh(StringId id) const;
-    // private:
-    //     SkinnedMeshWrapper& MakeAndStoreMesh(SkeletonWrapper const& skeleton);
-    //     std::map<StringId, unique_ptr<SkinnedMeshWrapper>> skinned_meshes_;
-    // };
-
-    class SingleSkinnedMeshContainer
+    class SkinnedMeshInstance
     {
     public:
-        PureResult Create(const StringId id, gef::Platform& platform);
         PureResult CreateSkinnedMesh(StringId id, gef::Platform& platform, std::unique_ptr<gef::Scene> modelScene);
-        gef::SkinnedMeshInstance & SkinnedMesh() const {return skinned_mesh_->Item();}
+        [[nodiscard]] gef::SkinnedMeshInstance & SkinnedMesh() const {return *skinned_mesh_;}
     private:
-        unique_ptr<MeshWrapper> mesh_ = nullptr;
-        unique_ptr<SkeletonWrapper> skeleton_ = nullptr;
-        
-        unique_ptr<SkinnedMeshWrapper> skinned_mesh_ = nullptr;
+        PureResult Create(const StringId id, gef::Platform& platform);
+             
+        unique_ptr<gef::SkinnedMeshInstance> skinned_mesh_ = nullptr;
         unique_ptr<gef::Scene> model_scene_;
     };
 

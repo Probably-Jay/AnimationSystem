@@ -34,6 +34,7 @@ namespace AnimationSystem
     private:
         const StringId name_id_;
         SkinnedMeshInstance skinned_mesh_container_;
+        
         std::unique_ptr<AnimationController> animator_;
 
         friend class AnimatedObjectFactory;

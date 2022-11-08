@@ -2,8 +2,9 @@
 
 #include "graphics/renderer_3d.h"
 
-AnimationSystem::AnimatedObject::AnimatedObject(gef::Platform& platform, const StringId nameId): name_id_(nameId)
-    , animator_(std::make_unique<AnimationController>(nameId, platform))
+AnimationSystem::AnimatedObject::AnimatedObject(gef::Platform& platform, const StringId nameId)
+    : name_id_(nameId)
+    , animator_(std::make_unique<AnimationController>(platform))
 {}
 
 AnimationSystem::PureResult AnimationSystem::AnimatedObject::CreateObjectsFromScene(gef::Platform& platform,

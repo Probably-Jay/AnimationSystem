@@ -17,16 +17,15 @@ namespace AnimationSystem
         virtual std::optional<string> CurrentAnimationName() = 0;
     };
 
-
-   class AnimationController : public IAnimator
+    class AnimationController : public IAnimator
    {
    public:
-       AnimationController(StringId id, gef::Platform const& platform);
+       AnimationController(gef::Platform const& platform);
 
        void Init(gef::SkinnedMeshInstance const& skinnedMesh);
         
        PureResult CreateAnimation(const string& animationName, const std::string& filePath,
-                                  const std::string& nameWithinFile, std::optional<std::function<void(AnimatorConfig)> const> const configDelegate);
+                                  const std::string& nameWithinFile, std::optional<std::function<void(IAnimatorConfig)> const> const configDelegate);
        
        PureResult SetAnimation(std::string animationName) override;
        PureResult SetAnimation(StringId animationId) override;
@@ -40,10 +39,22 @@ namespace AnimationSystem
    private:
        PureResult SetAnimation(Animation& animation);
 
-   private:
        std::optional<std::reference_wrapper<Animation>> current_animation_;
         
        std::unique_ptr<IAnimationContainer> animations_{};
-       std::unique_ptr<MotionClipPlayer> animator_{};
+       std::unique_ptr<class AnimatorWrapper> animator_{};
+   };
+
+   class AnimatorWrapper : IAnimatorConfig
+   {
+   public:
+       void UpdateAnimation(float frameTime, gef::SkinnedMeshInstance& skinnedMesh);
+       PureResult SetAnimation(const Animation& animation);
+       void SetAnimationTime(const float animationTime) override {animator_.set_anim_time(animationTime);}
+       void SetPlaybackSpeed(const float playbackSpeed) override {animator_.set_playback_speed(playbackSpeed); }
+       void SetLooping(const bool isLooping) override {animator_.set_looping(isLooping); }
+       MotionClipPlayer & Animator() {return animator_;}
+   private:
+       MotionClipPlayer animator_;
    };
 }

@@ -237,6 +237,7 @@
     <ClInclude Include="..\..\animated_mesh_app.h" />
     <ClInclude Include="AnimationController.h" />
     <ClInclude Include="AnimationSystem3D.h" />
+    <ClInclude Include="BlendAnimator.h" />
     <ClInclude Include="GefExtentions.h" />
     <ClInclude Include="MeshWrapper.h" />
     <ClInclude Include="IMeshLoader.h" />

@@ -1,6 +1,6 @@
 ﻿#include "AnimationController.h"
 
-AnimationSystem::AnimationController::AnimationController(StringId const id, gef::Platform const& platform)
+AnimationSystem::AnimationController::AnimationController(gef::Platform const& platform)
     : current_animation_({})
     , animations_(new AnimationContainer{platform})
     , animator_(new MotionClipPlayer{})
@@ -38,27 +38,36 @@ AnimationSystem::PureResult AnimationSystem::AnimationController::SetAnimation(c
     return result.ToPureResult();
 }
 
-AnimationSystem::PureResult AnimationSystem::AnimationController::UpdateAnimation(
-    float frameTime, gef::SkinnedMeshInstance& skinnedMesh)
-{
-    if(!current_animation_.has_value())
-        return PureResult::Error(ERROR_TAG+"Cannot animate as no animation is selected");
-
-    animator_->Update(frameTime, skinnedMesh.bind_pose());
-    skinnedMesh.UpdateBoneMatrices(animator_->pose());
-    return PureResult::OK();
-}
-
 AnimationSystem::PureResult AnimationSystem::AnimationController::SetAnimation(Animation& animation)
 {
     current_animation_ = animation;
 
-    animator_->set_clip(&animation.GetAnimation());
+    return animator_->SetAnimation(animation);
+}
+
+AnimationSystem::PureResult AnimationSystem::AnimationController::UpdateAnimation(
+    const float frameTime, gef::SkinnedMeshInstance& skinnedMesh)
+{
+    if(!current_animation_.has_value())
+        return PureResult::Error(ERROR_TAG+"Cannot animate as no animation is selected");
+
+    animator_->UpdateAnimation(frameTime, skinnedMesh);
+    return PureResult::OK();
+}
+
+void AnimationSystem::AnimatorWrapper::UpdateAnimation(const float frameTime, gef::SkinnedMeshInstance& skinnedMesh)
+{
+    animator_.Update(frameTime, skinnedMesh.bind_pose());
+    skinnedMesh.UpdateBoneMatrices(animator_.pose());
+}
+
+AnimationSystem::PureResult AnimationSystem::AnimatorWrapper::SetAnimation(Animation const & animation)
+{
+    animator_.SetClip(&animation.GetAnimation());
     
     try
     {
-        auto animatorConfigWrapper = AnimatorConfig{(*animator_)};
-        animation.ApplyConfig(animatorConfigWrapper);
+        animation.ApplyConfig(animator_);
     }
     catch (std::exception& e)
     {

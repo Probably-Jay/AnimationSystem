@@ -4,13 +4,11 @@
 /**
  * \brief Restricts the MotionClipPlayer interface
  */
-class AnimatorConfig 
+class IAnimatorConfig 
 {
 public:
-    AnimatorConfig(MotionClipPlayer& motionClipPlayer): motion_clip_player_(motionClipPlayer) {  }
-    void SetAnimationTime(const float animationTime) {motion_clip_player_.set_anim_time(animationTime);}
-    void SetPlaybackSpeed(const float playbackSpeed) {motion_clip_player_.set_playback_speed(playbackSpeed); }
-    void SetLooping(const bool isLooping) {motion_clip_player_.set_looping(isLooping); }
-private:
-    MotionClipPlayer& motion_clip_player_;
+    virtual ~IAnimatorConfig() = default;
+    virtual void SetAnimationTime(float animationTime) =0;
+    virtual void SetPlaybackSpeed(float playbackSpeed) =0;
+    virtual void SetLooping(bool isLooping) =0;
 };

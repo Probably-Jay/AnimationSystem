@@ -23,11 +23,11 @@ AnimationSystem::PureResult AnimationSystem::AnimatedObject::CreateObjectsFromSc
 
 AnimationSystem::PureResult AnimationSystem::AnimatedObject::UpdateAnimation(float frameTime)
 {
-    auto result = animator_->UpdateAnimation(frameTime,skinned_mesh_container_.SkinnedMesh().bind_pose());
-    if(result.IsError())
-        return result.ToPureResult();
+    auto newPoseResult = animator_->UpdateAnimation(frameTime, skinned_mesh_container_.SkinnedMesh().bind_pose());
+    if(newPoseResult.IsError())
+        return newPoseResult.ToPureResult();
     
-    const auto newPose = result.Take();
+    const auto newPose = newPoseResult.Take();
     skinned_mesh_container_.SkinnedMesh().UpdateBoneMatrices(newPose);
     return PureResult::OK();
 }

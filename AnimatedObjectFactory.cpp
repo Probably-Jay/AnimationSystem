@@ -5,11 +5,16 @@ AnimationSystem::ValueResult<std::shared_ptr<AnimationSystem::IAnimatedObject>>
 AnimationSystem::AnimatedObjectFactory::CreateAnimatedObject(
     string const& objectNameId, string const& filePath, gef::Platform& platform)
 {
+    const auto idIsUniqueResult = GefExtensions::TryAddNew(id_table_, objectNameId);
+    if(idIsUniqueResult.IsError())
+        return ValueResult<std::shared_ptr<IAnimatedObject>>::Error(idIsUniqueResult.Error());
+
+    // get the ID
+    const auto stringId = idIsUniqueResult.Get();
+    
     auto modelScene = std::make_unique<gef::Scene>();
     modelScene->ReadSceneFromFile(platform, filePath.c_str());
 
-    const auto stringId = id_table_.Add(objectNameId);
-    
     auto animatedObject = std::shared_ptr<AnimatedObject>{new AnimatedObject{platform, stringId}};
 
     // Load the object

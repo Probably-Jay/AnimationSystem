@@ -102,6 +102,7 @@ namespace AnimationSystem
 		static ValueResult OK(T && entity) { return ValueResult{ std::move(entity) }; }
 		static ValueResult Error(std::string error) { return ValueResult{ std::move(error) }; }
 		static ValueResult Error(ErrorStruct error) { return ValueResult{ std::move(error) }; }
+		static ValueResult Error(std::optional<ErrorStruct> error) { return ValueResult{ std::move(error.value()) }; }
 
 	[[nodiscard]] bool IsError() const {return std::holds_alternative<ErrorStruct>(result_);}
 

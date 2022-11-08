@@ -19,5 +19,6 @@ namespace AnimationSystem
     private:
         PureResult ApplyConfigs(Animation const& animation);
         MotionClipPlayer animator_;
+        std::optional<std::reference_wrapper<Animation const>> current_animation_;
     };
 }

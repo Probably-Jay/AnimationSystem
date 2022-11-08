@@ -11,6 +11,9 @@ namespace GefExtensions
     }
     static bool HasValue(gef::StringIdTable & idTable, std::string const &val) {return HasValue(idTable, gef::GetStringId(val));}
 
+    /**
+     * \brief  Adds the value "val" to "idTable", unless it is already a key, in which case an Error object will be returned
+     */
     static AnimationSystem::ValueResult<StringId> TryAddNew(gef::StringIdTable & idTable, std::string const & val)
     {
         if(HasValue(idTable, val))

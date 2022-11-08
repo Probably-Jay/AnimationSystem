@@ -28,15 +28,13 @@ ValueResult<std::shared_ptr<IAnimatedObject>> AnimationSystem3D::CreateAnimatedO
 
 PureResult AnimationSystem3D::CreateAnimationFor(IAnimatedObject const& readonlyAnimObject, string const& animationName,
                                                  string const& fileName, string const& nameWithinFile,
-                                                 std::optional<std::function<void(IAnimatorConfig&)> const> const configurationDelegate )
+                                                 std::optional<std::function<void(IAnimatorConfig&)> const> const configurationDelegate) const
 {
     auto animatedObjectResult = animated_objects_factory_->FindObject(readonlyAnimObject);
     if(animatedObjectResult.IsError())
         return animatedObjectResult.ToPureResult();
 
     auto & animatedObject = animatedObjectResult.Take().get();
-    
-   // const auto configDelegate = configurationDelegate.has_value() ? configurationDelegate.value() : [](AnimatorConfig _){};
     
     PureResult createAnimationResult = animatedObject.Animator().CreateAnimation(animationName, fileName, nameWithinFile, configurationDelegate);
     return createAnimationResult;

@@ -11,8 +11,8 @@ namespace AnimationSystem
     {
     public:
         virtual ~IAnimationController() = default;
-        virtual PureResult SetAnimation(std::string animationName) = 0;
-        virtual PureResult SetAnimation(StringId animationId) = 0;
+        virtual PureResult SetAnimation(std::string animationName, float transitionTime = 0) = 0;
+        virtual PureResult SetAnimation(StringId animationId, float transitionTime = 0) = 0;
         virtual std::optional<string> CurrentAnimationName() = 0;
     };
 
@@ -30,8 +30,8 @@ namespace AnimationSystem
                                    const std::string& nameWithinFile,
                                    std::optional<std::function<void(IAnimatorConfig&)> const> configDelegate);
 
-        PureResult SetAnimation(std::string animationName) override;
-        PureResult SetAnimation(StringId animationId) override;
+        PureResult SetAnimation(std::string animationName, float transitionTime) override;
+        PureResult SetAnimation(StringId animationId, float transitionTime = 0) override;
 
         ValueResult<gef::SkeletonPose> UpdateAnimation(const float frameTime, gef::SkeletonPose const &skeletonPose);
 
@@ -43,7 +43,7 @@ namespace AnimationSystem
         }
 
     private:
-        PureResult SetAnimation(Animation& animation);
+        PureResult SetAnimation(Animation const &animation, float const transitionTime);
 
         std::optional<StringId> current_animation_name_;
 

@@ -12,13 +12,13 @@ void AnimationSystem::AnimationController::Init(gef::SkinnedMeshInstance const &
     animator_->Init(skinnedMesh.bind_pose());
 }
 
-AnimationSystem::PureResult AnimationSystem::AnimationController::CreateAnimation(const string& animationName,
-    const std::string& filePath, const std::string& nameWithinFile, std::optional<std::function<void(IAnimatorConfig&)> const> const configDelegate)
+AnimationSystem::PureResult AnimationSystem::AnimationController::CreateAnimation(string const & animationName,
+    std::string const & filePath, std::string const & nameWithinFile, std::optional<std::function<void(IAnimatorConfig&)> const> const configDelegate)
 {
     return animations_->LoadAnimations(animationName, filePath, nameWithinFile, configDelegate);
 }
 
-AnimationSystem::PureResult AnimationSystem::AnimationController::SetAnimation(const std::string animationName)
+AnimationSystem::PureResult AnimationSystem::AnimationController::SetAnimation(const std::string animationName, float transitionTime)
 {
     const auto id = gef::GetStringId(animationName);
     if(!animations_->HasAnimation(id))
@@ -26,23 +26,24 @@ AnimationSystem::PureResult AnimationSystem::AnimationController::SetAnimation(c
     return SetAnimation(id);
 }
 
-AnimationSystem::PureResult AnimationSystem::AnimationController::SetAnimation(const StringId animationId)
+AnimationSystem::PureResult AnimationSystem::AnimationController::SetAnimation(StringId const animationId, float transitionTime)
 {
-    const auto result = animations_->GetAnimation(animationId);
-    if(result.IsError())
-        return result.ToPureResult();
+    const auto findAnimationResult = animations_->GetAnimation(animationId);
+    if(findAnimationResult.IsError())
+        return findAnimationResult.ToPureResult();
 
-    auto & animation = result.Get().get();
-    SetAnimation(animation);
+    auto const & animation = findAnimationResult.Get().get();
+
+    auto result = SetAnimation(animation, transitionTime);
     
-    return result.ToPureResult();
+    return result;
 }
 
-AnimationSystem::PureResult AnimationSystem::AnimationController::SetAnimation(Animation& animation)
+AnimationSystem::PureResult AnimationSystem::AnimationController::SetAnimation(Animation const & animation, float const transitionTime)
 {
     current_animation_name_ = animation.ID();
 
-    return animator_->ActiveAnimator().SetAnimation(animation);
+    return animator_->SetAnimation(animation, transitionTime);
 }
 
 AnimationSystem::ValueResult<gef::SkeletonPose> AnimationSystem::AnimationController::UpdateAnimation(
@@ -51,5 +52,6 @@ AnimationSystem::ValueResult<gef::SkeletonPose> AnimationSystem::AnimationContro
     if(!current_animation_name_.has_value())
         return ValueResult<gef::SkeletonPose>::Error(ERROR_TAG+"Cannot animate as no animation is selected");
 
-    return ValueResult<gef::SkeletonPose>::OK(animator_->ActiveAnimator().UpdateAnimation(frameTime, skeletonPose));
+    auto newPose = animator_->UpdateAnimation(frameTime, skeletonPose);
+    return ValueResult<gef::SkeletonPose>::OK(std::move(newPose));
 }

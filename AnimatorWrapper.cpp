@@ -3,12 +3,12 @@
 gef::SkeletonPose AnimationSystem::AnimatorWrapper::UpdateAnimation(const float frameTime, gef::SkeletonPose const& bindPose)
 {
     animator_.Update(frameTime, bindPose);
-   // skinnedMesh.UpdateBoneMatrices(animator_.pose());
    return animator_.pose();
 }
 
 AnimationSystem::PureResult AnimationSystem::AnimatorWrapper::SetAnimation(Animation const & animation)
 {
+    current_animation_ = animation;
     animator_.set_clip(&animation.GetAnimation());
     return ApplyConfigs(animation);
 }

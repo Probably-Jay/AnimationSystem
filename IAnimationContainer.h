@@ -3,6 +3,7 @@
 
 #include "Animation.h"
 #include "AnimatorConfig.h"
+#include "GefExtentions.h"
 #include "PureResult.h"
 #include "graphics/scene.h"
 #include "system/platform.h"
@@ -37,7 +38,7 @@ namespace AnimationSystem
                                   const std::function<void(AnimatorConfig)> configDelegate) override;
 
         ValueResult<std::reference_wrapper<Animation>> GetAnimation(const StringId id) const override;
-        bool HasAnimation(const StringId id) const override {return string_id_table_.HasValue(id); }
+        bool HasAnimation(const StringId id) const override {return GefExtensions::HasValue(string_id_table_, id); }
 
     private:
         std::map<StringId, std::unique_ptr<Animation>> animations_;

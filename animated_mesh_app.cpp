@@ -46,19 +46,32 @@ AnimationSystem::PureResult AnimatedMeshApp::LoadMeshAndAnimation()
 		return createPlayerResult.ToPureResult();
 
 	player_ = createPlayerResult.Take();
-	
-	auto animationResult = animation_system_->CreateAnimationFor(*player_,
-		"Walk","xbot/xbot@walking.scn","",
-	[](AnimatorConfig animPlayer)
-	{
-		animPlayer.SetLooping(true);
-		animPlayer.SetAnimationTime(0.0f);
-	});
 
-	if(animationResult.IsError())
+	if(auto animationResult =
+			animation_system_->CreateAnimationFor(*player_,
+	          "Jump","xbot/xbot@jump.scn","",
+	          [](AnimatorConfig animPlayer)
+	          {
+	              animPlayer.SetLooping(true);
+	          });
+	          animationResult.IsError())
+	{
 		return animationResult;
-	
-	if(auto result = player_->Animator().SetAnimation("Walk"); result.IsError())
+	}
+	if(auto animationResult =
+		animation_system_->CreateAnimationFor(*player_,
+		    "Walk","xbot/xbot@walking.scn","",
+		    [](AnimatorConfig animPlayer)
+		    {
+		        animPlayer.SetLooping(true);
+		    });
+		    animationResult.IsError())
+	{
+		return animationResult;
+	}
+
+
+	if(auto result = player_->Animator().SetAnimation("Jump"); result.IsError())
 		return result;
 
 	

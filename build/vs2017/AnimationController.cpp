@@ -52,13 +52,12 @@ AnimationSystem::PureResult AnimationSystem::AnimationController::UpdateAnimatio
 AnimationSystem::PureResult AnimationSystem::AnimationController::SetAnimation(Animation& animation)
 {
     current_animation_ = animation;
-    
-    auto & animator = *animator_;
-    animator.set_clip(&animation.GetAnimation());
+
+    animator_->set_clip(&animation.GetAnimation());
     
     try
     {
-        auto animatorConfigWrapper = AnimatorConfig{animator};
+        auto animatorConfigWrapper = AnimatorConfig{(*animator_)};
         animation.ApplyConfig(animatorConfigWrapper);
     }
     catch (std::exception& e)

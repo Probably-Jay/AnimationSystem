@@ -29,7 +29,8 @@ namespace AnimationSystem
 		[[nodiscard]] CreateAnimatedObjectResult CreateAnimatedObject(string const & objectNameId, string const & filePath) const;
 
 		PureResult CreateAnimationFor(IAnimatedObject const& readonlyAnimObject, string const& animationName,
-		                              string const& fileName, string const& nameWithinFile, std::function<void(AnimatorConfig)> const configurationDelegate);
+		                              string const& fileName, string const& nameWithinFile,
+		                              std::optional<std::function<void(AnimatorConfig)> const> configurationDelegate = {});
 	private:
 		AnimationSystem3D(gef::Platform & platform_);
 		

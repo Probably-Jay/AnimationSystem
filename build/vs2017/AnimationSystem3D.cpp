@@ -27,14 +27,17 @@ CreateAnimatedObjectResult AnimationSystem3D::CreateAnimatedObject(string const&
 
 PureResult AnimationSystem3D::CreateAnimationFor(IAnimatedObject const& readonlyAnimObject, string const& animationName,
                                                  string const& fileName, string const& nameWithinFile,
-                                                 std::function<void(AnimatorConfig)> const configurationDelegate)
+                                                 std::optional<std::function<void(AnimatorConfig)> const> const configurationDelegate )
 {
-    auto animatedObjectResult = animated_objects_factory_->GetObject(readonlyAnimObject);
+    auto animatedObjectResult = animated_objects_factory_->FindObject(readonlyAnimObject);
     if(animatedObjectResult.IsError())
         return animatedObjectResult.ToPureResult();
 
     auto & animatedObject = animatedObjectResult.Take().get();
-    PureResult createAnimationResult = animatedObject.Animator().CreateAnimation(animationName, fileName, nameWithinFile, configurationDelegate);
+    
+    const auto configDelegate = configurationDelegate.has_value() ? configurationDelegate.value() : [](AnimatorConfig _){};
+    
+    PureResult createAnimationResult = animatedObject.Animator().CreateAnimation(animationName, fileName, nameWithinFile, configDelegate);
     return createAnimationResult;
 }
 

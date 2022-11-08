@@ -10,16 +10,15 @@ gef::SkeletonPose AnimationSystem::BlendAnimator::UpdateAnimationSimple(float co
    return ActiveAnimator().UpdateAnimation(frameTime, skeletonPose);
 }
 
-void AnimationSystem::BlendAnimator::UpdateTransition(float frameTime) {
-   auto transition = transition_.value();
-   transition.AccumulateTime(frameTime);
-   if(transition.InTransition())
+void AnimationSystem::BlendAnimator::UpdateTransition(float const frameTime) {
+   transition_->AccumulateTime(frameTime);
+   if(transition_->InTransition())
       return;
 
    transition_.reset();
 }
 
-gef::SkeletonPose AnimationSystem::BlendAnimator::UpdateAnimationBlended(float frameTime,
+gef::SkeletonPose AnimationSystem::BlendAnimator::UpdateAnimationBlended(float const frameTime,
    gef::SkeletonPose const& skeletonPose) {
    UpdateTransition(frameTime);
 
@@ -29,7 +28,7 @@ gef::SkeletonPose AnimationSystem::BlendAnimator::UpdateAnimationBlended(float f
    auto const activePose = ActiveAnimator().UpdateAnimation(frameTime, skeletonPose);
    auto const previousPose = AlternateAnimator().UpdateAnimation(frameTime, skeletonPose);
 
-   auto const lerpValue = transition_.value().LerpValue();
+   auto const lerpValue = transition_->LerpValue();
             
    auto blendedPose = skeletonPose;
    blendedPose.Linear2PoseBlend(previousPose, activePose, lerpValue);
@@ -47,7 +46,7 @@ gef::SkeletonPose AnimationSystem::BlendAnimator::UpdateAnimation(float const fr
 
 AnimationSystem::AnimatorWrapper& AnimationSystem::BlendAnimator::AlternateAnimator() const {return controllers_.Get(ControllerOther(current_animator_));}
 
-bool AnimationSystem::BlendAnimator::InTransition() const {return transition_.has_value();}
+bool AnimationSystem::BlendAnimator::InTransition() const {return transition_ != nullptr;}
 
 AnimationSystem::AnimatorWrapper& AnimationSystem::BlendAnimator::AnimationControllerPair::Get(
    Controller const controller) const {return map_.at(controller)();}

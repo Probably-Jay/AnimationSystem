@@ -13,6 +13,14 @@ AnimationSystem::PureResult AnimationSystem::AnimatorWrapper::SetAnimation(Anima
     return ApplyConfigs(animation);
 }
 
+AnimationSystem::PureResult AnimationSystem::AnimatorWrapper::SetAnimation(AnimatorWrapper const& animator)
+{
+    if(auto const animation = animator.current_animation_; animation.has_value())
+        return SetAnimation(animation.value());
+    return PureResult::Error(ERROR_TAG+"Animator has no animation");
+}
+
+
 AnimationSystem::PureResult AnimationSystem::AnimatorWrapper::ApplyConfigs(Animation const & animation)
 {
     try

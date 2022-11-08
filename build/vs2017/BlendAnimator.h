@@ -24,20 +24,16 @@ namespace AnimationSystem
 
     struct Transition
     {
-        Transition(float const beginTime, float const duration)
-            : begin_time_(beginTime)
-            , duration_(duration)
+        explicit Transition(float const duration)
+            : duration_(duration)
         {}
 
         void AccumulateTime(float const time){accumulated_time_ += time;}
-        [[nodiscard]] BlendLerpValue LerpValue() const {return BlendLerpValue::SetFromInverseLerp(begin_time_, EndTime(), CurrentTime());}
-        [[nodiscard]] bool InTransition() const {return (CurrentTime() < EndTime()); }
+        [[nodiscard]] BlendLerpValue LerpValue() const {return BlendLerpValue::SetFromInverseLerp(0, duration_, accumulated_time_);}
+        [[nodiscard]] bool InTransition() const {return (accumulated_time_ < duration_); }
     private:
         float accumulated_time_ = 0;
-        [[nodiscard]] float CurrentTime() const {return begin_time_ + accumulated_time_;}
-        const float begin_time_;
         const float duration_;
-        [[nodiscard]] float constexpr EndTime()const {return begin_time_ + duration_;}
     };
     
     class BlendAnimator
@@ -48,17 +44,33 @@ namespace AnimationSystem
         
         [[nodiscard]] AnimatorWrapper & ActiveAnimator() const;
 
-        gef::SkeletonPose UpdateAnimationSimple(float const frameTime, gef::SkeletonPose const& skeletonPose);
+        gef::SkeletonPose UpdateAnimationSimple(float frameTime, gef::SkeletonPose const& skeletonPose);
 
         void UpdateTransition(float frameTime);
 
         gef::SkeletonPose UpdateAnimationBlended(float frameTime, gef::SkeletonPose const& skeletonPose);
 
-        gef::SkeletonPose UpdateAnimation(float const frameTime, gef::SkeletonPose const &skeletonPose);
+        gef::SkeletonPose UpdateAnimation(float frameTime, gef::SkeletonPose const &skeletonPose);
+
+        PureResult SetAnimationSimple(Animation const& animation)
+        {
+            return ActiveAnimator().SetAnimation(animation);
+        }
+        
 
         PureResult SetAnimation(Animation const& animation, float transitionTime)
         {
-            return ActiveAnimator().SetAnimation(animation);
+            if(transitionTime <= 0)
+                return SetAnimationSimple(animation);
+
+            if(auto setAltResult = AlternateAnimator().SetAnimation(ActiveAnimator()); setAltResult.IsError())
+                return setAltResult;
+            
+            if(auto setActiveResult = ActiveAnimator().SetAnimation(animation); setActiveResult.IsError())
+               return setActiveResult;
+
+            transition_ = std::make_unique<Transition>(transitionTime);
+            return PureResult::OK();
         }
 
 
@@ -70,7 +82,7 @@ namespace AnimationSystem
 
         Controller current_animator_;
         
-        std::optional<Transition> transition_;
+        std::unique_ptr<Transition> transition_{};
         [[nodiscard]] bool InTransition() const;
 
         /**
@@ -78,7 +90,7 @@ namespace AnimationSystem
          */
         struct AnimationControllerPair
         {
-            [[nodiscard]] AnimatorWrapper& Get(Controller const controller) const;
+            [[nodiscard]] AnimatorWrapper& Get(Controller controller) const;
         private:
             std::pair<AnimatorWrapper, AnimatorWrapper> controllers_;
             std::map<Controller, std::function<AnimatorWrapper&()>> map_ {
@@ -87,6 +99,6 @@ namespace AnimationSystem
             };
         } controllers_;
 
-        static Controller ControllerOther(Controller const current);
+        static Controller ControllerOther(Controller current);
     };
 }

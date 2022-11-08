@@ -31,7 +31,7 @@ namespace AnimationSystem
                                    std::optional<std::function<void(IAnimatorConfig&)> const> configDelegate);
 
         PureResult SetAnimation(std::string animationName, float transitionTime) override;
-        PureResult SetAnimation(StringId animationId, float transitionTime = 0) override;
+        PureResult SetAnimation(StringId animationId, float transitionTime) override;
 
         ValueResult<gef::SkeletonPose> UpdateAnimation(const float frameTime, gef::SkeletonPose const &skeletonPose);
 

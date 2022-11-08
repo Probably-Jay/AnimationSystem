@@ -23,7 +23,8 @@ AnimationSystem::PureResult AnimationSystem::AnimationController::SetAnimation(c
     const auto id = gef::GetStringId(animationName);
     if(!animations_->HasAnimation(id))
         return PureResult::Error(ERROR_TAG+"Animation '" + animationName + "' could not be found");
-    return SetAnimation(id);
+    
+    return SetAnimation(id, transitionTime);
 }
 
 AnimationSystem::PureResult AnimationSystem::AnimationController::SetAnimation(StringId const animationId, float transitionTime)

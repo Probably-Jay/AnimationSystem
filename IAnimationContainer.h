@@ -34,9 +34,17 @@ namespace AnimationSystem
     {
     public:
         explicit AnimationContainer(gef::Platform const & platform);
+        ValueResult<std::unique_ptr<Animation>> CreateAnimation(const std::string &filepath,
+                                                                const std::string &nameWithinFile,
+                                                                std::optional<std::function<void(IAnimatorConfig&)> const> const configDelegate,
+                                                                const StringId animationId) const;
+        AnimationSystem::ValueResult<std::reference_wrapper<gef::Animation>> LoadAnimationScene(
+            const std::string &filepath, const std::string &nameWithinFile,
+            std::unique_ptr<gef::Scene> &animationScene,
+            gef::Animation &gefAnimation);
 
         PureResult LoadAnimations(const string& animationName, const std::string& filepath, const std::string& nameWithinFile,
-                                   std::optional<std::function<void(IAnimatorConfig&)> const>  configDelegate);
+                                  std::optional<std::function<void(IAnimatorConfig&)> const>  configDelegate);
 
         ValueResult<std::reference_wrapper<Animation>> GetAnimation(StringId id) const override;
         bool HasAnimation(const StringId id) const override {return GefExtensions::HasValue(stringIdTable_, id); }

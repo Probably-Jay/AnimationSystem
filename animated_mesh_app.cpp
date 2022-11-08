@@ -48,17 +48,6 @@ AnimationSystem::PureResult AnimatedMeshApp::LoadMeshAndAnimation()
 	player_ = createPlayerResult.Take();
 
 	if(auto animationResult =
-			animation_system_->CreateAnimationFor(*player_,
-	          "Jump","xbot/xbot@jump.scn","",
-	          [](AnimatorConfig animPlayer)
-	          {
-	              animPlayer.SetLooping(true);
-	          });
-	          animationResult.IsError())
-	{
-		return animationResult;
-	}
-	if(auto animationResult =
 		animation_system_->CreateAnimationFor(*player_,
 		    "Walk","xbot/xbot@walking.scn","",
 		    [](AnimatorConfig animPlayer)
@@ -69,9 +58,22 @@ AnimationSystem::PureResult AnimatedMeshApp::LoadMeshAndAnimation()
 	{
 		return animationResult;
 	}
+	
+	if(auto animationResult =
+			animation_system_->CreateAnimationFor(*player_,
+				"Jump","xbot/xbot@jump.scn","",
+		          [](AnimatorConfig animPlayer)
+		          {
+		          	animPlayer.SetAnimationTime(0);
+		          	animPlayer.SetLooping(true);
+		          });
+		animationResult.IsError())
+	{
+		return animationResult;
+	}
 
 
-	if(auto result = player_->Animator().SetAnimation("Jump"); result.IsError())
+	if(auto result = player_->Animator().SetAnimation("Walk"); result.IsError())
 		return result;
 
 	
@@ -113,6 +115,13 @@ bool AnimatedMeshApp::Update(float frame_time)
 		gef::Keyboard* keyboard = input_manager_->keyboard();
 		if (keyboard)
 		{
+			if(keyboard->IsKeyPressed(gef::Keyboard::KC_W))
+			{
+				if(player_->Animator().CurrentAnimationName() == "Walk")
+					player_->Animator().SetAnimation("Jump");
+				else
+					player_->Animator().SetAnimation("Walk");
+			}
 		}
 	}
 

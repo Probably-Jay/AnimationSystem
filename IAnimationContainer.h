@@ -17,13 +17,14 @@ namespace AnimationSystem
         virtual ~IReadOnlyAnimationContainer() = default;
         [[nodiscard]] virtual ValueResult<std::reference_wrapper<Animation>> GetAnimation(StringId id) const = 0;
         [[nodiscard]] virtual bool HasAnimation(StringId id) const = 0;
+        [[nodiscard]] virtual std::optional<string> GetAnimationName(StringId id) const = 0;
     };
     class IAnimationContainer : public IReadOnlyAnimationContainer
     {
     public:
         ~IAnimationContainer() override = default;
         virtual PureResult LoadAnimations(const string& nameId, const std::string& filepath, const std::string& nameWithinFile,
-                                          const std::function<void(AnimatorConfig)> configDelegate) = 0;
+                                          std::optional<std::function<void(AnimatorConfig)> const> configDelegate) = 0;
     };
 }
 
@@ -35,16 +36,17 @@ namespace AnimationSystem
         explicit AnimationContainer(gef::Platform const & platform);
 
         PureResult LoadAnimations(const string& animationName, const std::string& filepath, const std::string& nameWithinFile,
-                                  const std::function<void(AnimatorConfig)> configDelegate) override;
+                                   std::optional<std::function<void(AnimatorConfig)> const>  configDelegate) override;
 
-        ValueResult<std::reference_wrapper<Animation>> GetAnimation(const StringId id) const override;
+        ValueResult<std::reference_wrapper<Animation>> GetAnimation(StringId id) const override;
         bool HasAnimation(const StringId id) const override {return GefExtensions::HasValue(string_id_table_, id); }
+
+        std::optional<string> GetAnimationName(StringId id) const override;
 
     private:
         std::map<StringId, std::unique_ptr<Animation>> animations_;
         gef::Platform const & platform_;
 
-        std::unique_ptr<gef::Scene> animationScene;
         mutable gef::StringIdTable string_id_table_;
     };
 }

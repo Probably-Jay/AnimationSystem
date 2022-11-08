@@ -1,9 +1,11 @@
 ﻿#pragma once
 #include <functional>
+#include <optional>
 
 #include "AnimatorConfig.h"
 #include "ViewingProtectedWrapper.h"
 #include "animation/animation.h"
+#include "graphics/scene.h"
 
 using gef::StringId;
 
@@ -13,17 +15,12 @@ namespace AnimationSystem
   {
   public:
     
-    Animation(gef::Animation& animation, const StringId id,
-    const std::function<void(AnimatorConfig)> configDelegate)
+    Animation(std::unique_ptr<gef::Scene> animationScene, gef::Animation& animation, const StringId id,
+    std::optional<std::function<void(AnimatorConfig)> const> const configDelegate)
       : animation_(animation)
       , id_(id)
       , config_delegate_(configDelegate)
-    {
-    }
-    Animation(gef::Animation& animation, const StringId id)
-      : animation_(animation)
-      , id_(id)
-      , config_delegate_([](auto _){})
+      , animationScene_(std::move(animationScene))
     {
     }
 
@@ -31,13 +28,15 @@ namespace AnimationSystem
     [[nodiscard]] StringId ID() const {return id_;}
     void ApplyConfig(AnimatorConfig animator) const
     {
-      config_delegate_(animator);
+      if(config_delegate_.has_value())
+        config_delegate_.value()(animator);
     }
     
   private:
     gef::Animation& animation_;
     StringId id_;
-    std::function<void(AnimatorConfig)> const config_delegate_;
+    std::optional<std::function<void(AnimatorConfig)>> const config_delegate_;
+    std::unique_ptr<gef::Scene> const animationScene_;
   };
 
  

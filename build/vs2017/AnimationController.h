@@ -14,7 +14,7 @@ namespace AnimationSystem
         virtual ~IAnimator() = default;
         virtual PureResult SetAnimation(std::string animationName) = 0;
         virtual PureResult SetAnimation(StringId animationId) = 0;
-
+        virtual std::optional<string> CurrentAnimationName() = 0;
     };
 
 
@@ -26,14 +26,21 @@ namespace AnimationSystem
        void Init(gef::SkinnedMeshInstance const& skinnedMesh);
         
        PureResult CreateAnimation(const string& animationName, const std::string& filePath,
-                                  const std::string& nameWithinFile, const std::function<void(AnimatorConfig)> configDelegate);
+                                  const std::string& nameWithinFile, std::optional<std::function<void(AnimatorConfig)> const> const configDelegate);
+       
        PureResult SetAnimation(std::string animationName) override;
        PureResult SetAnimation(StringId animationId) override;
 
        PureResult UpdateAnimation(float frameTime, gef::SkinnedMeshInstance& skinnedMesh);
 
+       std::optional<string> CurrentAnimationName() override
+       {
+           return animations_->GetAnimationName(current_animation_->get().ID());
+       }
    private:
        PureResult SetAnimation(Animation& animation);
+
+   private:
        std::optional<std::reference_wrapper<Animation>> current_animation_;
         
        std::unique_ptr<IAnimationContainer> animations_{};

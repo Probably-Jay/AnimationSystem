@@ -20,7 +20,7 @@ AnimationSystem::CreateAnimatedObjectResult AnimationSystem::AnimatedObjectFacto
     return CreateAnimatedObjectResult::OK(animatedObject);
 }
 
-AnimationSystem::ValueResult<std::reference_wrapper<AnimationSystem::AnimatedObject>> AnimationSystem::AnimatedObjectFactory::GetObject(IAnimatedObject const& animatedObject)
+AnimationSystem::ValueResult<std::reference_wrapper<AnimationSystem::AnimatedObject>> AnimationSystem::AnimatedObjectFactory::FindObject(IAnimatedObject const& animatedObject)
 {
     using value_result = ValueResult<std::reference_wrapper<AnimatedObject>>;
     const auto iter = map_.find(animatedObject.ID());

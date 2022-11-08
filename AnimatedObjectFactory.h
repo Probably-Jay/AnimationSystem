@@ -11,7 +11,7 @@ namespace AnimationSystem
     {
     public:
         CreateAnimatedObjectResult CreateAnimatedObject(string const& objectNameId, string const& filePath, gef::Platform& platform);
-        ValueResult<std::reference_wrapper<AnimatedObject>> GetObject(IAnimatedObject const& animatedObject);
+        ValueResult<std::reference_wrapper<AnimatedObject>> FindObject(IAnimatedObject const& animatedObject);
         
     private:
         std::map<StringId, std::shared_ptr<AnimatedObject>> map_;

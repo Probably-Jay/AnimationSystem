@@ -13,7 +13,7 @@ void AnimationSystem::AnimationController::Init(gef::SkinnedMeshInstance const &
 }
 
 AnimationSystem::PureResult AnimationSystem::AnimationController::CreateAnimation(const string& animationName,
-    const std::string& filePath, const std::string& nameWithinFile, const std::function<void(AnimatorConfig)> configDelegate)
+    const std::string& filePath, const std::string& nameWithinFile, std::optional<std::function<void(AnimatorConfig)> const> const configDelegate)
 {
     return animations_->LoadAnimations(animationName, filePath, nameWithinFile, configDelegate);
 }

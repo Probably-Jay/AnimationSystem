@@ -35,9 +35,9 @@ PureResult AnimationSystem3D::CreateAnimationFor(IAnimatedObject const& readonly
 
     auto & animatedObject = animatedObjectResult.Take().get();
     
-    const auto configDelegate = configurationDelegate.has_value() ? configurationDelegate.value() : [](AnimatorConfig _){};
+   // const auto configDelegate = configurationDelegate.has_value() ? configurationDelegate.value() : [](AnimatorConfig _){};
     
-    PureResult createAnimationResult = animatedObject.Animator().CreateAnimation(animationName, fileName, nameWithinFile, configDelegate);
+    PureResult createAnimationResult = animatedObject.Animator().CreateAnimation(animationName, fileName, nameWithinFile, configurationDelegate);
     return createAnimationResult;
 }
 

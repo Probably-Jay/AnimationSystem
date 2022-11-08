@@ -14,7 +14,7 @@ namespace AnimationSystem
         ValueResult<std::reference_wrapper<AnimatedObject>> FindObject(IAnimatedObject const& animatedObject);
         
     private:
-        std::map<StringId, std::shared_ptr<AnimatedObject>> map_;
+        std::map<StringId, std::shared_ptr<AnimatedObject>> map_{};
         gef::StringIdTable id_table_;
     };
 }

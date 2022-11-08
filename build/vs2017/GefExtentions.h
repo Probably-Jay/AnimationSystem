@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "PureResult.h"
 #include "system/string_id.h"
 
 namespace GefExtensions
@@ -9,4 +10,11 @@ namespace GefExtensions
         return idTable.Find(val, _);
     }
     static bool HasValue(gef::StringIdTable & idTable, std::string const &val) {return HasValue(idTable, gef::GetStringId(val));}
+
+    static AnimationSystem::ValueResult<StringId> TryAddNew(gef::StringIdTable & idTable, std::string const & val)
+    {
+        if(HasValue(idTable, val))
+            return AnimationSystem::ValueResult<StringId>::Error(ERROR_TAG+"String ID '" + val + "' already exists!");
+        return AnimationSystem::ValueResult<StringId>::OK(idTable.Add(val));
+    }
 }

@@ -7,10 +7,7 @@
 #include <utility>
 #include <variant>
 
-#include "SkinnedMeshWrapper.h"
-
 #define ANIMATION_ERROR_STRUCT_THROWS_ON_UNHANDLED false 
-
 
 #define ERROR_TAG ("Unhandled error in: " + std::string(__FUNCTION__) + ", Message: ")
 
@@ -18,7 +15,7 @@ namespace AnimationSystem
 {
 	struct ErrorStruct
 	{
-		ErrorStruct(std::string message) :error_message_(std::move(message)){  }
+		explicit ErrorStruct(std::string message) :error_message_(std::move(message)){  }
 		[[nodiscard]] std::string Message() const {return error_message_;}
 		void HandleError() {handled_ = true;}
 		[[nodiscard]] bool UnHandled() const {return !handled_;}
@@ -202,16 +199,5 @@ namespace AnimationSystem
 		}
 		
 		std::variant<T, ErrorStruct> result_;
-	};
-
-
-	template <class T>
-	ValueResult<std::reference_wrapper<T>> TryGetValueFromMap(std::map<unsigned, std::unique_ptr<T>> const & map, unsigned key)
-	{
-		const auto iter = map.find(key);
-		if(iter == map.end())
-			return ValueResult<std::reference_wrapper<T>>::Error(ERROR_TAG+"Could not find value in map");
-		return ValueResult<std::reference_wrapper<T>>::OK(*iter->second);
-	}
-	
+	};	
 }

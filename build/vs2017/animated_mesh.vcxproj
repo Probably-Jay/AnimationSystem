@@ -242,11 +242,7 @@
     <ClInclude Include="AnimationSystem3D.h" />
     <ClInclude Include="BlendAnimator.h" />
     <ClInclude Include="GefExtentions.h" />
-    <ClInclude Include="MeshWrapper.h" />
     <ClInclude Include="IMeshLoader.h" />
-    <ClInclude Include="ViewingProtectedWrapper.h" />
-    <ClInclude Include="SkeletonWrapper.h" />
-    <ClInclude Include="SkinnedMeshWrapper.h" />
     <ClInclude Include="MeshLoader.h" />
     <ClInclude Include="PureResult.h" />
     <ClInclude Include="SkeletonLoader.h" />

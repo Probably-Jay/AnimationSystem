@@ -19,24 +19,24 @@ namespace AnimationSystem
         [[nodiscard]] virtual bool HasAnimation(StringId id) const = 0;
         [[nodiscard]] virtual std::optional<string> GetAnimationName(StringId id) const = 0;
     };
-    class IAnimationContainer : public IReadOnlyAnimationContainer
-    {
-    public:
-        ~IAnimationContainer() override = default;
-        virtual PureResult LoadAnimations(const string& nameId, const std::string& filepath, const std::string& nameWithinFile,
-                                          std::optional<std::function<void(IAnimatorConfig&)> const> configDelegate) = 0;
-    };
+    // class IAnimationContainer : public IReadOnlyAnimationContainer
+    // {
+    // public:
+    //     ~IAnimationContainer() override = default;
+    //     virtual PureResult LoadAnimations(const string& nameId, const std::string& filepath, const std::string& nameWithinFile,
+    //                                       std::optional<std::function<void(IAnimatorConfig&)> const> configDelegate) = 0;
+    // };
 }
 
 namespace AnimationSystem
 {
-    class AnimationContainer final : public IAnimationContainer
+    class AnimationContainer final : public IReadOnlyAnimationContainer
     {
     public:
         explicit AnimationContainer(gef::Platform const & platform);
 
         PureResult LoadAnimations(const string& animationName, const std::string& filepath, const std::string& nameWithinFile,
-                                   std::optional<std::function<void(IAnimatorConfig&)> const>  configDelegate) override;
+                                   std::optional<std::function<void(IAnimatorConfig&)> const>  configDelegate);
 
         ValueResult<std::reference_wrapper<Animation>> GetAnimation(StringId id) const override;
         bool HasAnimation(const StringId id) const override {return GefExtensions::HasValue(stringIdTable_, id); }

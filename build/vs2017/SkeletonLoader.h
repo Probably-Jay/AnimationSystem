@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include "SkeletonWrapper.h"
 #include "PureResult.h"
 #include "graphics/scene.h"
 

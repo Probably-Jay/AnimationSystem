@@ -1,12 +1,9 @@
 ﻿#pragma once
-#include <map>
 #include <memory>
 
-#include "MeshWrapper.h"
 #include "PureResult.h"
-#include "SkeletonWrapper.h"
-#include "SkinnedMeshWrapper.h"
 #include "graphics/scene.h"
+#include "graphics/skinned_mesh_instance.h"
 #include "system/string_id.h"
 
 using gef::StringId;
@@ -23,7 +20,7 @@ namespace AnimationSystem
         PureResult Create(const StringId id, gef::Platform& platform);
              
         unique_ptr<gef::SkinnedMeshInstance> skinned_mesh_ = nullptr;
-        unique_ptr<gef::Scene> model_scene_;
+        unique_ptr<gef::Scene> model_scene_{};
     };
 
    

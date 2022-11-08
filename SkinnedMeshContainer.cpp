@@ -3,7 +3,6 @@
 #include <pplwin.h>
 
 #include "MeshLoader.h"
-#include "MeshWrapper.h"
 #include "SkeletonLoader.h"
 
 AnimationSystem::PureResult AnimationSystem::SkinnedMeshInstance::CreateSkinnedMesh(StringId id, gef::Platform& platform, std::unique_ptr<gef::Scene> modelScene)

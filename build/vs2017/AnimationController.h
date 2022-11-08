@@ -4,7 +4,6 @@
 #include "AnimatorConfig.h"
 #include "BlendAnimator.h"
 #include "IAnimationContainer.h"
-#include "SkinnedMeshWrapper.h"
 
 namespace AnimationSystem
 {
@@ -48,7 +47,7 @@ namespace AnimationSystem
 
         std::optional<StringId> current_animation_name_;
 
-        std::unique_ptr<IAnimationContainer> animations_{};
+        std::unique_ptr<AnimationContainer> animations_{};
         std::unique_ptr<BlendAnimator> animator_{};
     };
 

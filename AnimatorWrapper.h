@@ -5,7 +5,7 @@
 
 namespace AnimationSystem
 {
-    class AnimatorWrapper final : IAnimatorConfig
+    class AnimatorWrapper : IAnimatorConfig
     {
     public:
         void Init(gef::SkeletonPose const& skeletonPose) { animator_.Init(skeletonPose); }

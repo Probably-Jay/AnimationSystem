@@ -10,6 +10,12 @@ AnimationSystem::AnimationContainer::AnimationContainer(const gef::Platform& pla
 AnimationSystem::PureResult AnimationSystem::AnimationContainer::LoadAnimations(const string& animationName, const std::string& filepath,
     const std::string& nameWithinFile, std::optional<std::function<void(IAnimatorConfig&)> const> const configDelegate)
 {
+    const auto result = GefExtensions::TryAddNew(stringIdTable_, animationName);
+    if(result.IsError())
+        return result.ToPureResult();
+    
+    const StringId animationId = result.Get();
+    
     auto animationScene = std::make_unique<gef::Scene>();
 	
     if (!animationScene->ReadSceneFromFile(platform_, filepath.c_str()))
@@ -22,9 +28,7 @@ AnimationSystem::PureResult AnimationSystem::AnimationContainer::LoadAnimations(
 
     if (animationIter == animationScene->animations.end())
         return PureResult::Error(ERROR_TAG+"Animation with name '" + nameWithinFile + "' could not be found");
-
-    const StringId animationId = stringIdTable_.Add(animationName);
-
+    
     auto & gefAnimation = *animationIter->second;
     auto animation = std::make_unique<Animation>(std::move(animationScene), gefAnimation, animationId, configDelegate);
     

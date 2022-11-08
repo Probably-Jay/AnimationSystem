@@ -3,7 +3,6 @@
 #include <optional>
 
 #include "AnimatorConfig.h"
-#include "ViewingProtectedWrapper.h"
 #include "animation/animation.h"
 #include "graphics/scene.h"
 

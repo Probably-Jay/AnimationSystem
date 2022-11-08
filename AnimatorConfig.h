@@ -12,3 +12,12 @@ public:
     virtual void SetPlaybackSpeed(float playbackSpeed) =0;
     virtual void SetLooping(bool isLooping) =0;
 };
+
+// class IAnimator
+// {
+// public:
+//     virtual ~IAnimator() = default;
+//     virtual void SetAnimationTime(float animationTime) =0;
+//     virtual void SetPlaybackSpeed(float playbackSpeed) =0;
+//     virtual void SetLooping(bool isLooping) =0;
+// };

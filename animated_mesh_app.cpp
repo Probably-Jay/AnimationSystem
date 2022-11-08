@@ -50,7 +50,7 @@ AnimationSystem::PureResult AnimatedMeshApp::LoadMeshAndAnimation()
 	if(auto animationResult =
 		animation_system_->CreateAnimationFor(*player_,
 		    "Walk","xbot/xbot@walking.scn","",
-		    [](AnimatorConfig animPlayer)
+		    [](IAnimatorConfig& animPlayer)
 		    {
 		        animPlayer.SetLooping(true);
 		    });
@@ -62,7 +62,7 @@ AnimationSystem::PureResult AnimatedMeshApp::LoadMeshAndAnimation()
 	if(auto animationResult =
 			animation_system_->CreateAnimationFor(*player_,
 				"Jump","xbot/xbot@jump.scn","",
-		          [](AnimatorConfig animPlayer)
+		          [](IAnimatorConfig& animPlayer)
 		          {
 		          	animPlayer.SetAnimationTime(0);
 		          	animPlayer.SetLooping(true);

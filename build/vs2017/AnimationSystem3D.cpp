@@ -27,7 +27,7 @@ CreateAnimatedObjectResult AnimationSystem3D::CreateAnimatedObject(string const&
 
 PureResult AnimationSystem3D::CreateAnimationFor(IAnimatedObject const& readonlyAnimObject, string const& animationName,
                                                  string const& fileName, string const& nameWithinFile,
-                                                 std::optional<std::function<void(AnimatorConfig)> const> const configurationDelegate )
+                                                 std::optional<std::function<void(IAnimatorConfig&)> const> const configurationDelegate )
 {
     auto animatedObjectResult = animated_objects_factory_->FindObject(readonlyAnimObject);
     if(animatedObjectResult.IsError())

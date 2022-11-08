@@ -8,7 +8,7 @@ AnimationSystem::AnimationContainer::AnimationContainer(const gef::Platform& pla
 }
 
 AnimationSystem::PureResult AnimationSystem::AnimationContainer::LoadAnimations(const string& animationName, const std::string& filepath,
-    const std::string& nameWithinFile, std::optional<std::function<void(AnimatorConfig)> const> const configDelegate)
+    const std::string& nameWithinFile, std::optional<std::function<void(IAnimatorConfig&)> const> const configDelegate)
 {
     auto animationScene = std::make_unique<gef::Scene>();
 	

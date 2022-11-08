@@ -30,7 +30,7 @@ namespace AnimationSystem
 
 		PureResult CreateAnimationFor(IAnimatedObject const& readonlyAnimObject, string const& animationName,
 		                              string const& fileName, string const& nameWithinFile,
-		                              std::optional<std::function<void(AnimatorConfig)> const> configurationDelegate = {});
+		                              std::optional<std::function<void(IAnimatorConfig&)> const> configurationDelegate = {});
 	private:
 		AnimationSystem3D(gef::Platform & platform_);
 		

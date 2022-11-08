@@ -24,7 +24,7 @@ namespace AnimationSystem
     public:
         ~IAnimationContainer() override = default;
         virtual PureResult LoadAnimations(const string& nameId, const std::string& filepath, const std::string& nameWithinFile,
-                                          std::optional<std::function<void(AnimatorConfig)> const> configDelegate) = 0;
+                                          std::optional<std::function<void(IAnimatorConfig&)> const> configDelegate) = 0;
     };
 }
 
@@ -36,7 +36,7 @@ namespace AnimationSystem
         explicit AnimationContainer(gef::Platform const & platform);
 
         PureResult LoadAnimations(const string& animationName, const std::string& filepath, const std::string& nameWithinFile,
-                                   std::optional<std::function<void(AnimatorConfig)> const>  configDelegate) override;
+                                   std::optional<std::function<void(IAnimatorConfig&)> const>  configDelegate) override;
 
         ValueResult<std::reference_wrapper<Animation>> GetAnimation(StringId id) const override;
         bool HasAnimation(const StringId id) const override {return GefExtensions::HasValue(stringIdTable_, id); }

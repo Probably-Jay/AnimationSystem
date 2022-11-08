@@ -1,9 +1,9 @@
 ﻿#include "AnimationController.h"
 
 AnimationSystem::AnimationController::AnimationController(gef::Platform const& platform)
-    : current_animation_({})
+    : current_animation_name_({})
     , animations_(new AnimationContainer{platform})
-    , animator_(new MotionClipPlayer{})
+    , animator_(std::make_unique<BlendAnimator>())
 {
 }
 
@@ -13,7 +13,7 @@ void AnimationSystem::AnimationController::Init(gef::SkinnedMeshInstance const &
 }
 
 AnimationSystem::PureResult AnimationSystem::AnimationController::CreateAnimation(const string& animationName,
-    const std::string& filePath, const std::string& nameWithinFile, std::optional<std::function<void(AnimatorConfig)> const> const configDelegate)
+    const std::string& filePath, const std::string& nameWithinFile, std::optional<std::function<void(IAnimatorConfig&)> const> const configDelegate)
 {
     return animations_->LoadAnimations(animationName, filePath, nameWithinFile, configDelegate);
 }
@@ -40,43 +40,17 @@ AnimationSystem::PureResult AnimationSystem::AnimationController::SetAnimation(c
 
 AnimationSystem::PureResult AnimationSystem::AnimationController::SetAnimation(Animation& animation)
 {
-    current_animation_ = animation;
+    current_animation_name_ = animation.ID();
 
-    return animator_->SetAnimation(animation);
+    return animator_->ActiveAnimator().SetAnimation(animation);
 }
 
 AnimationSystem::PureResult AnimationSystem::AnimationController::UpdateAnimation(
     const float frameTime, gef::SkinnedMeshInstance& skinnedMesh)
 {
-    if(!current_animation_.has_value())
+    if(!current_animation_name_.has_value())
         return PureResult::Error(ERROR_TAG+"Cannot animate as no animation is selected");
 
-    animator_->UpdateAnimation(frameTime, skinnedMesh);
+    animator_->ActiveAnimator().UpdateAnimation(frameTime, skinnedMesh);
     return PureResult::OK();
 }
-
-void AnimationSystem::AnimatorWrapper::UpdateAnimation(const float frameTime, gef::SkinnedMeshInstance& skinnedMesh)
-{
-    animator_.Update(frameTime, skinnedMesh.bind_pose());
-    skinnedMesh.UpdateBoneMatrices(animator_.pose());
-}
-
-AnimationSystem::PureResult AnimationSystem::AnimatorWrapper::SetAnimation(Animation const & animation)
-{
-    animator_.SetClip(&animation.GetAnimation());
-    
-    try
-    {
-        animation.ApplyConfig(animator_);
-    }
-    catch (std::exception& e)
-    {
-        return PureResult::Error(ERROR_TAG, e);
-    }
-    catch (...)
-    {
-        return PureResult::Error(ERROR_TAG+"Unknown exception thrown in user-given animator configuration.");
-    }
-    return PureResult::OK();
-}
-

@@ -208,6 +208,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\AnimatedObject.cpp" />
     <ClCompile Include="..\..\AnimatedObjectFactory.cpp" />
+    <ClCompile Include="..\..\AnimatorWrapper.cpp" />
     <ClCompile Include="..\..\IAnimationContainer.cpp" />
     <ClCompile Include="..\..\main_d3d11.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|PSVita'">true</ExcludedFromBuild>
@@ -224,6 +225,7 @@
     <ClCompile Include="..\..\SkinnedMeshContainer.cpp" />
     <ClCompile Include="AnimationController.cpp" />
     <ClCompile Include="AnimationSystem3D.cpp" />
+    <ClCompile Include="BlendAnimator.cpp" />
     <ClCompile Include="MeshLoader.cpp" />
     <ClCompile Include="SkeletonLoader.cpp" />
   </ItemGroup>
@@ -232,6 +234,7 @@
     <ClInclude Include="..\..\AnimatedObjectFactory.h" />
     <ClInclude Include="..\..\Animation.h" />
     <ClInclude Include="..\..\AnimatorConfig.h" />
+    <ClInclude Include="..\..\AnimatorWrapper.h" />
     <ClInclude Include="..\..\IAnimationContainer.h" />
     <ClInclude Include="..\..\motion_clip_player.h" />
     <ClInclude Include="..\..\animated_mesh_app.h" />

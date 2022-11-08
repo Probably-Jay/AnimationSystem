@@ -16,7 +16,7 @@ namespace AnimationSystem
   public:
     
     Animation(std::unique_ptr<gef::Scene> animationScene, gef::Animation& animation, const StringId id,
-    std::optional<std::function<void(AnimatorConfig)> const> const configDelegate)
+    std::optional<std::function<void(IAnimatorConfig&)> const> const configDelegate)
       : animation_(animation)
       , id_(id)
       , config_delegate_(configDelegate)
@@ -26,7 +26,7 @@ namespace AnimationSystem
 
     [[nodiscard]] gef::Animation const & GetAnimation() const {return animation_;}
     [[nodiscard]] StringId ID() const {return id_;}
-    void ApplyConfig(AnimatorConfig animator) const
+    void ApplyConfig(IAnimatorConfig& animator) const
     {
       if(config_delegate_.has_value())
         config_delegate_.value()(animator);
@@ -35,7 +35,7 @@ namespace AnimationSystem
   private:
     gef::Animation& animation_;
     StringId id_;
-    std::optional<std::function<void(AnimatorConfig)>> const config_delegate_;
+    std::optional<std::function<void(IAnimatorConfig&)>> const config_delegate_;
     std::unique_ptr<gef::Scene> const animationScene_;
   };
 

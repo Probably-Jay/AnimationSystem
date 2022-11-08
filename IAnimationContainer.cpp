@@ -36,7 +36,7 @@ AnimationSystem::AnimationContainer::CreateAnimation(const std::string &filepath
         return ValueResult<std::unique_ptr<Animation>>::Error(ERROR_TAG+"Could not load animation from scene file at: " + filepath);
 
     const auto animationIter =
-        nameWithinFile.empty() // if no name specified, take first
+        nameWithinFile.empty() // if no name specified, take the first animation in the file
             ? animationScene->animations.begin()
             : animationScene->animations.find(gef::GetStringId(nameWithinFile));
 

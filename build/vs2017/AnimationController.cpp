@@ -45,12 +45,11 @@ AnimationSystem::PureResult AnimationSystem::AnimationController::SetAnimation(A
     return animator_->ActiveAnimator().SetAnimation(animation);
 }
 
-AnimationSystem::PureResult AnimationSystem::AnimationController::UpdateAnimation(
-    const float frameTime, gef::SkinnedMeshInstance& skinnedMesh)
+AnimationSystem::ValueResult<gef::SkeletonPose> AnimationSystem::AnimationController::UpdateAnimation(
+    const float frameTime, gef::SkeletonPose const &skeletonPose)
 {
     if(!current_animation_name_.has_value())
-        return PureResult::Error(ERROR_TAG+"Cannot animate as no animation is selected");
+        return ValueResult<gef::SkeletonPose>::Error(ERROR_TAG+"Cannot animate as no animation is selected");
 
-    animator_->ActiveAnimator().UpdateAnimation(frameTime, skinnedMesh);
-    return PureResult::OK();
+    return ValueResult<gef::SkeletonPose>::OK(animator_->ActiveAnimator().UpdateAnimation(frameTime, skeletonPose));
 }

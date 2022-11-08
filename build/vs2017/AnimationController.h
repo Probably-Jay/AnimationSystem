@@ -7,10 +7,10 @@
 
 namespace AnimationSystem
 {
-    class IAnimator
+    class IAnimationController
     {
     public:
-        virtual ~IAnimator() = default;
+        virtual ~IAnimationController() = default;
         virtual PureResult SetAnimation(std::string animationName) = 0;
         virtual PureResult SetAnimation(StringId animationId) = 0;
         virtual std::optional<string> CurrentAnimationName() = 0;
@@ -19,7 +19,7 @@ namespace AnimationSystem
     /**
      * \brief Class containing the animator and all animations of an object
      */
-    class AnimationController : public IAnimator
+    class AnimationController : public IAnimationController
     {
     public:
         AnimationController(gef::Platform const& platform);
@@ -33,7 +33,7 @@ namespace AnimationSystem
         PureResult SetAnimation(std::string animationName) override;
         PureResult SetAnimation(StringId animationId) override;
 
-        PureResult UpdateAnimation(float frameTime, gef::SkinnedMeshInstance& skinnedMesh);
+        ValueResult<gef::SkeletonPose> UpdateAnimation(const float frameTime, gef::SkeletonPose const &skeletonPose);
 
         std::optional<string> CurrentAnimationName() override
         {

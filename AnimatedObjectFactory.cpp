@@ -1,8 +1,9 @@
 ﻿#include "AnimatedObjectFactory.h"
 
 
-AnimationSystem::CreateAnimatedObjectResult AnimationSystem::AnimatedObjectFactory::CreateAnimatedObject(
-    string const & objectNameId, string const& filePath, gef::Platform & platform)
+AnimationSystem::ValueResult<std::shared_ptr<AnimationSystem::IAnimatedObject>>
+AnimationSystem::AnimatedObjectFactory::CreateAnimatedObject(
+    string const& objectNameId, string const& filePath, gef::Platform& platform)
 {
     auto modelScene = std::make_unique<gef::Scene>();
     modelScene->ReadSceneFromFile(platform, filePath.c_str());
@@ -13,11 +14,11 @@ AnimationSystem::CreateAnimatedObjectResult AnimationSystem::AnimatedObjectFacto
 
     // Load the object
     if(const auto result = animatedObject->CreateObjectsFromScene(platform, std::move(modelScene)); result.IsError())
-        return CreateAnimatedObjectResult::Error(result.Error().value());
+        return ValueResult<std::shared_ptr<IAnimatedObject>>::Error(result.Error().value());
 
     map_.emplace(stringId, animatedObject);
 
-    return CreateAnimatedObjectResult::OK(animatedObject);
+    return ValueResult<std::shared_ptr<IAnimatedObject>>::OK(animatedObject);
 }
 
 AnimationSystem::ValueResult<std::reference_wrapper<AnimationSystem::AnimatedObject>> AnimationSystem::AnimatedObjectFactory::FindObject(IAnimatedObject const& animatedObject)

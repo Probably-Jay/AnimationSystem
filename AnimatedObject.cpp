@@ -23,7 +23,13 @@ AnimationSystem::PureResult AnimationSystem::AnimatedObject::CreateObjectsFromSc
 
 AnimationSystem::PureResult AnimationSystem::AnimatedObject::UpdateAnimation(float frameTime)
 {
-    return animator_->UpdateAnimation(frameTime, skinned_mesh_container_.SkinnedMesh());
+    auto result = animator_->UpdateAnimation(frameTime,skinned_mesh_container_.SkinnedMesh().bind_pose());
+    if(result.IsError())
+        return result.ToPureResult();
+    
+    const auto newPose = result.Take();
+    skinned_mesh_container_.SkinnedMesh().UpdateBoneMatrices(newPose);
+    return PureResult::OK();
 }
 
 void AnimationSystem::AnimatedObject::SetTransform(const gef::Matrix44& transform)

@@ -131,12 +131,12 @@ namespace AnimationSystem
 			return {};
 		}
 
-	[[nodiscard]] T Get() const
+		[[nodiscard]] T Get() const
 		{
 			return std::get<T>(result_);
 		}
 
-		T Take()
+		[[nodiscard]] T&& Take()
 		{
 			return std::move(std::get<T>(result_));
 		}

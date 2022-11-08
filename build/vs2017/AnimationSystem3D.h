@@ -26,7 +26,8 @@ namespace AnimationSystem
 		AnimationSystem3D (AnimationSystem3D const&) = delete;
 		void operator=(AnimationSystem3D const&) = delete;
 
-		[[nodiscard]] CreateAnimatedObjectResult CreateAnimatedObject(string const & objectNameId, string const & filePath) const;
+		[[nodiscard]] ValueResult<std::shared_ptr<IAnimatedObject>> CreateAnimatedObject(
+			string const& objectNameId, string const& filePath) const;
 
 		PureResult CreateAnimationFor(IAnimatedObject const& readonlyAnimObject, string const& animationName,
 		                              string const& fileName, string const& nameWithinFile,

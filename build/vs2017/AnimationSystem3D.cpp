@@ -20,7 +20,8 @@ unique_ptr<AnimationSystem3D> AnimationSystem3D::Create(gef::Platform& platform_
     return unique_ptr<AnimationSystem3D>(system);
 }
 
-CreateAnimatedObjectResult AnimationSystem3D::CreateAnimatedObject(string const& objectNameId, string const& filePath) const
+ValueResult<std::shared_ptr<IAnimatedObject>> AnimationSystem3D::CreateAnimatedObject(
+    string const& objectNameId, string const& filePath) const
 {
     return animated_objects_factory_->CreateAnimatedObject(objectNameId, filePath, platform_);
 }

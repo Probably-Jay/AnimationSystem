@@ -9,7 +9,7 @@ namespace AnimationSystem
     {
     public:
         void Init(gef::SkeletonPose const& skeletonPose) { animator_.Init(skeletonPose); }
-        void UpdateAnimation(float frameTime, gef::SkinnedMeshInstance& skinnedMesh);
+        [[nodiscard]]gef::SkeletonPose UpdateAnimation(const float frameTime, gef::SkeletonPose const &bindPose);
         PureResult SetAnimation(const Animation& animation);
         
         void SetAnimationTime(const float animationTime) override { animator_.set_anim_time(animationTime); }

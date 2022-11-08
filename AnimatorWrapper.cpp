@@ -1,9 +1,10 @@
 ﻿#include "AnimatorWrapper.h"
 
-void AnimationSystem::AnimatorWrapper::UpdateAnimation(const float frameTime, gef::SkinnedMeshInstance& skinnedMesh)
+gef::SkeletonPose AnimationSystem::AnimatorWrapper::UpdateAnimation(const float frameTime, gef::SkeletonPose const& bindPose)
 {
-    animator_.Update(frameTime, skinnedMesh.bind_pose());
-    skinnedMesh.UpdateBoneMatrices(animator_.pose());
+    animator_.Update(frameTime, bindPose);
+   // skinnedMesh.UpdateBoneMatrices(animator_.pose());
+   return animator_.pose();
 }
 
 AnimationSystem::PureResult AnimationSystem::AnimatorWrapper::SetAnimation(Animation const & animation)

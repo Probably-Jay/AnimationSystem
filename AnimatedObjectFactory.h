@@ -5,12 +5,11 @@
 
 namespace AnimationSystem
 {
-    using CreateAnimatedObjectResult = ValueResult<std::shared_ptr<IAnimatedObject>>;
-  
     class AnimatedObjectFactory
     {
     public:
-        CreateAnimatedObjectResult CreateAnimatedObject(string const& objectNameId, string const& filePath, gef::Platform& platform);
+        ValueResult<std::shared_ptr<IAnimatedObject>> CreateAnimatedObject(
+            string const& objectNameId, string const& filePath, gef::Platform& platform);
         ValueResult<std::reference_wrapper<AnimatedObject>> FindObject(IAnimatedObject const& animatedObject);
         
     private:

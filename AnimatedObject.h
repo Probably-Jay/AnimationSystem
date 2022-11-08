@@ -10,7 +10,7 @@ namespace AnimationSystem
     public:
         virtual ~IAnimatedObject() = default;
         [[nodiscard]] virtual StringId ID() const = 0;
-        [[nodiscard]] virtual IAnimator & Animator() const = 0;
+        [[nodiscard]] virtual IAnimationController & Animator() const = 0;
         virtual PureResult UpdateAnimation(float frameTime) = 0;
         virtual void SetTransform(const gef::Matrix44& matrix44) = 0;
         virtual void RenderSelf(gef::Renderer3D& renderer3D) = 0;
@@ -24,7 +24,7 @@ namespace AnimationSystem
                                           std::unique_ptr<gef::Scene> modelScene);
 
         [[nodiscard]] StringId ID() const override {return name_id_;}
-        [[nodiscard]] IAnimator& Animator() const override {return *animator_;}
+        [[nodiscard]] IAnimationController & Animator() const override {return *animator_;}
         [[nodiscard]] AnimationController& Animator() {return *animator_;}
         
         PureResult UpdateAnimation(float frameTime) override;

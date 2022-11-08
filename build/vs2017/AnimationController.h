@@ -28,7 +28,7 @@ namespace AnimationSystem
 
         PureResult CreateAnimation(const string& animationName, const std::string& filePath,
                                    const std::string& nameWithinFile,
-                                   std::optional<std::function<void(IAnimatorConfig&)> const> configDelegate);
+                                   Animation::OptionalAnimatorConfigDelegate configDelegate);
 
         PureResult SetAnimation(std::string animationName, float transitionTime) override;
         PureResult SetAnimation(StringId animationId, float transitionTime) override;

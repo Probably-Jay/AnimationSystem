@@ -7,27 +7,9 @@ AnimationSystem::AnimationContainer::AnimationContainer(const gef::Platform& pla
 {
 }
 
-AnimationSystem::PureResult AnimationSystem::AnimationContainer::LoadAnimations(const string& animationName, const std::string& filepath,
-                                                                                const std::string& nameWithinFile, std::optional<std::function<void(IAnimatorConfig&)> const> const configDelegate)
-{
-    const auto result = GefExtensions::TryAddNew(stringIdTable_, animationName);
-    if(result.IsError())
-        return result.ToPureResult();
-    
-    const StringId animationId = result.Get();
- 
-    auto createAnimResult = CreateAnimation(filepath, nameWithinFile, configDelegate, animationId);
-    
-    if(createAnimResult.IsError())
-        return createAnimResult.ToPureResult();
-    
-    animations_.emplace(animationId, createAnimResult.Take());
-    return PureResult::OK();
-}
-
 AnimationSystem::ValueResult<std::unique_ptr<AnimationSystem::Animation>>
 AnimationSystem::AnimationContainer::CreateAnimation(const std::string &filepath, const std::string &nameWithinFile,
-                                                     std::optional<std::function<void(IAnimatorConfig&)> const> const
+                                                     Animation::OptionalAnimatorConfigDelegate const
                                                      configDelegate, const StringId animationId) const
 {
     auto animationScene = std::make_unique<gef::Scene>();
@@ -45,8 +27,29 @@ AnimationSystem::AnimationContainer::CreateAnimation(const std::string &filepath
 
     auto & gefAnimation = *animationIter->second;
     auto animation = std::make_unique<Animation>(std::move(animationScene), gefAnimation, animationId, configDelegate);
+    
     return ValueResult<std::unique_ptr<Animation>>::OK(std::move(animation));
 }
+
+AnimationSystem::PureResult AnimationSystem::AnimationContainer::LoadAnimations(const string& animationName, const std::string& filepath,
+    const std::string& nameWithinFile, Animation::OptionalAnimatorConfigDelegate const configDelegate)
+{
+    const auto result = GefExtensions::TryAddNew(stringIdTable_, animationName);
+    if(result.IsError())
+        return result.ToPureResult();
+    
+    const StringId animationId = result.Get();
+
+    // Create the animation
+    auto createAnimResult = CreateAnimation(filepath, nameWithinFile, configDelegate, animationId);
+    
+    if(createAnimResult.IsError())
+        return createAnimResult.ToPureResult();
+    
+    animations_.emplace(animationId, createAnimResult.Take());
+    return PureResult::OK();
+}
+
 
 AnimationSystem::ValueResult<std::reference_wrapper<AnimationSystem::Animation>> AnimationSystem::AnimationContainer::GetAnimation(
     const StringId id) const

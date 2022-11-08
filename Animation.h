@@ -13,9 +13,10 @@ namespace AnimationSystem
   class Animation
   {
   public:
-    
+    using OptionalAnimatorConfigDelegate = std::optional<std::function<void(IAnimatorConfig&)> const>;
+
     Animation(std::unique_ptr<gef::Scene> animationScene, gef::Animation& animation, const StringId id,
-    std::optional<std::function<void(IAnimatorConfig&)> const> const configDelegate)
+              OptionalAnimatorConfigDelegate const configDelegate)
       : animation_(animation)
       , id_(id)
       , config_delegate_(configDelegate)
@@ -34,7 +35,7 @@ namespace AnimationSystem
   private:
     gef::Animation& animation_;
     StringId id_;
-    std::optional<std::function<void(IAnimatorConfig&)>> const config_delegate_;
+    OptionalAnimatorConfigDelegate const config_delegate_;
     std::unique_ptr<gef::Scene> const animationScene_;
   };
 

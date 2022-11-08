@@ -23,7 +23,7 @@ AnimationSystem::PureResult AnimationSystem::AnimationContainer::LoadAnimations(
     if (animationIter == animationScene->animations.end())
         return PureResult::Error(ERROR_TAG+"Animation with name '" + nameWithinFile + "' could not be found");
 
-    const StringId animationId = string_id_table_.Add(animationName);
+    const StringId animationId = stringIdTable_.Add(animationName);
 
     auto & gefAnimation = *animationIter->second;
     auto animation = std::make_unique<Animation>(std::move(animationScene), gefAnimation, animationId, configDelegate);
@@ -45,7 +45,7 @@ AnimationSystem::ValueResult<std::reference_wrapper<AnimationSystem::Animation>>
 
 std::optional<string> AnimationSystem::AnimationContainer::GetAnimationName(StringId const id) const
 {
-    if(string result; string_id_table_.Find(id, result))
+    if(string result; stringIdTable_.Find(id, result))
         return result;
     return {};
 }

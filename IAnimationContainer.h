@@ -39,7 +39,7 @@ namespace AnimationSystem
                                    std::optional<std::function<void(AnimatorConfig)> const>  configDelegate) override;
 
         ValueResult<std::reference_wrapper<Animation>> GetAnimation(StringId id) const override;
-        bool HasAnimation(const StringId id) const override {return GefExtensions::HasValue(string_id_table_, id); }
+        bool HasAnimation(const StringId id) const override {return GefExtensions::HasValue(stringIdTable_, id); }
 
         std::optional<string> GetAnimationName(StringId id) const override;
 
@@ -47,7 +47,7 @@ namespace AnimationSystem
         std::map<StringId, std::unique_ptr<Animation>> animations_;
         gef::Platform const & platform_;
 
-        mutable gef::StringIdTable string_id_table_;
+        mutable gef::StringIdTable stringIdTable_;
     };
 }
 

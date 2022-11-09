@@ -13,13 +13,13 @@ void AnimationSystem::AnimationController::Init(gef::SkinnedMeshInstance const &
 }
 
 AnimationSystem::PureResult AnimationSystem::AnimationController::CreateAnimation(string const & animationName,
-    std::string const & filePath, std::string const & nameWithinFile, Animation::OptionalConfigOnSetAnimationDelegate configDelegate)
+    std::string const & filePath, std::string const & nameWithinFile, AnimationClip::OptionalConfigOnSetAnimationDelegate configDelegate)
 {
     return animations_->LoadAnimations(animationName, filePath, nameWithinFile, std::move(configDelegate));
 }
 
 AnimationSystem::PureResult AnimationSystem::AnimationController::SetAnimation(const std::string animationName, float transitionTime,
-    Animation::OptionalConfigOnTransitionAnimationDelegate transitionDelegate)
+    AnimationClip::OptionalConfigOnTransitionAnimationDelegate transitionDelegate)
 {
     const auto id = gef::GetStringId(animationName);
     if(!animations_->HasAnimation(id))
@@ -29,7 +29,7 @@ AnimationSystem::PureResult AnimationSystem::AnimationController::SetAnimation(c
 }
 
 AnimationSystem::PureResult AnimationSystem::AnimationController::SetAnimation(StringId const animationId, float transitionTime,
-    Animation::OptionalConfigOnTransitionAnimationDelegate transitionDelegate)
+    AnimationClip::OptionalConfigOnTransitionAnimationDelegate transitionDelegate)
 {
     const auto findAnimationResult = animations_->GetAnimation(animationId);
     if(findAnimationResult.IsError())
@@ -42,8 +42,8 @@ AnimationSystem::PureResult AnimationSystem::AnimationController::SetAnimation(S
     return result;
 }
 
-AnimationSystem::PureResult AnimationSystem::AnimationController::SetAnimation(Animation const & animation, float const transitionTime
-    ,Animation::OptionalConfigOnTransitionAnimationDelegate transitionDelegate)
+AnimationSystem::PureResult AnimationSystem::AnimationController::SetAnimation(AnimationClip const & animation, float const transitionTime
+    ,AnimationClip::OptionalConfigOnTransitionAnimationDelegate transitionDelegate)
 {
     current_animation_name_ = animation.ID();
 

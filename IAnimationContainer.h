@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <functional>
 
-#include "Animation.h"
+#include "AnimationClip.h"
 #include "AnimatorConfig.h"
 #include "GefExtentions.h"
 #include "PureResult.h"
@@ -15,7 +15,7 @@ namespace AnimationSystem
     {
     public:
         virtual ~IReadOnlyAnimationContainer() = default;
-        [[nodiscard]] virtual ValueResult<std::reference_wrapper<Animation>> GetAnimation(StringId id) const = 0;
+        [[nodiscard]] virtual ValueResult<std::reference_wrapper<AnimationClip>> GetAnimation(StringId id) const = 0;
         [[nodiscard]] virtual bool HasAnimation(StringId id) const = 0;
         [[nodiscard]] virtual std::optional<string> GetAnimationName(StringId id) const = 0;
     };
@@ -33,19 +33,19 @@ namespace AnimationSystem
         PureResult LoadAnimations(const string &animationName,
                                   const std::string &filepath,
                                   const std::string &nameWithinFile,
-                                  Animation::OptionalConfigOnSetAnimationDelegate configDelegate);
+                                  AnimationClip::OptionalConfigOnSetAnimationDelegate configDelegate);
 
-        ValueResult<std::reference_wrapper<Animation>> GetAnimation(StringId id) const override;
+        ValueResult<std::reference_wrapper<AnimationClip>> GetAnimation(StringId id) const override;
         bool HasAnimation(const StringId id) const override {return GefExtensions::HasValue(stringIdTable_, id); }
 
         std::optional<string> GetAnimationName(StringId id) const override;
 
     private:
-        ValueResult<std::unique_ptr<Animation>> CreateAnimation(const std::string &filepath,
+        ValueResult<std::unique_ptr<AnimationClip>> CreateAnimation(const std::string &filepath,
                                                                 const std::string &nameWithinFile,
-                                                                Animation::OptionalConfigOnSetAnimationDelegate configDelegate,
+                                                                AnimationClip::OptionalConfigOnSetAnimationDelegate configDelegate,
                                                                 const StringId animationId) const;
-        std::map<StringId, std::unique_ptr<Animation>> animations_;
+        std::map<StringId, std::unique_ptr<AnimationClip>> animations_;
         gef::Platform const & platform_;
 
         mutable gef::StringIdTable stringIdTable_;

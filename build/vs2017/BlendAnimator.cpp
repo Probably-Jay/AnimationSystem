@@ -30,7 +30,6 @@ AnimationSystem::ValueResult<gef::SkeletonPose> AnimationSystem::BlendAnimator::
     auto const previousPose = AlternateAnimator().UpdateAnimation(frameTime, skeletonPose);
 
     auto const lerpValue = transition_->LerpValue();
-        // todo
     auto blendedPose = skeletonPose;
     blendedPose.Linear2PoseBlend(previousPose, activePose, lerpValue);
 
@@ -56,7 +55,7 @@ AnimationSystem::PureResult AnimationSystem::BlendAnimator::ApplyTransitionDeleg
 {
     try
     {
-        transition_->ApplyDelegate(ActiveAnimator());
+        transition_->ApplyDelegate(ActiveAnimator(), AlternateAnimator());
     }
     catch (std::exception& e)
     {
@@ -71,11 +70,11 @@ AnimationSystem::PureResult AnimationSystem::BlendAnimator::ApplyTransitionDeleg
 
 void AnimationSystem::BlendAnimator::SyncAnimators()
 {
-    auto const percentThroughAnimation = ActiveAnimator().GetPercentThroughAnimation();
-    AlternateAnimator().SetAnimationTimePercent(percentThroughAnimation.value_or(0));
+    auto const percentThroughAnimation = ActiveAnimator().GetCurrentAnimationProgress();
+    AlternateAnimator().SetAnimationTimePercent(percentThroughAnimation);
 }
 
-AnimationSystem::PureResult AnimationSystem::BlendAnimator::SetAnimationSimple(Animation const &animation)
+AnimationSystem::PureResult AnimationSystem::BlendAnimator::SetAnimationSimple(AnimationClip const &animation)
 {
     return ActiveAnimator().SetAnimation(animation);
 }
@@ -93,8 +92,8 @@ gef::SkeletonPose AnimationSystem::BlendAnimator::UpdateAnimation(float const fr
     return blendedPoseResult.Take();
 }
 
-AnimationSystem::PureResult AnimationSystem::BlendAnimator::SetAnimation(Animation const& animation,
-    float transitionTime, Animation::OptionalConfigOnTransitionAnimationDelegate transitionDelegate) {
+AnimationSystem::PureResult AnimationSystem::BlendAnimator::SetAnimation(AnimationClip const& animation,
+    float transitionTime, AnimationClip::OptionalConfigOnTransitionAnimationDelegate transitionDelegate) {
     if(transitionTime <= 0)
         return SetAnimationSimple(animation);
 

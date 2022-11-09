@@ -1,7 +1,7 @@
 #ifndef _ANIMATED_MESH_APP_H
 #define _ANIMATED_MESH_APP_H
 
-#include <animation/animation.h>
+#include <animation/AnimationClip.h>
 #include <system/application.h>
 #include <graphics/sprite.h>
 #include <maths/vector2.h>

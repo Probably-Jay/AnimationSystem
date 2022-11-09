@@ -52,6 +52,8 @@ AnimationSystem::PureResult AnimatedMeshApp::LoadMeshAndAnimation()
 		                                      "Walk","xbot/xbot@walking_inplace.scn","",
 		                                      [](IAnimatorConfig& animPlayer)
 		                                      {
+		                                      	animPlayer.SetAnimationTime(0);
+
 			                                      animPlayer.SetLooping(true);
 		                                      });
 		    animationResult.IsError())
@@ -64,6 +66,8 @@ AnimationSystem::PureResult AnimatedMeshApp::LoadMeshAndAnimation()
 			                                      "Run","xbot/xbot@running_inplace.scn","",
 			                                      [](IAnimatorConfig& animPlayer)
 			                                      {
+			                                      	animPlayer.SetAnimationTime(0);
+
 				                                      animPlayer.SetLooping(true);
 			                                      });
 		animationResult.IsError())
@@ -117,9 +121,31 @@ bool AnimatedMeshApp::Update(float frame_time)
 			if(keyboard->IsKeyPressed(gef::Keyboard::KC_W))
 			{
 				if(player_->Animator().CurrentAnimationName() == "Walk")
-					player_->Animator().SetAnimation("Run", 1);
+					player_->Animator().SetAnimation("Run", 3,
+						[](IAnimatorConfig& animator, IAnimatorConfig& previousAnimator, float transitionTime)
+					{
+						auto const currentToPreviousScaleFactor = 1.f/animator.GetDurationScalingFactor(previousAnimator);
+						auto const previousToCurrentScaleFactor = 1.f/previousAnimator.GetDurationScalingFactor(animator);
+						
+						auto const currentAnimatorSpeedVal = std::lerp(currentToPreviousScaleFactor, 1.f, transitionTime);
+						animator.SetPlaybackSpeed(currentAnimatorSpeedVal);
+
+						auto const previousAnimatorSpeedVal = std::lerp(1.f, previousToCurrentScaleFactor, transitionTime);
+						previousAnimator.SetPlaybackSpeed(previousAnimatorSpeedVal);
+					});
 				else
-					player_->Animator().SetAnimation("Walk", 0.5f);
+					player_->Animator().SetAnimation("Walk", 2,
+						[](IAnimatorConfig& animator, IAnimatorConfig& previousAnimator, float transitionTime)
+					{
+						auto const currentToPreviousScaleFactor = 1.f/animator.GetDurationScalingFactor(previousAnimator);
+						auto const previousToCurrentScaleFactor = 1.f/previousAnimator.GetDurationScalingFactor(animator);
+						
+						auto const currentAnimatorSpeedVal = std::lerp(currentToPreviousScaleFactor, 1.f, transitionTime);
+						animator.SetPlaybackSpeed(currentAnimatorSpeedVal);
+
+						auto const previousAnimatorSpeedVal = std::lerp(1.f, previousToCurrentScaleFactor, transitionTime);
+						previousAnimator.SetPlaybackSpeed(previousAnimatorSpeedVal);
+					});
 			}
 		}
 	}

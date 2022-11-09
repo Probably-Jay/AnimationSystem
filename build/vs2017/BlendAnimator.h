@@ -24,7 +24,7 @@ namespace AnimationSystem
 
     struct Transition
     {
-        explicit Transition(float const duration, Animation::OptionalConfigOnTransitionAnimationDelegate transitionDelegate)
+        explicit Transition(float const duration, AnimationClip::OptionalConfigOnTransitionAnimationDelegate transitionDelegate)
             : duration_(duration), transition_delegate_(std::move(transitionDelegate))
         {}
 
@@ -33,17 +33,17 @@ namespace AnimationSystem
         [[nodiscard]] bool InTransition() const {return (LerpValue() < 1); }
 
       //  Animation::OptionalConfigOnTransitionAnimationDelegate const & GetTransitionDelegate() const {return transition_delegate_;}
-        void ApplyDelegate(AnimatorWrapper & activeAnimator) const noexcept(false)
+        void ApplyDelegate(AnimatorWrapper & activeAnimator, AnimatorWrapper & otherAnimator) const noexcept(false)
         {
             if(!transition_delegate_.has_value())
                 return;
             
-            transition_delegate_.value()(activeAnimator, LerpValue());
+            transition_delegate_.value()(activeAnimator, otherAnimator, LerpValue());
         }
     private:
         float accumulated_time_ = 0;
         const float duration_;
-        Animation::OptionalConfigOnTransitionAnimationDelegate transition_delegate_;
+        AnimationClip::OptionalConfigOnTransitionAnimationDelegate transition_delegate_;
     };
     
     class BlendAnimator
@@ -55,7 +55,7 @@ namespace AnimationSystem
 
         gef::SkeletonPose UpdateAnimation(float frameTime, gef::SkeletonPose const &skeletonPose);
 
-        PureResult SetAnimation(Animation const& animation, float transitionTime, Animation::OptionalConfigOnTransitionAnimationDelegate transitionDelegate);
+        PureResult SetAnimation(AnimationClip const& animation, float transitionTime, AnimationClip::OptionalConfigOnTransitionAnimationDelegate transitionDelegate);
 
 
     private:
@@ -68,7 +68,7 @@ namespace AnimationSystem
             float frameTime, gef::SkeletonPose const &skeletonPose);
         PureResult ApplyTransitionDelegate();
 
-        [[nodiscard]] PureResult SetAnimationSimple(Animation const& animation);
+        [[nodiscard]] PureResult SetAnimationSimple(AnimationClip const& animation);
 
         [[nodiscard]] PureResult UpdateTransitionAndApplyTransitionDelegate(float frameTime);
 

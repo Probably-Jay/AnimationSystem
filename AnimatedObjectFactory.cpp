@@ -28,10 +28,11 @@ AnimationSystem::AnimatedObjectFactory::CreateAnimatedObject(
 
 AnimationSystem::ValueResult<std::reference_wrapper<AnimationSystem::AnimatedObject>> AnimationSystem::AnimatedObjectFactory::FindObject(IAnimatedObject const& animatedObject)
 {
-    using value_result = ValueResult<std::reference_wrapper<AnimatedObject>>;
+    using AnimatedObjectResult = ValueResult<std::reference_wrapper<AnimatedObject>>;
+    
     const auto iter = map_.find(animatedObject.ID());
     if(iter == map_.end())
-        return value_result::Error(ERROR_TAG+"Could not find animated object");
+        return AnimatedObjectResult::Error(ERROR_TAG+"Could not find animated object");
 
-    return value_result::OK(*iter->second);
+    return AnimatedObjectResult::OK(*iter->second);
 }  

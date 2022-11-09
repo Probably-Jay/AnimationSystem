@@ -23,10 +23,13 @@ AnimationSystem::PureResult AnimationSystem::AnimatedObject::CreateObjectsFromSc
 
 AnimationSystem::PureResult AnimationSystem::AnimatedObject::UpdateAnimation(float frameTime)
 {
+    //Update animation
     auto newPoseResult = animator_->UpdateAnimation(frameTime, skinned_mesh_container_.SkinnedMesh().bind_pose());
+    
     if(newPoseResult.IsError())
         return newPoseResult.ToPureResult();
-    
+
+    // apply current bone pose
     const auto newPose = newPoseResult.Take();
     skinned_mesh_container_.SkinnedMesh().UpdateBoneMatrices(newPose);
     return PureResult::OK();

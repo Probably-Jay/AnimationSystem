@@ -31,7 +31,7 @@ namespace AnimationSystem
 
 		PureResult CreateAnimationFor(IAnimatedObject const &readonlyAnimObject, string const &animationName,
 		                              string const &fileName, string const &nameWithinFile,
-		                              Animation::OptionalConfigOnSetAnimationDelegate &&configurationDelegate = {}) const;
+		                              AnimationClip::OptionalConfigOnSetAnimationDelegate &&configurationDelegate = {}) const;
 	private:
 		AnimationSystem3D(gef::Platform & platform_);
 		

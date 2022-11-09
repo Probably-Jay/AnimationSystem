@@ -9,7 +9,7 @@ AnimationSystem::AnimationContainer::AnimationContainer(const gef::Platform& pla
 
 
 AnimationSystem::PureResult AnimationSystem::AnimationContainer::LoadAnimations(const string& animationName, const std::string& filepath,
-    const std::string& nameWithinFile, Animation::OptionalConfigOnSetAnimationDelegate configDelegate)
+    const std::string& nameWithinFile, AnimationClip::OptionalConfigOnSetAnimationDelegate configDelegate)
 {
     const auto result = GefExtensions::TryAddNew(stringIdTable_, animationName);
     if(result.IsError())
@@ -27,14 +27,14 @@ AnimationSystem::PureResult AnimationSystem::AnimationContainer::LoadAnimations(
     return PureResult::OK();
 }
 
-AnimationSystem::ValueResult<std::unique_ptr<AnimationSystem::Animation>>
+AnimationSystem::ValueResult<std::unique_ptr<AnimationSystem::AnimationClip>>
 AnimationSystem::AnimationContainer::CreateAnimation(const std::string &filepath, const std::string &nameWithinFile,
-                                                     Animation::OptionalConfigOnSetAnimationDelegate configDelegate, const StringId animationId) const
+                                                     AnimationClip::OptionalConfigOnSetAnimationDelegate configDelegate, const StringId animationId) const
 {
     auto animationScene = std::make_unique<gef::Scene>();
 	
     if (!animationScene->ReadSceneFromFile(platform_, filepath.c_str()))
-        return ValueResult<std::unique_ptr<Animation>>::Error(ERROR_TAG+"Could not load animation from scene file at: " + filepath);
+        return ValueResult<std::unique_ptr<AnimationClip>>::Error(ERROR_TAG+"Could not load animation from scene file at: " + filepath);
 
     const auto animationIter =
         nameWithinFile.empty() // if no name specified, take the first animation in the file
@@ -42,23 +42,23 @@ AnimationSystem::AnimationContainer::CreateAnimation(const std::string &filepath
             : animationScene->animations.find(gef::GetStringId(nameWithinFile));
 
     if (animationIter == animationScene->animations.end())
-        return ValueResult<std::unique_ptr<Animation>>::Error(ERROR_TAG+"Animation with name '" + nameWithinFile + "' could not be found");
+        return ValueResult<std::unique_ptr<AnimationClip>>::Error(ERROR_TAG+"Animation with name '" + nameWithinFile + "' could not be found");
 
     auto & gefAnimation = *animationIter->second;
-    auto animation = std::make_unique<Animation>(std::move(animationScene), gefAnimation, animationId,std::move(configDelegate));
+    auto animation = std::make_unique<AnimationClip>(std::move(animationScene), gefAnimation, animationId,std::move(configDelegate));
     
-    return ValueResult<std::unique_ptr<Animation>>::OK(std::move(animation));
+    return ValueResult<std::unique_ptr<AnimationClip>>::OK(std::move(animation));
 }
 
 
-AnimationSystem::ValueResult<std::reference_wrapper<AnimationSystem::Animation>> AnimationSystem::AnimationContainer::GetAnimation(
+AnimationSystem::ValueResult<std::reference_wrapper<AnimationSystem::AnimationClip>> AnimationSystem::AnimationContainer::GetAnimation(
     const StringId id) const
 {
     const auto iter = animations_.find(id);
     if(iter == animations_.end())
-        return ValueResult<std::reference_wrapper<Animation>>::Error(ERROR_TAG+"Could not find animation with id: " + std::to_string(id));
+        return ValueResult<std::reference_wrapper<AnimationClip>>::Error(ERROR_TAG+"Could not find animation with id: " + std::to_string(id));
     
-    return ValueResult<std::reference_wrapper<Animation>>::OK(*iter->second);
+    return ValueResult<std::reference_wrapper<AnimationClip>>::OK(*iter->second);
 }
 
 std::optional<string> AnimationSystem::AnimationContainer::GetAnimationName(StringId const id) const

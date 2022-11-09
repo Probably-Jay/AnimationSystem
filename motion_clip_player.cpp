@@ -1,5 +1,5 @@
 #include "motion_clip_player.h"
-#include <animation/animation.h>
+#include <animation/AnimationClip.h>
 #include <system/debug_log.h>
 
 MotionClipPlayer::MotionClipPlayer() :

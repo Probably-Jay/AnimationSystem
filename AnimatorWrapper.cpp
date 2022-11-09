@@ -7,7 +7,7 @@ gef::SkeletonPose AnimationSystem::AnimatorWrapper::UpdateAnimation(const float 
    return animator_.pose();
 }
 
-AnimationSystem::PureResult AnimationSystem::AnimatorWrapper::SetAnimation(Animation const & animation)
+AnimationSystem::PureResult AnimationSystem::AnimatorWrapper::SetAnimation(AnimationClip const & animation)
 {
     current_animation_ = animation;
     animator_.set_clip(&animation.GetAnimation());
@@ -22,7 +22,19 @@ AnimationSystem::PureResult AnimationSystem::AnimatorWrapper::SetAnimation(Anima
 }
 
 
-AnimationSystem::PureResult AnimationSystem::AnimatorWrapper::ApplyConfigs(Animation const & animation)
+float AnimationSystem::AnimatorWrapper::GetDurationScalingFactor(IAnimatorConfig const& otherAnimator) const
+{
+    const auto duration = GetCurrentClipDuration();
+    const auto otherDuration = otherAnimator.GetCurrentClipDuration();
+
+    // Avoid div 0 error
+    if(std::fpclassify(duration) == FP_ZERO || std::fpclassify(otherDuration) == FP_ZERO)  
+        return 0;
+            
+    return otherDuration / duration;
+}
+
+AnimationSystem::PureResult AnimationSystem::AnimatorWrapper::ApplyConfigs(AnimationClip const & animation)
 {
     try
     {

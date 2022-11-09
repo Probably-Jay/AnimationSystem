@@ -33,7 +33,7 @@ namespace AnimationSystem
         PureResult LoadAnimations(const string &animationName,
                                   const std::string &filepath,
                                   const std::string &nameWithinFile,
-                                  Animation::OptionalAnimatorConfigDelegate configDelegate);
+                                  Animation::OptionalConfigOnSetAnimationDelegate configDelegate);
 
         ValueResult<std::reference_wrapper<Animation>> GetAnimation(StringId id) const override;
         bool HasAnimation(const StringId id) const override {return GefExtensions::HasValue(stringIdTable_, id); }
@@ -43,8 +43,8 @@ namespace AnimationSystem
     private:
         ValueResult<std::unique_ptr<Animation>> CreateAnimation(const std::string &filepath,
                                                                 const std::string &nameWithinFile,
-                                                                Animation::OptionalAnimatorConfigDelegate configDelegate,
-                                                                StringId animationId) const;
+                                                                Animation::OptionalConfigOnSetAnimationDelegate configDelegate,
+                                                                const StringId animationId) const;
         std::map<StringId, std::unique_ptr<Animation>> animations_;
         gef::Platform const & platform_;
 

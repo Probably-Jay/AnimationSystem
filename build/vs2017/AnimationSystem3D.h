@@ -29,9 +29,9 @@ namespace AnimationSystem
 		[[nodiscard]] ValueResult<std::shared_ptr<IAnimatedObject>> CreateAnimatedObject(
 			string const& objectNameId, string const& filePath) const;
 
-		PureResult CreateAnimationFor(IAnimatedObject const& readonlyAnimObject, string const& animationName,
-		                              string const& fileName, string const& nameWithinFile,
-		                              Animation::OptionalAnimatorConfigDelegate configurationDelegate = {}) const;
+		PureResult CreateAnimationFor(IAnimatedObject const &readonlyAnimObject, string const &animationName,
+		                              string const &fileName, string const &nameWithinFile,
+		                              Animation::OptionalConfigOnSetAnimationDelegate &&configurationDelegate = {}) const;
 	private:
 		AnimationSystem3D(gef::Platform & platform_);
 		

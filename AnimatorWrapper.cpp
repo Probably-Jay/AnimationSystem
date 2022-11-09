@@ -3,6 +3,7 @@
 gef::SkeletonPose AnimationSystem::AnimatorWrapper::UpdateAnimation(const float frameTime, gef::SkeletonPose const& bindPose)
 {
     animator_.Update(frameTime, bindPose);
+   
    return animator_.pose();
 }
 

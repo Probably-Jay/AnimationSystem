@@ -28,7 +28,7 @@ ValueResult<std::shared_ptr<IAnimatedObject>> AnimationSystem3D::CreateAnimatedO
 
 PureResult AnimationSystem3D::CreateAnimationFor(IAnimatedObject const& readonlyAnimObject, string const& animationName,
                                                  string const& fileName, string const& nameWithinFile,
-                                                 Animation::OptionalAnimatorConfigDelegate const configurationDelegate) const
+                                                 Animation::OptionalConfigOnSetAnimationDelegate && configurationDelegate) const
 {
     auto animatedObjectResult = animated_objects_factory_->FindObject(readonlyAnimObject);
     if(animatedObjectResult.IsError())
@@ -36,7 +36,7 @@ PureResult AnimationSystem3D::CreateAnimationFor(IAnimatedObject const& readonly
 
     auto & animatedObject = animatedObjectResult.Take().get();
     
-    PureResult createAnimationResult = animatedObject.Animator().CreateAnimation(animationName, fileName, nameWithinFile, configurationDelegate);
+    PureResult createAnimationResult = animatedObject.Animator().CreateAnimation(animationName, fileName, nameWithinFile, std::move(configurationDelegate));
     return createAnimationResult;
 }
 

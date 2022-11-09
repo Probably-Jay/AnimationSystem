@@ -11,8 +11,8 @@ namespace AnimationSystem
     {
     public:
         virtual ~IAnimationController() = default;
-        virtual PureResult SetAnimation(std::string animationName, float transitionTime = 0) = 0;
-        virtual PureResult SetAnimation(StringId animationId, float transitionTime = 0) = 0;
+        virtual PureResult SetAnimation(std::string animationName, float transitionTime = 0, Animation::OptionalConfigOnTransitionAnimationDelegate blendDelegate ={}) = 0;
+        virtual PureResult SetAnimation(StringId animationId, float transitionTime = 0, Animation::OptionalConfigOnTransitionAnimationDelegate ={}) = 0;
         virtual std::optional<string> CurrentAnimationName() = 0;
     };
 
@@ -26,12 +26,12 @@ namespace AnimationSystem
 
         void Init(gef::SkinnedMeshInstance const& skinnedMesh);
 
-        PureResult CreateAnimation(const string& animationName, const std::string& filePath,
-                                   const std::string& nameWithinFile,
-                                   Animation::OptionalAnimatorConfigDelegate configDelegate);
+        PureResult CreateAnimation(const string &animationName, const std::string &filePath,
+                                   const std::string &nameWithinFile,
+                                   Animation::OptionalConfigOnSetAnimationDelegate configDelegate);
 
-        PureResult SetAnimation(std::string animationName, float transitionTime) override;
-        PureResult SetAnimation(StringId animationId, float transitionTime) override;
+        PureResult SetAnimation(std::string animationName, float transitionTime, Animation::OptionalConfigOnTransitionAnimationDelegate transitionDelegate) override;
+        PureResult SetAnimation(StringId animationId, float transitionTime, Animation::OptionalConfigOnTransitionAnimationDelegate transitionDelegate ) override;
 
         ValueResult<gef::SkeletonPose> UpdateAnimation(const float frameTime, gef::SkeletonPose const &skeletonPose);
 
@@ -43,7 +43,8 @@ namespace AnimationSystem
         }
 
     private:
-        PureResult SetAnimation(Animation const &animation, float const transitionTime);
+        PureResult SetAnimation(Animation const &animation, float const transitionTime, Animation::OptionalConfigOnTransitionAnimationDelegate
+                                transitionDelegate);
 
         std::optional<StringId> current_animation_name_;
 

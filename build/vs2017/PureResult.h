@@ -170,7 +170,7 @@ namespace AnimationSystem
 			return *this;
 		}
 
-		void Raise() const
+		[[noreturn]] void Raise() const
 		{
 			if(IsError() && Error().value().UnHandled() )
 			{

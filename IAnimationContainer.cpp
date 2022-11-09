@@ -7,10 +7,29 @@ AnimationSystem::AnimationContainer::AnimationContainer(const gef::Platform& pla
 {
 }
 
+
+AnimationSystem::PureResult AnimationSystem::AnimationContainer::LoadAnimations(const string& animationName, const std::string& filepath,
+    const std::string& nameWithinFile, Animation::OptionalConfigOnSetAnimationDelegate configDelegate)
+{
+    const auto result = GefExtensions::TryAddNew(stringIdTable_, animationName);
+    if(result.IsError())
+        return result.ToPureResult();
+    
+    const StringId animationId = result.Get();
+
+    // Create the animation
+    auto createAnimResult = CreateAnimation(filepath, nameWithinFile, std::move(configDelegate), animationId);
+    
+    if(createAnimResult.IsError())
+        return createAnimResult.ToPureResult();
+    
+    animations_.emplace(animationId, createAnimResult.Take());
+    return PureResult::OK();
+}
+
 AnimationSystem::ValueResult<std::unique_ptr<AnimationSystem::Animation>>
 AnimationSystem::AnimationContainer::CreateAnimation(const std::string &filepath, const std::string &nameWithinFile,
-                                                     Animation::OptionalAnimatorConfigDelegate const
-                                                     configDelegate, const StringId animationId) const
+                                                     Animation::OptionalConfigOnSetAnimationDelegate configDelegate, const StringId animationId) const
 {
     auto animationScene = std::make_unique<gef::Scene>();
 	
@@ -26,28 +45,9 @@ AnimationSystem::AnimationContainer::CreateAnimation(const std::string &filepath
         return ValueResult<std::unique_ptr<Animation>>::Error(ERROR_TAG+"Animation with name '" + nameWithinFile + "' could not be found");
 
     auto & gefAnimation = *animationIter->second;
-    auto animation = std::make_unique<Animation>(std::move(animationScene), gefAnimation, animationId, configDelegate);
+    auto animation = std::make_unique<Animation>(std::move(animationScene), gefAnimation, animationId,std::move(configDelegate));
     
     return ValueResult<std::unique_ptr<Animation>>::OK(std::move(animation));
-}
-
-AnimationSystem::PureResult AnimationSystem::AnimationContainer::LoadAnimations(const string& animationName, const std::string& filepath,
-    const std::string& nameWithinFile, Animation::OptionalAnimatorConfigDelegate const configDelegate)
-{
-    const auto result = GefExtensions::TryAddNew(stringIdTable_, animationName);
-    if(result.IsError())
-        return result.ToPureResult();
-    
-    const StringId animationId = result.Get();
-
-    // Create the animation
-    auto createAnimResult = CreateAnimation(filepath, nameWithinFile, configDelegate, animationId);
-    
-    if(createAnimResult.IsError())
-        return createAnimResult.ToPureResult();
-    
-    animations_.emplace(animationId, createAnimResult.Take());
-    return PureResult::OK();
 }
 
 

@@ -49,11 +49,11 @@ AnimationSystem::PureResult AnimatedMeshApp::LoadMeshAndAnimation()
 
 	if(auto animationResult =
 		animation_system_->CreateAnimationFor(*player_,
-		    "Walk","xbot/xbot@walking_inplace.scn","",
-		    [](IAnimatorConfig& animPlayer)
-		    {
-		        animPlayer.SetLooping(true);
-		    });
+		                                      "Walk","xbot/xbot@walking_inplace.scn","",
+		                                      [](IAnimatorConfig& animPlayer)
+		                                      {
+			                                      animPlayer.SetLooping(true);
+		                                      });
 		    animationResult.IsError())
 	{
 		return animationResult;
@@ -61,11 +61,11 @@ AnimationSystem::PureResult AnimatedMeshApp::LoadMeshAndAnimation()
 	
 	if(auto animationResult =
 			animation_system_->CreateAnimationFor(*player_,
-				"Run","xbot/xbot@running_inplace.scn","",
-		          [](IAnimatorConfig& animPlayer)
-		          {
-		          	animPlayer.SetLooping(true);
-		          });
+			                                      "Run","xbot/xbot@running_inplace.scn","",
+			                                      [](IAnimatorConfig& animPlayer)
+			                                      {
+				                                      animPlayer.SetLooping(true);
+			                                      });
 		animationResult.IsError())
 	{
 		return animationResult;
@@ -117,7 +117,10 @@ bool AnimatedMeshApp::Update(float frame_time)
 			if(keyboard->IsKeyPressed(gef::Keyboard::KC_W))
 			{
 				if(player_->Animator().CurrentAnimationName() == "Walk")
-					player_->Animator().SetAnimation("Run", 1);
+					player_->Animator().SetAnimation("Run", 100, [](IAnimatorConfig& animPlayer, float transitionPercent)
+												  {
+													  //animPlayer.SetLooping(true);
+												  });
 				else
 					player_->Animator().SetAnimation("Walk", 0.5f);
 			}

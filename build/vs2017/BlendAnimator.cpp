@@ -29,10 +29,10 @@ AnimationSystem::ValueResult<gef::SkeletonPose> AnimationSystem::BlendAnimator::
     auto const activePose = ActiveAnimator().UpdateAnimation(frameTime, skeletonPose);
     auto const previousPose = AlternateAnimator().UpdateAnimation(frameTime, skeletonPose);
 
-    /*auto const lerpValue =*/ transition_->LerpValue();
+    auto const lerpValue = transition_->LerpValue();
         // todo
     auto blendedPose = skeletonPose;
-    blendedPose.Linear2PoseBlend(previousPose, activePose, 0.5f);
+    blendedPose.Linear2PoseBlend(previousPose, activePose, lerpValue);
 
     return ValueResult<gef::SkeletonPose>::OK(std::move(blendedPose));
 }

@@ -117,10 +117,7 @@ bool AnimatedMeshApp::Update(float frame_time)
 			if(keyboard->IsKeyPressed(gef::Keyboard::KC_W))
 			{
 				if(player_->Animator().CurrentAnimationName() == "Walk")
-					player_->Animator().SetAnimation("Run", 100, [](IAnimatorConfig& animPlayer, float transitionPercent)
-												  {
-													  //animPlayer.SetLooping(true);
-												  });
+					player_->Animator().SetAnimation("Run", 1);
 				else
 					player_->Animator().SetAnimation("Walk", 0.5f);
 			}

@@ -7,7 +7,7 @@
 #include <utility>
 #include <variant>
 
-#define ANIMATION_ERROR_STRUCT_THROWS_ON_UNHANDLED false 
+#define ANIMATION_ERROR_STRUCT_THROWS_ON_UNHANDLED true 
 
 #define ERROR_TAG ("Unhandled error in: " + std::string(__FUNCTION__) + ", Message: ")
 
@@ -170,17 +170,22 @@ namespace AnimationSystem
 			return *this;
 		}
 
-		[[noreturn]] void Raise() const
+		[[noreturn]] void Raise() const noexcept(false)
+		{
+			Error().value().Raise();
+		}
+		
+		void RaiseIfError() const noexcept(false)
 		{
 			if(IsError() && Error().value().UnHandled() )
 			{
-				Error().value().Raise();
+				Raise();
 			}
 		}
 		
 		~ValueResult() noexcept(false)
 		{	
-			Raise();
+			RaiseIfError();
 		}
 
 	private:
